@@ -40,7 +40,6 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 
 public class GymGUI{
@@ -788,7 +787,7 @@ public class GymGUI{
 		    formPanels[i].setBackground(LIGHTGRAY);
 		    formPanels[i].setLayout(new GridLayout(3, 3, 0, 0));
 
-		    for (int j = 0; j < (inputPanels[0].length); j++) { //since an extra panel is added in second form, we use the first form's panel length to run the loop
+		    for (int j = 0; j < (inputPanels[0].length); j++) {
 
 		        inputLabels[i][j].setForeground(MIDNIGHTBLUE);
 		        inputLabels[i][j].setFont(INPUT_HEADING);
