@@ -1635,10 +1635,6 @@ public class GymGUI{
 			                    GENDER.clearSelection(); // deselecting radio buttons
 			                    isGenderSelected = false; // since gender is deselected
 			                    
-			                    //=========================
-//			                    regular_plan_C.setSelectedIndex(-1); // deselecting plan
-			                    //=========================
-			                    
 					        	for(int m = 0 ; m < inputFields.length ; m++) {
 								
 								// only resetting the form if yes is clicked
@@ -1678,11 +1674,7 @@ public class GymGUI{
 								
 			                    GENDER.clearSelection(); // deselecting radio buttons
 			                    isGenderSelected = false; // since gender is deselected
-			                    
-			                    //=========================
-//			                    regular_plan_C.setSelectedIndex(-1); // deselecting plan
-			                    //=========================
-											                    
+    
 			                    // reverting title and removing back button
 			                    addMemberTitle_L.setText("Add a Member");
 					        	addMemberTitle_P.remove(utilityButtons_P[0]);
