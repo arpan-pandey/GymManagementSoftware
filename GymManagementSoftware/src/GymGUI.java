@@ -1279,7 +1279,7 @@ public class GymGUI{
 		cardUniqueAttributes_P.setLayout(new GridLayout(0,1));
 		
 		// individual member management buttons panel styling 
-		individualMemberButtons_P.setBackground(LIGHTGRAY);
+		individualMemberButtons_P.setBackground(Color.blue);
 	
 		/*
 		 * FRAME SECTION
