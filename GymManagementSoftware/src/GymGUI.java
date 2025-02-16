@@ -211,52 +211,109 @@ public class GymGUI{
 					};
 				
 				
-				// premium member form
+				// member form panels
 				JPanel prem_form_P = new JPanel();
-				JPanel prem_id_P, prem_name_P, prem_location_P, prem_phone_P, prem_email_P, prem_gender_P, prem_DOB_P, prem_membershipStartDate_P, prem_personalTrainer_P;
-					
-				JLabel prem_id_L = new JLabel("ID:"),
-					   prem_name_L = new JLabel("Name:"),
-					   prem_location_L = new JLabel("Location:"),
-					   prem_phone_L = new JLabel("Phone:"),
-					   prem_email_L = new JLabel("Email:"),
-					   prem_gender_L = new JLabel("Gender:"),
-					   prem_DOB_L = new JLabel("Date of Birth:"),
-					   prem_membershipStartDate_L = new JLabel("Start Date:"),
-					   prem_personalTrainer_L = new JLabel("Trainer Name:"); 
-					
-				JTextField prem_id_F, prem_name_F, prem_location_F, prem_phone_F, prem_email_F, prem_DOB_F, prem_membershipStartDate_F, prem_personalTrainer_F;
-				
-				JRadioButton
-					prem_genderMale = new JRadioButton("Male"),
-					prem_genderFemale = new JRadioButton("Female");
-				
-					
-				// regular member form
 				JPanel regular_form_P = new JPanel();
-				JPanel regular_id_P, regular_name_P, regular_location_P, regular_phone_P, regular_email_P, regular_gender_P, regular_membershipStartDate_P, regular_DOB_P, regular_referralSource_P;
-					
-				JLabel regular_id_L = new JLabel("ID:"),
-					   regular_name_L = new JLabel("Name:"),
-					   regular_location_L = new JLabel("Location:"),
-					   regular_phone_L = new JLabel("Phone:"),
-					   regular_email_L = new JLabel("Email:"),
-					   regular_gender_L = new JLabel("Gender:"),
-					   regular_DOB_L = new JLabel("Date of Birth:"),
-					   regular_membershipStartDate_L = new JLabel("Start Date:"),
-					   regular_referralSource_L = new JLabel("Referral Source:"); 
-					
-				JTextField regular_id_F, regular_name_F, regular_location_F, regular_phone_F, regular_email_F, regular_DOB_F, regular_membershipStartDate_F, regular_referralSource_F;
 				
-				JRadioButton
-					regular_genderMale = new JRadioButton("Male"),
-					regular_genderFemale = new JRadioButton("Female");
+				// input panels
+				JPanel input_id_P, input_name_P, input_location_P, input_phone_P, input_email_P, input_gender_P, input_DOB_P, input_membershipStartDate_P, input_personalTrainer_P, input_referralSource_P;
+					
+				// input labels
+				JLabel input_id_L, input_name_L, input_location_L, input_phone_L, input_email_L, input_gender_L, input_DOB_L, input_membershipStartDate_L, input_personalTrainer_L, input_referralSource_L; 
 				
-					JPanel regular_plan_P;
-						JLabel regular_plan_L = new JLabel("Select a Plan:");
-							String[] plans = {"Basic","Standard","Deluxe"};
-							JComboBox<String> regular_plan_C = new JComboBox<String>(plans);
-							
+				// input fields
+				JTextField input_id_F, input_name_F, input_location_F, input_phone_F, input_email_F, input_DOB_F, input_membershipStartDate_F, input_personalTrainer_F, input_referralSource_F;
+				
+				// radio buttons
+				JRadioButton input_genderMale, input_genderFemale;
+				
+				// combobox (UNUSED FOR NOW)
+				JPanel regular_plan_P;
+					JLabel regular_plan_L = new JLabel("Select a Plan:");
+						String[] plans = {"Basic","Standard","Deluxe"};
+						JComboBox<String> regular_plan_C = new JComboBox<String>(plans);
+						
+				/*
+				 * FORM ARRAYS
+				 */
+					
+				//array of form panels + initialization
+				JPanel[] inputPanels = {
+						input_id_P = new JPanel(),
+						input_name_P = new JPanel(),
+						input_location_P = new JPanel(),
+						input_phone_P = new JPanel(),
+						input_email_P = new JPanel(),
+						input_gender_P = new JPanel(),
+						input_DOB_P = new JPanel(),
+						input_membershipStartDate_P = new JPanel(),
+						input_personalTrainer_P = new JPanel(),	
+						input_referralSource_P = new JPanel(),
+				};	
+						
+						
+				// array of input labels + initialization
+				JLabel[] inputLabels = {
+						input_id_L = new JLabel("ID:"),
+						input_name_L = new JLabel("Name:"),
+						input_location_L = new JLabel("Location:"),
+						input_phone_L = new JLabel("Phone:"),
+						input_email_L = new JLabel("Email:"),
+						input_gender_L = new JLabel("Gender:"),
+						input_DOB_L = new JLabel("Date of Birth:"),
+						input_membershipStartDate_L = new JLabel("Start Date:"),
+						input_personalTrainer_L = new JLabel("Trainer Name:"),
+						input_referralSource_L = new JLabel("Referral Source:")
+				};
+				
+				// array of input fields + initialization
+				JTextField[] inputFields = {
+						input_id_F = new JTextField(),
+						input_name_F = new JTextField(),
+						input_location_F = new JTextField(),
+						input_phone_F = new JTextField(),
+						input_email_F = new JTextField(),
+						input_DOB_F = new JTextField(),
+						input_membershipStartDate_F = new JTextField(),
+						input_personalTrainer_F = new JTextField(),	
+						input_referralSource_F = new JTextField()	
+				};
+				
+				// array of gender radio buttons + initialization
+				JRadioButton[] genderRadioButtons = {
+						input_genderMale = new JRadioButton("Male"),
+						input_genderFemale = new JRadioButton("Female")
+				};
+				
+				String[]
+						//array of common input placeholders
+						commonPlaceholders = {
+								"Enter a unique ID", 	// id
+								"Enter your name", 		// name
+								"Enter city",			// location
+								"+977 9XXXXXXXX",		// phone no.
+								"name@domain.com",		// email
+								"YYYY-MM-DD",			// DOB
+								"YYYY-MM-DD",			// Membership Start Date
+							};
+					
+					String[][]
+						//array of input field placeholders
+						uniquePlaceholders = {
+							{
+								// premium form placeholder (Trainer name)
+								"Enter trainer's name"
+							},
+							{
+								// regular form placeholders (Referral source)
+								"eg., Friend, Website, Ad"	
+							}
+					};
+					
+					
+				/*
+				 * FORM CONTROL BUTTONS VARIBALES
+				 */
 							
 				JPanel formButtons_P = new JPanel();
 				JPanel formControlButtonsPanel = new JPanel();
@@ -325,6 +382,8 @@ public class GymGUI{
 					};
 				
 			JPanel individualMemberButtons_P = new JPanel();
+			
+			
 	/*
 	 * ARRAYS
 	 */
@@ -402,126 +461,6 @@ public class GymGUI{
 					memberTypeButtons[1],
 					manageMemberButton,
 			};
-	
-	JLabel[][]
-			//array of premium form input labels
-			inputLabels = {
-				{
-					prem_id_L,
-					prem_name_L,
-					prem_location_L,
-					prem_phone_L,
-					prem_email_L,
-					prem_gender_L,
-					prem_DOB_L,
-					prem_membershipStartDate_L,
-					prem_personalTrainer_L	
-				},
-				{
-					regular_id_L,
-					regular_name_L,
-					regular_location_L,
-					regular_phone_L,
-					regular_email_L,
-					regular_gender_L,
-					regular_DOB_L,
-					regular_membershipStartDate_L,
-					regular_referralSource_L,
-					regular_plan_L
-				}
-			};
-			
-	
-	JPanel[][]
-		//array of premium member form panels
-		inputPanels = {
-		{
-			prem_id_P = new JPanel(),
-			prem_name_P = new JPanel(),
-			prem_location_P = new JPanel(),
-			prem_phone_P = new JPanel(),
-			prem_email_P = new JPanel(),
-			prem_gender_P = new JPanel(),
-			prem_DOB_P = new JPanel(),
-			prem_membershipStartDate_P = new JPanel(),
-			prem_personalTrainer_P = new JPanel()	
-		},
-		{
-			regular_id_P = new JPanel(),
-			regular_name_P = new JPanel(),
-			regular_location_P = new JPanel(),
-			regular_phone_P = new JPanel(),
-			regular_email_P = new JPanel(),
-			regular_gender_P = new JPanel(),
-			regular_DOB_P = new JPanel(),
-			regular_membershipStartDate_P = new JPanel(),
-			regular_referralSource_P = new JPanel()	,
-			regular_plan_P = new JPanel()
-		}
-	};
-	
-	JTextField[][]
-		//2D array of form fields
-		inputFields = {
-		{
-			prem_id_F = new JTextField(),
-			prem_name_F = new JTextField(),
-			prem_location_F = new JTextField(),
-			prem_phone_F = new JTextField(),
-			prem_email_F = new JTextField(),
-			prem_DOB_F = new JTextField(),
-			prem_membershipStartDate_F = new JTextField(),
-			prem_personalTrainer_F = new JTextField()	
-		},
-		{
-			regular_id_F = new JTextField(),
-			regular_name_F = new JTextField(),
-			regular_location_F = new JTextField(),
-			regular_phone_F = new JTextField(),
-			regular_email_F = new JTextField(),
-			regular_DOB_F = new JTextField(),
-			regular_membershipStartDate_F = new JTextField(),
-			regular_referralSource_F = new JTextField()	
-		}
-	};
-	
-	JRadioButton[][]
-		//2D array of gender radio buttons
-		genderRadioButtons = {
-		{
-			prem_genderMale = new JRadioButton("Male"),
-			prem_genderFemale = new JRadioButton("Female")
-		},
-		{
-			regular_genderMale = new JRadioButton("Male"),
-			regular_genderFemale = new JRadioButton("Female")
-		}
-	};
-	
-	String[]
-		//array of common input placeholders
-		commonPlaceholders = {
-				"Enter a unique ID", 	// id
-				"Enter your name", 		// name
-				"Enter city",			// location
-				"+977 9XXXXXXXX",		// phone no.
-				"name@domain.com",		// email
-				"YYYY-MM-DD",			// DOB
-				"YYYY-MM-DD",			// Membership Start Date
-			};
-	
-	String[][]
-		//array of input field placeholders
-		uniquePlaceholders = {
-			{
-				// premium form placeholder (Trainer name)
-				"Enter trainer's name"
-			},
-			{
-				// regular form placeholders (Referral source)
-				"eg., Friend, Website, Ad"	
-			}
-	};
 	
 	
 	/*
@@ -725,10 +664,10 @@ public class GymGUI{
 		
 		
 		/*
-		 * addMember back button
+		 * ADD A MEMBER SECTION
 		 */
 		
-		// setting attributes of utilityButton text using a for each loop
+		// setting attributes of utilityButton (back button) text using a for each loop
 		for(JLabel utilityButton_L : utilityButtons_L) {
 			utilityButton_L.setForeground(DARKNAVY);
 			utilityButton_L.setFont(TITLE_SYMBOL_FONT);
@@ -777,203 +716,159 @@ public class GymGUI{
 		
 		
 		/*
-		 * ADD A MEMBER SECTION
+		 * ADD A MEMBER FORM SECTION
 		 */
 		
+		// forms styling, put into a runnable 
+		Runnable showFormContent = new Runnable() {
+		
+			@Override
+			public void run() { 
+					int formIndex = isFormContent[0] ? 0 : 1;
+					
+				    formPanels[formIndex].setBackground(LIGHTGRAY);
+				    formPanels[formIndex].setLayout(new GridLayout(3, 3, 0, 0));
+				    
+				    for (int j = 0; j < inputPanels.length - 1; j++) {
 
-		// forms styling
-		for (int i = 0; i < formPanels.length; i++) {
-		    
-		    formPanels[i].setBackground(LIGHTGRAY);
-		    formPanels[i].setLayout(new GridLayout(3, 3, 0, 0));
+				    	int l = j < 8 ? j : j+formIndex;
+				    	
+				        inputLabels[l].setForeground(MIDNIGHTBLUE);
+				        inputLabels[l].setFont(INPUT_HEADING);
 
-		    for (int j = 0; j < (inputPanels[0].length); j++) {
+				        
+				        // initializing panels
+				        JPanel inputPanel = inputPanels[j]; //putting the current panel into a variable for easy future use
 
-		        inputLabels[i][j].setForeground(MIDNIGHTBLUE);
-		        inputLabels[i][j].setFont(INPUT_HEADING);
+				        inputPanel.removeAll();
+				        inputPanel.setBorder(FORM_INPUT_MARGIN);
+				        inputPanel.setBackground(LIGHTGRAY);
+				        inputPanel.setLayout(new BorderLayout());
+				        inputPanel.add(inputLabels[l], BorderLayout.NORTH); // adding label at the top
 
-		        
-		        // initializing panels
-		        JPanel inputPanel = inputPanels[i][j]; //putting the current panel into a variable for easy future use
-
-		        inputPanel.setBorder(FORM_INPUT_MARGIN);
-		        inputPanel.setBackground(LIGHTGRAY);
-		        inputPanel.setLayout(new BorderLayout());
-		        inputPanel.add(inputLabels[i][j], BorderLayout.NORTH); // adding label at the top
-
-		        if (j == 5) { 
-		        	//adding gender radio buttons instead of a text field for panel 5
-		        	
-		        	inputPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0)); // setting different layout
-		            inputLabels[i][j].setPreferredSize(new Dimension(200, 15)); // increasing the width of label to make it so that gender radio buttons appaer on next line
+				        if (j == 5) { 
+				        	//adding gender radio buttons instead of a text field for panel 5
+				        	
+				        	inputPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0)); // setting different layout
+				            inputLabels[j].setPreferredSize(new Dimension(200, 15)); // increasing the width of label to make it so that gender radio buttons appaer on next line
 
 
-		            // to set attributes of radio buttons
-		            
-		            for (int k = 0; k < 2; k++) {
+				            // to set attributes of radio buttons
+				            
+				            for (int k = 0; k < 2; k++) {
 
-		                JRadioButton genderRadio = genderRadioButtons[i][k]; //putting the current radio button into a variable for easy future use
-		                
-		                GENDER.add(genderRadio);
-		                genderRadio.setForeground(MIDNIGHTBLUE);
-		                genderRadio.setBackground(LIGHTGRAY);
-		                genderRadio.setFont(RADIO_FONT);
-		                genderRadio.setFocusable(false);
-		                genderRadio.setPreferredSize(new Dimension(80, 60));
-		                
-		                int l = i; // to pass i into the next block
-		                
-		                // to set isGenderSelected to true when a gender radio is clicked
-		                genderRadio.addMouseListener(new MouseAdapter() {
-		                	
-		                	@Override
-		                	public void mousePressed(MouseEvent e) {		                		
-		                		for(int j = 0 ; j < inputFields[1].length ; j++) {
-				        			inputFields[l][j].setFocusable(false);
-				        			
-				        			indexOfGenderSelected = e.getSource()==genderRadioButtons[l][0] ? 0 : 1;
-				        			
-				        		}
-		                	}
-		                	
-		                	@Override
-		                	public void mouseReleased(MouseEvent e) {		                		
-		                		for(int j = 0 ; j < inputFields[1].length ; j++) {
-				        			inputFields[l][j].setFocusable(true);
-				        		}
-		                	}
-		                	
-		                	@Override
-		                	public void mouseClicked(MouseEvent e) {		                		
-		                		isGenderSelected = true;
-		                	}
-		                });
+				                JRadioButton genderRadio = genderRadioButtons[k]; //putting the current radio button into a variable for easy future use
+				                
+				                GENDER.add(genderRadio);
+				                genderRadio.setForeground(MIDNIGHTBLUE);
+				                genderRadio.setBackground(LIGHTGRAY);
+				                genderRadio.setFont(RADIO_FONT);
+				                genderRadio.setFocusable(false);
+				                genderRadio.setPreferredSize(new Dimension(80, 60));
+				                
+				                // to set isGenderSelected to true when a gender radio is clicked
+				                genderRadio.addMouseListener(new MouseAdapter() {
+				                	
+				                	@Override
+				                	public void mousePressed(MouseEvent e) {		                		
+				                		for(int j = 0 ; j < inputFields.length ; j++) {
+						        			inputFields[j].setFocusable(false);
+						        			
+						        			indexOfGenderSelected = e.getSource()==genderRadioButtons[0] ? 0 : 1;
+						        			
+						        		}
+				                	}
+				                	
+				                	@Override
+				                	public void mouseReleased(MouseEvent e) {		                		
+				                		for(int j = 0 ; j < inputFields.length ; j++) {
+						        			inputFields[j].setFocusable(true);
+						        		}
+				                	}
+				                	
+				                	@Override
+				                	public void mouseClicked(MouseEvent e) {		                		
+				                		isGenderSelected = true;
+				                	}
+				                });
 
-		                inputPanel.add(genderRadio);
+				                inputPanel.add(genderRadio);
 
-		            }
-		            
-		        }
-		        
-		        else {
-		        	
-		        	JTextField inputField; //declaring a common variable 
-		        	
-		        	int k = j < 5 ? j : j-1; // to use/add [j-1] fields to the panels after panel 5
-		        		
-		        	// setting the placeholders for input variables
-		        	String inputPlaceholder = k != 7 ? commonPlaceholders[k] : uniquePlaceholders[i][0];
-		        	
-	                inputPanel.add(inputFields[i][k], BorderLayout.SOUTH);
-	                inputField = inputFields[i][k]; // assigning required/corresponding field to the common variable
-	                inputField.setText(inputPlaceholder); //setting corresponding placeholder
-		            
-		            //styling the text fields
-		            inputField.setPreferredSize(new Dimension(1,35));
-		            inputField.setBorder(DEFAULT_INPUT_BORDER); // setting default border initially
-		            inputField.setFont(INPUT_FONT);
-		            inputField.setForeground(PLACEHOLDERGRAY);
-		            inputField.setBackground(LIGHTGRAY);
-		            
-		            // using the anonymous focusAdapter class to override focus methods for textFields
-		            inputField.addFocusListener(new FocusAdapter() {
-		                @Override
-		                public void focusGained(FocusEvent e) {
-		                    if (inputField.getText().equals(inputPlaceholder)) {
-		                        inputField.setText(""); // Clear placeholder instantly
-		                        inputField.setForeground(MIDNIGHTBLUE); // Set active text color
-		                        inputField.setBorder(ACTIVE_INPUT_BORDER); // setting different border when field gains focus
-		                    }
-		                }
+				            }
+				            
+				        }
+				        
+				        else {
+				        	
+				        	int k = j < 5 ? j : (j==inputFields.length - 1 && isFormContent[1]) ? j : j-1; // to use/add [j-1] fields to the panels after panel 5
+				        		
+				        	// setting the placeholders for input variables
+				        	String inputPlaceholder = k < (inputFields.length - 2) ? commonPlaceholders[k] : uniquePlaceholders[formIndex][0];
+				        	
+				        	JTextField inputField = inputFields[k]; // assigning required/corresponding field to a common variable
+				        	
+			                inputPanel.add(inputField, BorderLayout.SOUTH);
+			                inputField.setText(inputPlaceholder); //setting corresponding placeholder
+				            
+				            //styling the text fields
+				            inputField.setPreferredSize(new Dimension(1,35));
+				            inputField.setBorder(DEFAULT_INPUT_BORDER); // setting default border initially
+				            inputField.setFont(INPUT_FONT);
+				            inputField.setForeground(PLACEHOLDERGRAY);
+				            inputField.setBackground(LIGHTGRAY);
+				            
+				            // using the anonymous focusAdapter class to override focus methods for textFields
+				            inputField.addFocusListener(new FocusAdapter() {
+				                @Override
+				                public void focusGained(FocusEvent e) {
+				                    if (inputField.getText().equals(inputPlaceholder)) {
+				                        inputField.setText(""); // Clear placeholder instantly
+				                        inputField.setForeground(MIDNIGHTBLUE); // Set active text color
+				                        inputField.setBorder(ACTIVE_INPUT_BORDER); // setting different border when field gains focus
+				                    }
+				                }
 
-		                @Override
-		                public void focusLost(FocusEvent e) {
-		                    if (inputField.getText().isEmpty()) {
-		                        inputField.setText(inputPlaceholder); // Restore placeholder
-		                        inputField.setForeground(PLACEHOLDERGRAY); // Set placeholder color   
-		                    }
-		                    inputField.setBorder(DEFAULT_INPUT_BORDER); // setting default border when field loses focus
-		                }
-		            });
-		            
-		            // to make sure that caret in the text fields dont appear when focus is lost, using the anonymous class MouseAdapter and overriding it's click methods
-					bodyContent[1].addMouseListener(new MouseAdapter() {
-						
-						@Override
-						public void mousePressed(MouseEvent e) {
-							inputField.setFocusable(false);
-							
-						}
-						
-						@Override
-						public void mouseReleased(MouseEvent e) {
-							inputField.setFocusable(true);
-						}
-					});
-		            
-		        }
-		        formPanels[i].add(inputPanel);
-		    }
-		    
+				                @Override
+				                public void focusLost(FocusEvent e) {
+				                    if (inputField.getText().isEmpty()) {
+				                        inputField.setText(inputPlaceholder); // Restore placeholder
+				                        inputField.setForeground(PLACEHOLDERGRAY); // Set placeholder color   
+				                    }
+				                    inputField.setBorder(DEFAULT_INPUT_BORDER); // setting default border when field loses focus
+				                }
+				            });
+				            
+				            // to make sure that caret in the text fields dont appear when focus is lost, using the anonymous class MouseAdapter and overriding it's click methods
+							bodyContent[1].addMouseListener(new MouseAdapter() {
+								
+								@Override
+								public void mousePressed(MouseEvent e) {
+									inputField.setFocusable(false);
+									
+								}
+								
+								@Override
+								public void mouseReleased(MouseEvent e) {
+									inputField.setFocusable(true);
+								}
+							});
+				            
+				        }
+				        formPanels[formIndex].add(inputPanel);
+				    }
 
-			 // for regular member form only (since one extra panel is added, the layout is changed)
-//			if(i == 1) {
-//				
-//				regular_plan_L.setForeground(MIDNIGHTBLUE);
-//		        regular_plan_L.setFont(INPUT_HEADING);
-//				
-//		        regular_plan_C.setSelectedIndex(-1); // setting null value by default
-//		        regular_plan_C.setBackground(LIGHTGRAY);
-//		        regular_plan_C.setPreferredSize(new Dimension(160,29));
-//		        regular_plan_C.setForeground(MIDNIGHTBLUE);
-//		        regular_plan_C.setFont(INPUT_FONT);
-//		        regular_plan_C.setFocusable(false); // to make it so that the annoying highlight doesn't appear
-//		        
-//		        // to remove caret fromfields when the combobox is clicked
-//		        regular_plan_C.addMouseListener(news MouseAdapter() {
-//		        
-//		        	@Override
-//		        	public void mousePressed(MouseEvent e) {
-//		        		for(int j = 0 ; j < inputFields[1].length ; j++) {
-//		        			inputFields[1][j].setFocusable(false);		        			
-//		        		}
-//		        	}
-//		        	
-//		        	@Override
-//		        	public void mouseReleased(MouseEvent e) {
-//		        		for(int j = 0 ; j < inputFields[1].length ; j++) {
-//		        			inputFields[1][j].setFocusable(true);		        			
-//		        		}
-//		        	}
-//		        });
-//		        
-//				regular_plan_P.setBackground(LIGHTGRAY);
-//				regular_plan_P.setPreferredSize(new Dimension(300,1));
-//				regular_plan_P.setBorder(PLAN_SELECTION_MARGIN);
-//				regular_plan_P.setLayout(new FlowLayout(FlowLayout.LEADING,planMarginLeft,planMarginTop));
-//				
-//				regular_plan_P.add(regular_plan_L, BorderLayout.NORTH);
-//				regular_plan_P.add(regular_plan_C);
-//				
-//				formPanels[1].setLayout(new GridLayout (3, 3, 0, 0));
-//				formPanels[1].setPreferredSize(new Dimension(1, 800));
-//				
-//				formPanels[1].add(regular_plan_P);
-//				
-//			}
-			
+				    // setting attributes and adding buttons to the panel below the form
+				    
+				    formButtons_P.setBackground(LIGHTGRAY);
+				    formButtons_P.setPreferredSize(new Dimension(1, 100));
+				    formButtons_P.setLayout(new BorderLayout());
 
-		    // setting attributes and adding buttons to the panel below the form
-		    
-		    formButtons_P.setBackground(LIGHTGRAY);
-		    formButtons_P.setPreferredSize(new Dimension(1, 100));
-		    formButtons_P.setLayout(new BorderLayout());
-
-			
-			formControlButtonsPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,10,30));
-			formControlButtonsPanel.setPreferredSize(new Dimension(400,1));
-			formControlButtonsPanel.setBackground(LIGHTGRAY);
-		}
+					
+					formControlButtonsPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,10,30));
+					formControlButtonsPanel.setPreferredSize(new Dimension(400,1));
+					formControlButtonsPanel.setBackground(LIGHTGRAY);
+			}
+		};
 		
 		// for form control buttons functionality
 		for(int k = 0 ; k < formControlButtons.length ; k++) {
@@ -989,35 +884,36 @@ public class GymGUI{
 						int currentFormIndex = isFormContent[0] ? 0:1;
 						
 						String options[]= {"Yes","No"}; // to explicitly define options in the following dialog box and select no as the focused button
-						for(int i = 0 ; i < inputFields[currentFormIndex].length ; i++) {
-				        	// setting the placeholders for input variables
-				        	String inputPlaceholder = i < 7 ? commonPlaceholders[i] : uniquePlaceholders[currentFormIndex][0];
+						
+						for(int i = 0 ; i < inputFields.length - 1; i++) {
+			        		
+				        	// setting the corresponding placeholders for input fields into a common variable
+				        	String inputPlaceholder = i < (inputFields.length - 2) ? commonPlaceholders[i] : uniquePlaceholders[currentFormIndex][0];
+				        	
+				        	// seetting the corresponding input fields into a common variable
+				        	JTextField inputField = i < (inputFields.length - 2) ? inputFields[i] : inputFields[i+currentFormIndex];
 				        	
 							// checking if input fields dont have their corresponding placeholders or empty value, and only allowing form clearing when that's the case
-							if( ! (inputFields[currentFormIndex][i].getText().equals(inputPlaceholder)) && ! (inputFields[currentFormIndex][i].getText().equals(""))) {
+							if( ! (inputField.getText().equals(inputPlaceholder)) && ! (inputField.getText().equals(""))) {
 							
 								// showing a confirmation dialog to make sure that all fields are meant to be reset (byte to save memory)
 								byte clearWish = (byte) JOptionPane.showOptionDialog(frame, "Are you sure you want to clear all fields?", "Caution: Fields will be reset", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
 						
 								// only resetting the form if yes is clicked
 								if(clearWish==0) {
-									for(int j=0 ; j < inputFields[currentFormIndex].length ; j++ ) {
+									for(int j=0 ; j < inputFields.length ; j++ ) {
 										
 										// setting the placeholders for input variables
 										String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
 										
-										inputFields[currentFormIndex][j].setForeground(PLACEHOLDERGRAY);
-										inputFields[currentFormIndex][j].setText(placeholder);
-										inputFields[currentFormIndex][j].setFocusable(false);
-										inputFields[currentFormIndex][j].setBorder(DEFAULT_INPUT_BORDER);
+										inputFields[j].setForeground(PLACEHOLDERGRAY);
+										inputFields[j].setText(placeholder);
+										inputFields[j].setFocusable(false);
+										inputFields[j].setBorder(DEFAULT_INPUT_BORDER);
 									}
 									
 									GENDER.clearSelection(); // deselecting radio buttons
 									isGenderSelected = false; // since gender is deselected
-									
-									//=========================
-//									regular_plan_C.setSelectedIndex(-1); // deselecting plan
-									//=========================
 									
 									JOptionPane.showMessageDialog(frame, "Form successfully cleared!", "Success", JOptionPane.INFORMATION_MESSAGE); // success message
 								}
@@ -1027,27 +923,23 @@ public class GymGUI{
 							}
 							
 							// removing caret and adding placeholder silently when atlest one field is null, and the clear all button is clicked
-							if((inputFields[currentFormIndex][i].getText().equals(""))) {
+							if((inputField.getText().equals(""))) {
 								
-								for(int j=0 ; j < inputFields[currentFormIndex].length ; j++ ) {
+								for(int j=0 ; j < inputFields.length ; j++ ) {
 									
 									// setting the placeholders for input variables
 									String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
 									
-									inputFields[currentFormIndex][j].setForeground(PLACEHOLDERGRAY);
-									inputFields[currentFormIndex][j].setText(placeholder);
-									inputFields[currentFormIndex][j].setFocusable(false);
-									inputFields[currentFormIndex][j].setBorder(DEFAULT_INPUT_BORDER); // setting default border
+									inputFields[j].setForeground(PLACEHOLDERGRAY);
+									inputFields[j].setText(placeholder);
+									inputFields[j].setFocusable(false);
+									inputFields[j].setBorder(DEFAULT_INPUT_BORDER); // setting default border
 								}
 							}
 						}
 						
 						GENDER.clearSelection(); // deselecting radio buttons
 						isGenderSelected = false; // since gender is deselected
-						
-						//=========================
-//						regular_plan_C.setSelectedIndex(-1); // deselecting plan
-						//=========================
 					}
 					
 					// event listener for add premium member/regular member buttons of respective forms
@@ -1056,13 +948,18 @@ public class GymGUI{
 						boolean allFieldsFilled = true; // assuming all fields are filled initially
 						
 						int currentFormIndex = e.getSource()==formControlButtons[1] ? 0 : 1;
+						
 						String memberType = isFormContent[0] ? "premium" : "regular";
 
-						for (int k = 0; k < inputFields[currentFormIndex].length; k++) {
+						for (int k = 0; k < inputFields.length - 1; k++) {
 						    
-							String inputPlaceholder = k != 7 ? commonPlaceholders[k] : uniquePlaceholders[currentFormIndex][0];
-						    
-				        	String text = inputFields[currentFormIndex][k].getText();
+				        	// setting the corresponding placeholders for input fields into a common variable
+				        	String inputPlaceholder = k < (inputFields.length - 2) ? commonPlaceholders[k] : uniquePlaceholders[currentFormIndex][0];
+				        	
+				        	// seetting the corresponding input fields into a common variable
+				        	JTextField inputField = k < (inputFields.length - 2) ? inputFields[k] : inputFields[k+currentFormIndex];
+				        	
+				        	String text = inputField.getText(); // getting text from input fields
 
 				        	// setting allFieldsFilled to false, if atleast one input field is "empty"
 						    if (text.equals(inputPlaceholder) || text.equals("")) {
@@ -1078,33 +975,16 @@ public class GymGUI{
 						    JOptionPane.showMessageDialog(frame, "All fields must be filled before adding a "+memberType+" member.", "Incomplete Form", JOptionPane.ERROR_MESSAGE);
 						} 
 						
-						 // checking if gender is selected after confirming all fields are filled OR checking if the current form is regular member form, and if the plan is selected but gender is not
-						
-						//=========================
-//						else if (!isGenderSelected || (!isGenderSelected && isFormContent[1] && regular_plan_C.getSelectedIndex() != -1 )) {
-						//=========================
+						 // checking if gender is selected after confirming all fields are filled 
 						
 						else if (!isGenderSelected) {	
 							// remving caret from the fields
-							for (int k = 0; k < inputFields[currentFormIndex].length; k++) {
-								inputFields[currentFormIndex][k].setFocusable(false);
+							for (int k = 0; k < inputFields.length; k++) {
+								inputFields[k].setFocusable(false);
 							}
 							
 						    JOptionPane.showMessageDialog(frame, "Please select a gender.", "Incomplete Form", JOptionPane.ERROR_MESSAGE);
 						} 
-						
-						//=========================
-						// checking if the form is the regular member form and if no plan is selected
-//						else if (isFormContent[1] && regular_plan_C.getSelectedIndex() == -1 ) {
-//							
-//							// remving caret from the fields
-//							for (int k = 0; k < inputFields[l].length; k++) {
-//								inputFields[l][k].setFocusable(false);
-//							}
-//							
-//							JOptionPane.showMessageDialog(frame, "Please choose a plan.", "Incomplete Form", JOptionPane.ERROR_MESSAGE);
-//						}
-						//=========================
 						
 						// proceeding with adding a member if all conditions are met
 						else {  
@@ -1113,7 +993,7 @@ public class GymGUI{
 							
 							// using try/catch blocks to handle String -> int conversion issues
 						    try {
-						        int id = Integer.parseInt(inputFields[currentFormIndex][0].getText()); // Convert input to int
+						        int id = Integer.parseInt(inputFields[0].getText()); // Convert input to int
 						        
 						        for (GymMember member : members) {
 						            if (member.id == id) {
@@ -1126,15 +1006,15 @@ public class GymGUI{
 						        	
 						        	// declaring variables to pass into contructor of respective classes
 						        	String 
-					        		name = inputFields[currentFormIndex][1].getText(),
-					        		location = inputFields[currentFormIndex][2].getText(),
-					        		phone = inputFields[currentFormIndex][3].getText(),
-					        		email = inputFields[currentFormIndex][4].getText(),
+					        		name = inputFields[1].getText(),
+					        		location = inputFields[2].getText(),
+					        		phone = inputFields[3].getText(),
+					        		email = inputFields[4].getText(),
 					        		gender = indexOfGenderSelected==0 ? "Male" : "Female", // use of ternary operator to dynamically assign value
-					        		DOB = inputFields[currentFormIndex][5].getText(),
-					        		membershipStartDate = inputFields[currentFormIndex][6].getText(),
-					        		personalTrainer = inputFields[0][7].getText(), // unique field
-					        		referralSource = inputFields[1][7].getText(); // unique field
+					        		DOB = inputFields[5].getText(),
+					        		membershipStartDate = inputFields[6].getText(),
+					        		personalTrainer = inputFields[7].getText(), // unique field
+					        		referralSource = inputFields[7].getText(); // unique field
 						        	
 						        	
 									 // creating premium member object, based on the form on display
@@ -1156,27 +1036,23 @@ public class GymGUI{
 									JOptionPane.showMessageDialog(frame, "You have successfully added a " + memberType + " member!", "Member Added", JOptionPane.INFORMATION_MESSAGE);
 									
 									// clearing the forms after object creation
-									for(int j=0 ; j < inputFields[currentFormIndex].length ; j++ ) {
+									for(int j=0 ; j < inputFields.length ; j++ ) {
 										
 										// setting the placeholders for input variables
 										String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
 										
-										inputFields[currentFormIndex][j].setForeground(PLACEHOLDERGRAY);
-										inputFields[currentFormIndex][j].setText(placeholder);
-										inputFields[currentFormIndex][j].setFocusable(false);
-										inputFields[currentFormIndex][j].setBorder(DEFAULT_INPUT_BORDER); // setting default border
+										inputFields[j].setForeground(PLACEHOLDERGRAY);
+										inputFields[j].setText(placeholder);
+										inputFields[j].setFocusable(false);
+										inputFields[j].setBorder(DEFAULT_INPUT_BORDER); // setting default border
 									}
 									
 									GENDER.clearSelection(); // deselecting radio buttons
 									isGenderSelected = false; // since gender is deselected
-									
-									//=========================
-//									regular_plan_C.setSelectedIndex(-1); // deselecting plan
-									//=========================
 						        
 						        }
 						        else {
-						        	JOptionPane.showMessageDialog(frame, "Member with ID "+inputFields[currentFormIndex][0].getText()+" already exists! Please enter a new ID.", "Duplicate input", JOptionPane.ERROR_MESSAGE);
+						        	JOptionPane.showMessageDialog(frame, "Member with ID "+inputFields[0].getText()+" already exists! Please enter a new ID.", "Duplicate input", JOptionPane.ERROR_MESSAGE);
 						        }
 						    } 
 						    
@@ -1195,9 +1071,8 @@ public class GymGUI{
 				// making sure that caret doesnt appear after clearing the form
 				@Override
 				public void mouseExited(MouseEvent e) {
-					int currentFormIndex = isFormContent[0] ? 0:1;
-					for(int j=0 ; j < inputFields[currentFormIndex].length ; j++ ) {
-						inputFields[currentFormIndex][j].setFocusable(true);
+					for(int j=0 ; j < inputFields.length ; j++ ) {
+						inputFields[j].setFocusable(true);
 					}
 				}
 			});
@@ -1321,14 +1196,19 @@ public class GymGUI{
 		                    // checking if an add member form is open
 		                    if (isFormContent[0] || isFormContent[1]) {
 		                    	
-		                        int currentFormPanelIndex = isFormContent[0] ? 0 : 1; // determining index of the current panel
+		                        int currentFormIndex = isFormContent[0] ? 0 : 1; // determining index of the current panel
 		                        boolean isFormFilled = false;
 
-		                        for (int j = 0; j < inputFields[currentFormPanelIndex].length; j++) {
-		                            String inputPlaceholder = j != 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormPanelIndex][0];
+		                        for (int j = 0; j < inputFields.length - 1; j++) {
+		                        	
+						        	// setting the corresponding placeholders for input fields into a common variable
+						        	String inputPlaceholder = j < (inputFields.length - 2) ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+						        	
+						        	// seetting the corresponding input fields into a common variable
+						        	JTextField inputField = j < (inputFields.length - 2) ? inputFields[j] : inputFields[j+currentFormIndex];
 
 		                            // checking if any field has user input
-		                            if (!inputFields[currentFormPanelIndex][j].getText().equals(inputPlaceholder) && !inputFields[currentFormPanelIndex][j].getText().isEmpty()) {
+		                            if (!inputField.getText().equals(inputPlaceholder) && !inputField.getText().isEmpty()) {
 		                                isFormFilled = true;
 		                                break;
 		                            }
@@ -1349,12 +1229,12 @@ public class GymGUI{
 		                        }
 
 		                        // resetting form fields
-		                        for (int j = 0; j < inputFields[currentFormPanelIndex].length; j++) {
-		                            String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormPanelIndex][0];
-		                            inputFields[currentFormPanelIndex][j].setForeground(PLACEHOLDERGRAY);
-		                            inputFields[currentFormPanelIndex][j].setText(placeholder);
-		                            inputFields[currentFormPanelIndex][j].setFocusable(false);
-		                            inputFields[currentFormPanelIndex][j].setBorder(DEFAULT_INPUT_BORDER);
+		                        for (int j = 0; j < inputFields.length; j++) {
+		                            String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+		                            inputFields[j].setForeground(PLACEHOLDERGRAY);
+		                            inputFields[j].setText(placeholder);
+		                            inputFields[j].setFocusable(false);
+		                            inputFields[j].setBorder(DEFAULT_INPUT_BORDER);
 		                        }
 
 		                        GENDER.clearSelection();
@@ -1365,15 +1245,15 @@ public class GymGUI{
 		                        addMemberTitle_P.remove(utilityButtons_P[0]);
 
 		                        // removing current form panel and form buttons
-		                        bodyContent[1].remove(formPanels[currentFormPanelIndex]);
+		                        bodyContent[1].remove(formPanels[currentFormIndex]);
 		                        bodyContent[1].remove(formButtons_P);
 		                        
 		                        // showing the memberTypeSelect panel
 		                        bodyContent[1].add(memberTypeSelect_P, BorderLayout.CENTER);
 		                        
 		                        // making the fields be focusable after the form panel has been removed
-		                        for(int j = 0 ; j < inputFields[currentFormPanelIndex].length ; j++) {
-		                        	inputFields[currentFormPanelIndex][j].setFocusable(true);
+		                        for(int j = 0 ; j < inputFields.length ; j++) {
+		                        	inputFields[j].setFocusable(true);
 		                        }
 		                    }
 
@@ -1676,6 +1556,7 @@ public class GymGUI{
 							bodyContent[1].add(formPanels[i], BorderLayout.CENTER); // showing corresponding content
 							
 							isFormContent[i] = true; // since current panel is not member type
+							showFormContent.run();
 						}
 			        	
 			        	// setting the form title accroding to the button pressed
@@ -1730,13 +1611,16 @@ public class GymGUI{
 							
 							boolean isFormFilled = false; // since form is "empty" by default
 							
-							for(int j = 0 ; j < inputFields[currentFormIndex].length ; j++) {
+							for(int j = 0 ; j < inputFields.length ; j++) {
 								
-								// setting the placeholders for input variables
-								String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0]; 
+					        	// setting the corresponding placeholders for input fields into a common variable
+					        	String inputPlaceholder = j < (inputFields.length - 2) ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+					        	
+					        	// seetting the corresponding input fields into a common variable
+					        	JTextField inputField = j < (inputFields.length - 2) ? inputFields[j] : inputFields[j+currentFormIndex];
 								
 								// checking if atleast one input field doesn't have it's corresponding placeholder or empty value, and setting emptyForm to false when that's the case
-								if( ! (inputFields[currentFormIndex][j].getText().equals(placeholder)) && ! (inputFields[currentFormIndex][j].getText().equals("")) ) {
+								if( ! (inputField.getText().equals(inputPlaceholder)) && ! (inputField.getText().equals("")) ) {
 									isFormFilled = true;
 									break; // to exit out of this loop when it finds the first user inputted field
 								}
@@ -1755,19 +1639,19 @@ public class GymGUI{
 //			                    regular_plan_C.setSelectedIndex(-1); // deselecting plan
 			                    //=========================
 			                    
-					        	for(int m = 0 ; m < inputFields[currentFormIndex].length ; m++) {
+					        	for(int m = 0 ; m < inputFields.length ; m++) {
 								
 								// only resetting the form if yes is clicked
 								if(backWish==0) {
-									for(int j=0 ; j < inputFields[currentFormIndex].length ; j++ ) {
+									for(int j=0 ; j < inputFields.length - 1 ; j++ ) {
 										
-										// setting the placeholders for input variables
-										String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+							        	// setting the corresponding placeholders for input fields into a common variable
+							        	String inputPlaceholder = j < (inputFields.length - 2) ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
 
-										inputFields[currentFormIndex][j].setForeground(PLACEHOLDERGRAY);
-										inputFields[currentFormIndex][j].setText(placeholder);
-										inputFields[currentFormIndex][j].setFocusable(false);
-										inputFields[currentFormIndex][j].setBorder(DEFAULT_INPUT_BORDER); // setting default border
+										inputFields[j].setForeground(PLACEHOLDERGRAY);
+										inputFields[j].setText(inputPlaceholder);
+										inputFields[j].setFocusable(false);
+										inputFields[j].setBorder(DEFAULT_INPUT_BORDER); // setting default border
 									}
 									
 									// reverting title and removing back button
@@ -1816,8 +1700,8 @@ public class GymGUI{
 								
 							}
 							
-							for(int j=0 ; j < inputFields[currentFormIndex].length ; j++ ) {
-								inputFields[currentFormIndex][j].setFocusable(true);
+							for(int j=0 ; j < inputFields.length ; j++ ) {
+								inputFields[j].setFocusable(true);
 							}
 						}
 						
