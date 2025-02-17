@@ -1940,35 +1940,7 @@ public class GymGUI{
 		        }
 		    }
 		});
-//
-//		// deactivate membership button  
-//		menuBar.addMouseListener(new MouseAdapter() {
-//		    @Override
-//		    public void mousePressed(MouseEvent e) {
-//		        for (GymMember member : members) {
-//		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
-//		            	
-//		                if (showDialog) {
-//		                    showDialog = false; // setting to false so it doesn't show multiple times  
-//
-//		                    // deactivating membership  
-//		                    member.deactivateMembership();  
-//
-//		                    // handling dialog  
-//		                    SwingUtilities.invokeLater(() -> {
-//		                        inputDialogHandler.run(); // executing the dialog logic  
-//		                        showDialog = true; // setting to true after dialog is shown  
-//		                    });
-//
-//		                    // refreshing ui  
-//		                    memberManagementContent.revalidate();
-//		                    memberManagementContent.repaint();   
-//		                }
-//		                break; // stopping loop once found  
-//		            }
-//		        }
-//		    }
-//		});
+
 
 	}
 
