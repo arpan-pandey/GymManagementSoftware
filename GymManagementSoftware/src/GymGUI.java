@@ -356,33 +356,63 @@ public class GymGUI{
 					// card keyword labels
 					cardLabels = {
 							
-							new JLabel("Name : "),
-							new JLabel("ID : "),
-							new JLabel("Active Status : "),
-							new JLabel("Start Date : "),
-							new JLabel("Location : "),
-							new JLabel("Phone no. : "),
-							new JLabel("Email : "),
-							new JLabel("DOB : "),
-							new JLabel("Attendance : "),
-							new JLabel("Loyalty Points : "),
+						new JLabel("Name : "),
+						new JLabel("ID : "),
+						new JLabel("Active Status : "),
+						new JLabel("Start Date : "),
+						new JLabel("Location : "),
+						new JLabel("Phone no. : "),
+						new JLabel("Email : "),
+						new JLabel("DOB : "),
+						new JLabel("Attendance : "),
+						new JLabel("Loyalty Points : "),
 							
-							// premium member unique attributes
-							new JLabel("Paid Amount : "),
-							new JLabel("Discount Amount : "),
-							new JLabel("Full Payment? : "),
-							new JLabel("Trainer Name : "),
+						// premium member unique attributes
+						new JLabel("Paid Amount : "),
+						new JLabel("Discount Amount : "),
+						new JLabel("Full Payment? : "),
+						new JLabel("Trainer Name : "),
 							
-							// regular member unique attributes
-							new JLabel("Current Plan : "),
-							new JLabel("Upgrade? : "),
-							new JLabel("Referral Source : "),
-							new JLabel("Removal Reason : ")
+						// regular member unique attributes
+						new JLabel("Current Plan : "),
+						new JLabel("Upgrade? : "),
+						new JLabel("Referral Source : "),
+						new JLabel("Removal Reason : ")
 
+				};
+				
+				JPanel individualMemberButtonsWrapper_P = new JPanel();
+			
+					JPanel[]
+						individualMemberButtons_P = {
+							new JPanel(), // activate/deactivate membership
+							new JPanel(), // mark attendance
+							new JPanel(), // revert Premium/Regular member
+						
+							new JPanel(), // calculate discount || upgrade plan
+							new JPanel(), // discount amount field || plan combo box
+							new JPanel(), // pay due amount || plan price field
+							new JPanel(), // premium plan charge field || remove member
+							new JPanel()  // removal reason field
 					};
 				
-			JPanel individualMemberButtons_P = new JPanel();
-			
+					JTextField[]
+						individualMemberFields = {
+							new JTextField(), // discount amount field || plan price
+							new JTextField()  // premium plan charge || removal reason  
+					};
+				
+					JButton[]
+						individualMemberButtons = {
+							new JButton("Activate Membership"),
+							new JButton("Mark Attendance"),
+							new JButton("Revert Premium Member"), // seperate button as required
+							new JButton("Revert Regular Member"), // seperate button as required
+							
+							new JButton("Calculate Discount"), // OR Upgrade plan 
+							new JButton("Pay Due Amount"),
+							new JButton("Remove Member")
+					};
 			
 	/*
 	 * ARRAYS
@@ -397,7 +427,7 @@ public class GymGUI{
 		},
 		//array of utility buttons
 		utilityButtons_L= {
-			new JLabel(backSymbol), //back button for addMember forms
+			new JLabel(backSymbol), //back button for internal panels
 		},
 		// array of central body panel titles
 		centralPanelTitles = {
@@ -454,6 +484,13 @@ public class GymGUI{
 						formControlButtons[1],
 						formControlButtons[2],
 				menuButtons[2],
+						individualMemberButtons[0],
+						individualMemberButtons[1],
+						individualMemberButtons[2],
+						individualMemberButtons[3],
+						individualMemberButtons[4],
+						individualMemberButtons[5],
+						individualMemberButtons[6]
 			},
 			// array of body buttons
 			centralPanelButtons = {
@@ -1083,62 +1120,17 @@ public class GymGUI{
 		 * MEMBER MANAGEMENT SECTION
 		 */
 		
-		/*
-				
-			JPanel individualMemberManagement_P = new JPanel();
-				JPanel memberCard_P = new JPanel();
-				JPanel cardCommonAttributes_P = new JPanel();
-				
-					JPanel memberPersonalDetails_P = new JPanel();
-					JPanel memberContacts_P = new JPanel();
-					JPanel memberAttendance = new JPanel();
-					
-				JPanel cardUniqueAttributes_P = new JPanel();
-					
-					JPanel memberTypeAttributes = new JPanel();
-				
-				JLabel[]
-					// card detail labels
-					cardLabels = {
-								
-						// common attributes
-						new JLabel(), // name
-						new JLabel(), // id
-						new JLabel(), // activeStatus
-						new JLabel(), // membershipStartDate
-						new JLabel(), // location
-						new JLabel(), // phone
-						new JLabel(), // email
-						new JLabel(), // DOB
-						new JLabel(), // attendance
-						new JLabel(), // loyalty points
-						
-						// unique attributes for premium members
-						new JLabel(), // paid amount (premium)
-						new JLabel(), // discount (premium)
-						new JLabel(), // isFullPayment (premium)
-						new JLabel(), // trainer name (premium)
-						
-						// unique attributes for regular members
-						new JLabel(), // current plan (regular)
-						new JLabel(), // isEligibleForUpgrade (regular)
-						new JLabel(), // referralSource (regular)
-						new JLabel(), // removal reason (regular)				
-				};
-		 */
-		
-		
 		bodyContent[2].remove(memberManagementButton_P);
 		bodyContent[2].add(individualMemberManagement_P);
 		
 		individualMemberManagement_P.setLayout(new BorderLayout());
 		individualMemberManagement_P.add(memberCard_P, BorderLayout.NORTH);
-		individualMemberManagement_P.add(individualMemberButtons_P, BorderLayout.CENTER);
+		individualMemberManagement_P.add(individualMemberButtonsWrapper_P, BorderLayout.CENTER);
 		
 		// card styling
 		memberCard_P.setBorder(CARD_MARGIN);
 		memberCard_P.setBackground(LIGHTGRAY);
-		memberCard_P.setPreferredSize(new Dimension(1,280));
+		memberCard_P.setPreferredSize(new Dimension(1,260));
 		memberCard_P.setLayout(new BorderLayout());
 		memberCard_P.add(cardCommonAttributes_P, BorderLayout.WEST);
 		memberCard_P.add(cardUniqueAttributes_P, BorderLayout.CENTER);
@@ -1153,8 +1145,57 @@ public class GymGUI{
 		cardUniqueAttributes_P.setLayout(new GridLayout(0,1));
 		
 		// individual member management buttons panel styling 
-		individualMemberButtons_P.setBackground(LIGHTGRAY);
-		individualMemberButtons_P.setLayout(new GridLayout(4,2));
+		individualMemberButtonsWrapper_P.setBackground(LIGHTGRAY);
+		individualMemberButtonsWrapper_P.setLayout(new GridLayout(3,3));
+		individualMemberButtonsWrapper_P.setBorder(CARD_MARGIN);
+		
+		/*
+ 			JPanel individualMemberButtonsWrapper_P = new JPanel();
+			
+					JPanel[]
+						individualMemberButtons_P = {
+							new JPanel(), // activate/deactivate membership
+							new JPanel(), // mark attendance
+							new JPanel(), // revert Premium/Regular member
+						
+							new JPanel(), // calculate discount || upgrade plan
+							new JPanel(), // discount amount field || plan combo box
+							new JPanel(), // pay due amount || plan price field
+							new JPanel(), // premium plan charge field || remove member
+							new JPanel()  // removal reason field
+					};
+				
+					JTextField[]
+						individualMemberFields = {
+							new JTextField(), // discount amount field || plan price
+							new JTextField()  // premium plan charge || removal reason  
+					};
+				
+					JButton[]
+						individualMemberButtons = {
+							new JButton("Activate Membership"),
+							new JButton("Mark Attendance"),
+							new JButton("Revert Premium Member"), // seperate button as required
+							new JButton("Revert Regular Member"), // seperate button as required
+							
+							new JButton("Calculate Discount"), // OR Upgrade plan 
+							new JButton("Pay Due Amount"),
+							new JButton("Remove Member")
+					};
+		 */
+		
+		Border testOutline = BorderFactory.createLineBorder(Color.red, 1);
+		
+		for(JPanel buttonPanel : individualMemberButtons_P) {
+			buttonPanel.setBorder(testOutline);
+			buttonPanel.setBackground(LIGHTGRAY);
+			buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,15));
+			
+			individualMemberButtonsWrapper_P.add(buttonPanel);
+		}
+		
+		individualMemberButtons_P[0].add(individualMemberButtons[0]);
+		
 		
 		
 		/*
@@ -1633,7 +1674,7 @@ public class GymGUI{
 							
 							boolean isFormFilled = false; // since form is "empty" by default
 							
-							for(int j = 0 ; j < inputFields.length ; j++) {
+							for(int j = 0 ; j < inputFields.length - 1; j++) {
 								
 					        	// setting the corresponding placeholders for input fields into a common variable
 					        	String inputPlaceholder = j < (inputFields.length - 2) ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
@@ -1729,62 +1770,62 @@ public class GymGUI{
 			});
 		}
 		
-		// activate membership button  
-		individualMemberButtons_P.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mousePressed(MouseEvent e) {
-		        for (GymMember member : members) {
-		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
-		                if (showDialog) {
-		                    showDialog = false; // setting to false so it doesn't show multiple times  
-
-		                    // activating membership  
-		                    member.activateMembership();  
-
-		                    // handling dialog  
-		                    SwingUtilities.invokeLater(() -> {
-		                        inputDialogHandler.run(); // executing the dialog logic  
-		                        showDialog = true; // setting to true after dialog is shown  
-		                    });
-
-		                    // refreshing ui  
-		                    memberManagementContent.revalidate();
-		                    memberManagementContent.repaint();
-		                }
-		                break; // stopping loop once found  
-		            }
-		        }
-		    }
-		});
-
-		// deactivate membership button  
-		menuBar.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mousePressed(MouseEvent e) {
-		        for (GymMember member : members) {
-		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
-		            	
-		                if (showDialog) {
-		                    showDialog = false; // setting to false so it doesn't show multiple times  
-
-		                    // deactivating membership  
-		                    member.deactivateMembership();  
-
-		                    // handling dialog  
-		                    SwingUtilities.invokeLater(() -> {
-		                        inputDialogHandler.run(); // executing the dialog logic  
-		                        showDialog = true; // setting to true after dialog is shown  
-		                    });
-
-		                    // refreshing ui  
-		                    memberManagementContent.revalidate();
-		                    memberManagementContent.repaint();   
-		                }
-		                break; // stopping loop once found  
-		            }
-		        }
-		    }
-		});
+//		// activate membership button  
+//		individualMemberButtonsWrapper_P.addMouseListener(new MouseAdapter() {
+//		    @Override
+//		    public void mousePressed(MouseEvent e) {
+//		        for (GymMember member : members) {
+//		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
+//		                if (showDialog) {
+//		                    showDialog = false; // setting to false so it doesn't show multiple times  
+//
+//		                    // activating membership  
+//		                    member.activateMembership();  
+//
+//		                    // handling dialog  
+//		                    SwingUtilities.invokeLater(() -> {
+//		                        inputDialogHandler.run(); // executing the dialog logic  
+//		                        showDialog = true; // setting to true after dialog is shown  
+//		                    });
+//
+//		                    // refreshing ui  
+//		                    memberManagementContent.revalidate();
+//		                    memberManagementContent.repaint();
+//		                }
+//		                break; // stopping loop once found  
+//		            }
+//		        }
+//		    }
+//		});
+//
+//		// deactivate membership button  
+//		menuBar.addMouseListener(new MouseAdapter() {
+//		    @Override
+//		    public void mousePressed(MouseEvent e) {
+//		        for (GymMember member : members) {
+//		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
+//		            	
+//		                if (showDialog) {
+//		                    showDialog = false; // setting to false so it doesn't show multiple times  
+//
+//		                    // deactivating membership  
+//		                    member.deactivateMembership();  
+//
+//		                    // handling dialog  
+//		                    SwingUtilities.invokeLater(() -> {
+//		                        inputDialogHandler.run(); // executing the dialog logic  
+//		                        showDialog = true; // setting to true after dialog is shown  
+//		                    });
+//
+//		                    // refreshing ui  
+//		                    memberManagementContent.revalidate();
+//		                    memberManagementContent.repaint();   
+//		                }
+//		                break; // stopping loop once found  
+//		            }
+//		        }
+//		    }
+//		});
 
 	}
 
