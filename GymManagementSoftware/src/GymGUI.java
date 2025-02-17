@@ -1441,7 +1441,7 @@ public class GymGUI{
 			                                                "#1B263B", //MIDNIGHTBLUE
 			                                                detailTitle,
 			                                                activeStatusTextColor,
-			                                                (i == 2) ? "⦿ " : "", // adding ⦿ symbol to active status value using ternary operator
+			                                                (i == 2) ? "⦿ " : ((memberType.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""), // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
 			                                                memberDetails[i] 
 			                                            ));  
 			                                            
