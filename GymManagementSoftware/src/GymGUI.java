@@ -1014,7 +1014,7 @@ public class GymGUI{
 					        		DOB = inputFields[5].getText(),
 					        		membershipStartDate = inputFields[6].getText(),
 					        		personalTrainer = inputFields[7].getText(), // unique field
-					        		referralSource = inputFields[7].getText(); // unique field
+					        		referralSource = inputFields[8].getText(); // unique field
 						        	
 						        	
 									 // creating premium member object, based on the form on display
