@@ -82,6 +82,9 @@ public class GymGUI{
     final Font INPUT_FONT = new Font("Helvetica", Font.PLAIN, 14);
     final Font RADIO_FONT = new Font("Century Gothic", Font.BOLD, 14);
     
+    // memberManagement input font
+    final Font MANAGEMENT_INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 13);
+    
     
     
     /*
@@ -98,6 +101,8 @@ public class GymGUI{
     final int cardMarginTop = 22, cardMarginBottom = 5, cardMarginHorizontal = 20; // margin for individual member card
     final int cardContentMarginVertical = 15, cardContentMarginHorizontal = 10;
     final int cardOddLabelMarginLeft = 11, cardUniqueLabelMarginLeft = 19;
+    
+    final int managementInputMarginTop = 8, managementInputMarginBottom = 18, managementInputMarginHorizontal = 18;
 
     // content margin
     final Border CONTENT_MARGIN = BorderFactory.createEmptyBorder(marginTopBottom, marginLeftRight, marginTopBottom, marginLeftRight);
@@ -122,6 +127,12 @@ public class GymGUI{
     // margin for member management card labels
     final Border CARD_UNIQUE_LABEL_MARGIN_LEFT = BorderFactory.createEmptyBorder(0,cardUniqueLabelMarginLeft,0,0);
     final Border CARD_ODD_LABEL_MARGIN_LEFT = BorderFactory.createEmptyBorder(0,cardOddLabelMarginLeft,0,0);
+    
+    // margin for member management button panel
+    final Border MANAGEMENT_BUTTON_PANEL_MARGIN = BorderFactory.createEmptyBorder(cardMarginTop,0,cardMarginBottom,0);
+    
+    // margin for member management input field
+    final Border MEMBER_MANAGEMENT_INPUT_MARGIN = BorderFactory.createEmptyBorder(managementInputMarginTop,managementInputMarginHorizontal,managementInputMarginBottom,managementInputMarginHorizontal);
     
     // padding inside buttons
     final Border BUTTON_INNER_PADDING = BorderFactory.createEmptyBorder(buttonPaddingVertical, horizontalMargin, buttonPaddingVertical, horizontalMargin);
@@ -154,7 +165,11 @@ public class GymGUI{
 	
 	// for member card buttons funcitonality
     boolean showDialog = true;
+    
+    // last member id and type of member
     String lastMemberID = "-1";
+    String memberInstanceOf = "";
+    
     Runnable inputDialogHandler; // declaring a runnable
 	
     
@@ -401,6 +416,15 @@ public class GymGUI{
 							new JTextField(), // discount amount field || plan price
 							new JTextField()  // premium plan charge || removal reason  
 					};
+					
+					JLabel[]
+						individualMemberFieldTitle = {
+							new JLabel("Discount Amount:"),
+							new JLabel("Select A Plan:"),
+							new JLabel("Plan Price:"),
+							new JLabel("Removal Reason:"),
+							new JLabel("Amount:")
+						};
 				
 					JButton[]
 						individualMemberButtons = {
@@ -1130,7 +1154,7 @@ public class GymGUI{
 		// card styling
 		memberCard_P.setBorder(CARD_MARGIN);
 		memberCard_P.setBackground(LIGHTGRAY);
-		memberCard_P.setPreferredSize(new Dimension(1,260));
+		memberCard_P.setPreferredSize(new Dimension(1,245));
 		memberCard_P.setLayout(new BorderLayout());
 		memberCard_P.add(cardCommonAttributes_P, BorderLayout.WEST);
 		memberCard_P.add(cardUniqueAttributes_P, BorderLayout.CENTER);
@@ -1147,7 +1171,7 @@ public class GymGUI{
 		// individual member management buttons panel styling 
 		individualMemberButtonsWrapper_P.setBackground(LIGHTGRAY);
 		individualMemberButtonsWrapper_P.setLayout(new GridLayout(3,3));
-		individualMemberButtonsWrapper_P.setBorder(CARD_MARGIN);
+		individualMemberButtonsWrapper_P.setBorder(MANAGEMENT_BUTTON_PANEL_MARGIN);
 		
 		/*
  			JPanel individualMemberButtonsWrapper_P = new JPanel();
@@ -1187,16 +1211,31 @@ public class GymGUI{
 		Border testOutline = BorderFactory.createLineBorder(Color.red, 1);
 		
 		for(JPanel buttonPanel : individualMemberButtons_P) {
-			buttonPanel.setBorder(testOutline);
 			buttonPanel.setBackground(LIGHTGRAY);
 			buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,15));
-			
-			individualMemberButtonsWrapper_P.add(buttonPanel);
 		}
 		
-		individualMemberButtons_P[0].add(individualMemberButtons[0]);
+		for(JButton managementButtons : individualMemberButtons) {
+			managementButtons.setPreferredSize(new Dimension(220,45));
+			managementButtons.setHorizontalAlignment(SwingConstants.CENTER);
+		}
 		
+		for(JTextField inputField : individualMemberFields) {
+            inputField.setPreferredSize(new Dimension(1,30));
+            inputField.setBorder(DEFAULT_INPUT_BORDER); // setting default border initially
+            inputField.setFont(INPUT_FONT);
+            inputField.setForeground(MIDNIGHTBLUE);
+            inputField.setBackground(LIGHTGRAY);
+            inputField.setFocusable(false);
+		}
 		
+		for(JLabel inputHeading : individualMemberFieldTitle) {
+			inputHeading.setForeground(MIDNIGHTBLUE);
+			inputHeading.setFont(MANAGEMENT_INPUT_HEADING);
+		}
+		
+//		individualMemberFields[1].setBorder(MANAGEMENT_INPUT_BORDER); // setting different border for last field
+		individualMemberFields[1].setFocusable(true);
 		
 		/*
 		 * FRAME SECTION
@@ -1371,8 +1410,6 @@ public class GymGUI{
 		                                	
 		                                    boolean isExistingId = false; // checking if ID exists
 		                                    
-		                                    String memberInstanceOf = "";
-		                                    
 		                                    String[]
 		                                    	memberDetails = {
 		                                    		"", // name
@@ -1451,7 +1488,103 @@ public class GymGUI{
 		                                        
 		                                        memberManagementContent.add(individualMemberManagement_P, BorderLayout.CENTER); 
 		                                        
-		                                        String memberType = memberInstanceOf; // to pass into next block
+		                                        // removing all previous button panels, and it's contents
+		                                        individualMemberButtonsWrapper_P.removeAll();
+		                                        
+		                                        int marker;
+		                                        
+		                                     // adding button panels in corresponding places
+		                                		for(int i = 0 ; i < individualMemberButtons_P.length - 1 ; i++ ) {
+		                                			
+			                                        individualMemberButtons_P[i].removeAll();
+			                                        individualMemberButtons_P[i].setBorder(null);
+			                                        individualMemberButtons_P[i].setLayout(new FlowLayout(FlowLayout.CENTER,0,15));
+		                                			
+		                                			if(memberInstanceOf.equals("Premium") && i==5) {
+		                                				JPanel emptyPanel = new JPanel();
+		                                				emptyPanel.setBackground(LIGHTGRAY);
+		                                				
+                                						individualMemberButtonsWrapper_P.add(emptyPanel);
+		                                			}
+		                                			
+		                                			individualMemberButtonsWrapper_P.add(individualMemberButtons_P[i]);
+		                                			
+		                                			if(memberInstanceOf.equals("Regular") && i==6) {
+		                                				
+                                						individualMemberButtonsWrapper_P.add(individualMemberButtons_P[i+1]);
+		                                			}
+		                                			
+		                                			// setting corresponding buttons using a switch statement on i
+		                                			switch (i) {
+		                                			
+		                                				case 0:
+		                                				case 1:
+		                                					individualMemberButtons_P[i].add(individualMemberButtons[i]);
+		                                					break;
+		                                			
+		                                				case 2:
+		                                					int buttonIndex = i + (memberInstanceOf.equals("Premium") ? 0 : 1);
+		                                			        individualMemberButtons_P[i].add(individualMemberButtons[buttonIndex]);
+		                                			        break;
+
+		                                				case 3:
+		                                			        individualMemberButtons[i + 1].setText(memberInstanceOf.equals("Premium") ? "Calculate Discount" : "Upgrade Plan");
+		                                			        individualMemberButtons_P[i].add(individualMemberButtons[i + 1]);
+		                                			        break;
+		                                			        
+		                                				case 4:
+		                                					individualMemberButtons_P[i].removeAll();
+		                                					individualMemberButtons_P[i].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
+		                                					individualMemberButtons_P[i].setBackground(LIGHTGRAY);
+		                                					individualMemberButtons_P[i].setLayout(new BorderLayout());
+		                                					
+		                                					if(memberInstanceOf.equals("Premium")){
+		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[0], BorderLayout.NORTH); // adding label at the top
+		                                						individualMemberButtons_P[i].add(individualMemberFields[0], BorderLayout.SOUTH); // adding field at the bottom	
+		                                					}
+		                                					else{
+		                                					}
+		                                					break;
+
+		                                				case 5: 
+		                                					if (memberInstanceOf.equals("Premium")) {
+		                                						
+		                                						individualMemberButtons_P[i].add(individualMemberButtons[i]);
+		                                					}
+		                                					else{
+		                                						individualMemberButtons_P[i].removeAll();
+		                                						individualMemberButtons_P[i].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
+		                                						individualMemberButtons_P[i].setBackground(LIGHTGRAY);
+		                                						individualMemberButtons_P[i].setLayout(new BorderLayout());
+		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[2], BorderLayout.NORTH); // adding label at the top
+		                                						individualMemberButtons_P[i].add(individualMemberFields[0], BorderLayout.SOUTH); // adding field at the bottom	
+		                                					}
+		                                					
+		                                					break;
+
+		                                				case 6: 
+		                                					if (memberInstanceOf.equals("Premium")) {
+		                                						
+		                                						individualMemberButtons_P[i].removeAll();
+		                                						individualMemberButtons_P[i].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
+		                                						individualMemberButtons_P[i].setBackground(LIGHTGRAY);
+		                                						individualMemberButtons_P[i].setLayout(new BorderLayout());
+		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[4], BorderLayout.NORTH); // adding label at the top
+		                                						individualMemberButtons_P[i].add(individualMemberFields[1], BorderLayout.SOUTH); // adding field at the bottom	
+		                                					}
+		                                					else{
+		                                						individualMemberButtons_P[i].add(individualMemberButtons[i]);
+		                                						
+		                                						individualMemberButtons_P[i+1].removeAll();
+		                                						individualMemberButtons_P[i+1].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
+		                                						individualMemberButtons_P[i+1].setBackground(LIGHTGRAY);
+		                                						individualMemberButtons_P[i+1].setLayout(new BorderLayout());
+		                                						individualMemberButtons_P[i+1].add(individualMemberFieldTitle[3], BorderLayout.NORTH); // adding label at the top
+		                                						individualMemberButtons_P[i+1].add(individualMemberFields[1], BorderLayout.SOUTH); // adding field at the bottom	
+		                                					}
+		                                					break;
+		                                			}
+		                                		}
 		                                        
 		                                        for(JPanel cardPanel : cardPanels) {
 		                                        	cardPanel.removeAll(); // removing all previous labels completely
@@ -1468,7 +1601,7 @@ public class GymGUI{
 		                                            	customDetailTextColor = (memberDetails[2].equals("Active")) ? "color: green" : "color: red"; // red for inactive, green for active
 		                                            }
 		                                            // for current plan (regularMember)
-		                                            else if(memberType.equals("Regular") && i==10) {
+		                                            else if(memberInstanceOf.equals("Regular") && i==10) {
 		                                            	
 		                                            	String bold = "font-weight: bold; "; // making the text bold, by storing the CSS attribute in a variable and using it
 		                                            	
@@ -1484,7 +1617,7 @@ public class GymGUI{
 		                                            }
 		                                            
 		                                            // using i+4 card titles when i is greater than 9 and the member is a regular member
-		                                            String detailTitle = (i<10) ? cardLabels[i].getText() : cardLabels[i+(memberType.equals("Premium")? 0 : 4)].getText();
+		                                            String detailTitle = (i<10) ? cardLabels[i].getText() : cardLabels[i+(memberInstanceOf.equals("Premium")? 0 : 4)].getText();
 		                                            
 		                                            // to add unique labels to second panel
 		                                            JPanel cardPanel = (i<10) ? cardCommonAttributes_P : cardUniqueAttributes_P;
@@ -1504,7 +1637,7 @@ public class GymGUI{
 			                                                "#1B263B", //MIDNIGHTBLUE
 			                                                detailTitle,
 			                                                customDetailTextColor,
-			                                                (i == 2) ? "⦿ " : ((memberType.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""), // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
+			                                                (i == 2) ? "⦿ " : ((memberInstanceOf.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""), // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
 			                                                memberDetails[i] 
 			                                            ));  
 			                                            
@@ -1770,33 +1903,43 @@ public class GymGUI{
 			});
 		}
 		
-//		// activate membership button  
-//		individualMemberButtonsWrapper_P.addMouseListener(new MouseAdapter() {
-//		    @Override
-//		    public void mousePressed(MouseEvent e) {
-//		        for (GymMember member : members) {
-//		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
-//		                if (showDialog) {
-//		                    showDialog = false; // setting to false so it doesn't show multiple times  
-//
-//		                    // activating membership  
-//		                    member.activateMembership();  
-//
-//		                    // handling dialog  
-//		                    SwingUtilities.invokeLater(() -> {
-//		                        inputDialogHandler.run(); // executing the dialog logic  
-//		                        showDialog = true; // setting to true after dialog is shown  
-//		                    });
-//
-//		                    // refreshing ui  
-//		                    memberManagementContent.revalidate();
-//		                    memberManagementContent.repaint();
-//		                }
-//		                break; // stopping loop once found  
-//		            }
-//		        }
-//		    }
-//		});
+		// activate membership button  
+		individualMemberButtons[0].addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mousePressed(MouseEvent e) {
+		        for (GymMember member : members) {
+		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
+		                if (showDialog) {
+		                    showDialog = false; // setting to false so it doesn't show multiple times  
+		                    
+		                    if(member.isActiveStatus()) {
+		                    	// deactivating membership  
+		                    	member.deactivateMembership();
+		                    	
+		                    	individualMemberButtons[0].setText("Activate Membership");
+		                    }
+		                    else {
+		                    	// activating membership  
+		                    	member.activateMembership();
+		                    	
+		                    	individualMemberButtons[0].setText("Deactivate Membership");
+		                    }
+
+		                    // handling dialog  
+		                    SwingUtilities.invokeLater(() -> {
+		                        inputDialogHandler.run(); // executing the dialog logic  
+		                        showDialog = true; // setting to true after dialog is shown  
+		                    });
+
+		                    // refreshing ui  
+		                    memberManagementContent.revalidate();
+		                    memberManagementContent.repaint();
+		                }
+		                break; // stopping loop once found  
+		            }
+		        }
+		    }
+		});
 //
 //		// deactivate membership button  
 //		menuBar.addMouseListener(new MouseAdapter() {
