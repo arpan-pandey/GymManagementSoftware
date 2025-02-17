@@ -1153,8 +1153,10 @@ public class GymGUI{
 		cardUniqueAttributes_P.setLayout(new GridLayout(0,1));
 		
 		// individual member management buttons panel styling 
-		individualMemberButtons_P.setBackground(Color.blue);
-	
+		individualMemberButtons_P.setBackground(LIGHTGRAY);
+		individualMemberButtons_P.setLayout(new GridLayout(4,2));
+		
+		
 		/*
 		 * FRAME SECTION
 		 */
@@ -1417,8 +1419,28 @@ public class GymGUI{
 		                                        // Looping through the updated member details and creating new labels dynamically  
 		                                        for (int i = 0; i < cardLabels.length-4 ; i++) {  
 		                                        	
-		                                            // determining text color for active status (nested ternary operator)
-		                                            String activeStatusTextColor = (i==2) ? (memberDetails[2].equals("Active") ? "color: green" : "color: red") : "";
+		                                            // declaring a variable to store text color for active status / current plan (regularMember)
+		                                            String customDetailTextColor = "";
+		                                            
+		                                            // for active status
+		                                            if(i==2) {
+		                                            	customDetailTextColor = (memberDetails[2].equals("Active")) ? "color: green" : "color: red"; // red for inactive, green for active
+		                                            }
+		                                            // for current plan (regularMember)
+		                                            else if(memberType.equals("Regular") && i==10) {
+		                                            	
+		                                            	String bold = "font-weight: bold; "; // making the text bold, by storing the CSS attribute in a variable and using it
+		                                            	
+		                                            	// setting colors for different plan types
+		                                            	switch(memberDetails[10]) {
+		                                            	
+		                                            		case "Basic" : customDetailTextColor = bold + "color : #16A085"; break; // dark turquoise
+		                                            		case "Standard" : customDetailTextColor = bold + "color : #9B59B6"; break; // dark pastel purple
+		                                            		case "Deluxe" : customDetailTextColor = bold + "color : #27AE60"; break; // dark emerald green
+		                                            		
+		                                            		default : System.out.println("this statement will never print"); // impossible case
+		                                            	}
+		                                            }
 		                                            
 		                                            // using i+4 card titles when i is greater than 9 and the member is a regular member
 		                                            String detailTitle = (i<10) ? cardLabels[i].getText() : cardLabels[i+(memberType.equals("Premium")? 0 : 4)].getText();
@@ -1440,7 +1462,7 @@ public class GymGUI{
 			                                                
 			                                                "#1B263B", //MIDNIGHTBLUE
 			                                                detailTitle,
-			                                                activeStatusTextColor,
+			                                                customDetailTextColor,
 			                                                (i == 2) ? "⦿ " : ((memberType.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""), // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
 			                                                memberDetails[i] 
 			                                            ));  
