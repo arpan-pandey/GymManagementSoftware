@@ -13,6 +13,11 @@
  * #FFFFFF (White)
  * #DDDEEE (Dark Gray)
  * #696969 (Gray (for placeholder))
+ * 
+ * #9A2A2A (Red)
+ * #2A6B32 (Green)
+ * #7A2A2A (Dark Red)
+ * #1F4D2A (Dark Green)
  */
 
 import java.awt.BorderLayout;
@@ -62,6 +67,14 @@ public class GymGUI{
     final Color WHITE = new Color(0xFFFFFF);
     final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
     
+    // for activate/deactivate buttons
+    final Color RED = new Color(0x9A2A2A);
+    final Color GREEN = new Color(0x2A6B32);
+    final Color DARKRED = new Color(0x7A2A2A);
+    final Color DARKGREEN = new Color(0x1F4D2A);
+
+
+    
     
     /*
 	 * font variables
@@ -109,6 +122,10 @@ public class GymGUI{
 
     // borders for button states
     final Border DEFAULT_BUTTON_OUTLINE = BorderFactory.createLineBorder(DARKNAVY, 1);
+    
+    final Border ACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(GREEN, 1);
+    final Border DEACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(RED, 1);
+    
     final Border ACTIVE_BUTTON_HIGHLIGHT = BorderFactory.createMatteBorder(0, 2, 0, 0, LIGHTGRAY);
     
     // borders for input field
@@ -167,6 +184,7 @@ public class GymGUI{
     boolean showDialog = true;
     
     // last member id and type of member
+    int currentMemberIndex = 0;
     String lastMemberID = "-1";
     String memberInstanceOf = "";
     
@@ -1208,7 +1226,7 @@ public class GymGUI{
 					};
 		 */
 		
-		Border testOutline = BorderFactory.createLineBorder(Color.red, 1);
+		int makrer;
 		
 		for(JPanel buttonPanel : individualMemberButtons_P) {
 			buttonPanel.setBackground(LIGHTGRAY);
@@ -1429,11 +1447,14 @@ public class GymGUI{
 		                                    		""  // trainer name || removal reason
 		                                    	};
 
-		                                    // checking if the ID exists using a for-each loop of GymMember objects
-		                                    for (GymMember member : members) {
+		                                    // checking if the ID exists using a for loop of GymMember objects
+		                                    for (int i = 0; i<members.size(); i++) {
+		                                    	GymMember member = members.get(i);
+		                                    	
 		                                        if (member.id == memberId) {
 		                                            isExistingId = true;
 		                                            
+		                                            currentMemberIndex = i;
 		                                            memberInstanceOf = member instanceof PremiumMember ? "Premium" : "Regular";
 		                                            
 		                                            // setting values of the array above, using getter methods of the object
@@ -1470,6 +1491,56 @@ public class GymGUI{
 			                                            memberDetails[13] = regularMember.getRemovalReason().equals("")? "N/A" : regularMember.getRemovalReason(); // showing N/A when removal reason is empty
 		                                            }
 		                                            
+		                                            
+		                                            /*
+		                                             * STYLING THE ACTIVATE/DEACTIVATE BUTTON
+		                                             */
+		                            		    	individualMemberButtons[0].setText(member.isActiveStatus()?"Deactivate Membership":"Activate Membership"); // setting corresponding text of first management button for each member
+		                            				individualMemberButtons[0].setBackground(member.isActiveStatus()?RED:GREEN); // setting green or red for activate or deactivate button
+		                            				individualMemberButtons[0].setBorder(member.isActiveStatus()?DEACTIVATE_BUTTON_OUTLINE:ACTIVATE_BUTTON_OUTLINE);
+		                            				
+		                            				// setting mouse interaction effects for activate/deactivate member button
+		                            				individualMemberButtons[0].addMouseListener(new MouseAdapter() { 
+		                            					@Override
+		                            					public void mouseEntered(MouseEvent e) {
+		                            						individualMemberButtons[0].setForeground(LIGHTGRAY);
+		                            						if(member.isActiveStatus()) {
+		                            							individualMemberButtons[0].setBackground(DARKRED);
+		                            						}
+		                            						else {
+		                            							individualMemberButtons[0].setBackground(DARKGREEN);
+		                            						}
+		                            					}
+		                            					@Override
+		                            					public void mouseExited(MouseEvent e) {
+		                            						if(member.isActiveStatus()) {
+		                            							individualMemberButtons[0].setBackground(RED);
+		                            						}
+		                            						else {
+		                            							individualMemberButtons[0].setBackground(GREEN);
+		                            						}
+		                            					}
+		                            					@Override
+		                            					public void mouseClicked(MouseEvent e) {
+		                            						if(member.isActiveStatus()) {
+		                            							individualMemberButtons[0].setBackground(RED);
+		                            						}
+		                            						else {
+		                            							individualMemberButtons[0].setBackground(GREEN);
+		                            						}
+		                            					}
+		                            					@Override
+		                            					public void mouseReleased(MouseEvent e) {
+		                            						if(member.isActiveStatus()) {
+		                            							individualMemberButtons[0].setBackground(RED);
+		                            						}
+		                            						else {
+		                            							individualMemberButtons[0].setBackground(GREEN);
+		                            						}
+		                            					}
+		                            				});
+		                            		    	
+		                            		    	
 		                                            break; // no need to check further
 		                                        }
 		                                    }
@@ -1905,43 +1976,45 @@ public class GymGUI{
 		
 		// activate membership button  
 		individualMemberButtons[0].addMouseListener(new MouseAdapter() {
+			
 		    @Override
 		    public void mousePressed(MouseEvent e) {
-		        for (GymMember member : members) {
-		            if (lastMemberID.equals(Integer.toString(member.getId()))) {
-		                if (showDialog) {
-		                    showDialog = false; // setting to false so it doesn't show multiple times  
-		                    
-		                    if(member.isActiveStatus()) {
-		                    	// deactivating membership  
-		                    	member.deactivateMembership();
-		                    	
-		                    	individualMemberButtons[0].setText("Activate Membership");
-		                    }
-		                    else {
-		                    	// activating membership  
-		                    	member.activateMembership();
-		                    	
-		                    	individualMemberButtons[0].setText("Deactivate Membership");
-		                    }
+		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
+		    	
+                if (showDialog) {
+                    showDialog = false; // setting to false so dialog doesn't appear again
+                    
+                    String wishKeyword = member.isActiveStatus()? "Deactivate":"Activate";
+                    int activateWish = JOptionPane.showOptionDialog(frame, wishKeyword+" "+member.getName()+"'s Membership?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
+                    
+                    if(activateWish==0) {
+                    	
+                        if(member.isActiveStatus()) {
+                        	// deactivating membership  
+                        	member.deactivateMembership();
+                        }
+                        else {
+                        	// activating membership  
+                        	member.activateMembership();
+                        }
 
-		                    // handling dialog  
-		                    SwingUtilities.invokeLater(() -> {
-		                        inputDialogHandler.run(); // executing the dialog logic  
-		                        showDialog = true; // setting to true after dialog is shown  
-		                    });
+                        // handling dialog  
+                        SwingUtilities.invokeLater(() -> {
+                            inputDialogHandler.run(); // executing the card text getting/setting runnable  
+                            showDialog = true; // reverting to true after text update is finished
+                            
+                            // since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
+                            // that is why the following statement forces the button's pressed state to be false
+                            individualMemberButtons[0].getModel().setPressed(false);
+                        });
 
-		                    // refreshing ui  
-		                    memberManagementContent.revalidate();
-		                    memberManagementContent.repaint();
-		                }
-		                break; // stopping loop once found  
-		            }
-		        }
-		    }
+                        // refreshing ui  
+                        memberManagementContent.revalidate();
+                        memberManagementContent.repaint();
+                    } 
+                }
+            }
 		});
-
-
 	}
 
 	// main metchod that calls constructor of this class
