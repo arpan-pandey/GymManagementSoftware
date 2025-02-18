@@ -69,7 +69,7 @@ public class GymGUI{
     
     // for activate/deactivate buttons
     final Color RED = new Color(0x9A2A2A);
-    final Color GREEN = new Color(0x2A6B32);
+    final Color GREEN = new Color(0x2A5B32);
     final Color DARKRED = new Color(0x7A2A2A);
     final Color DARKGREEN = new Color(0x1F4D2A);
 
@@ -1614,6 +1614,7 @@ public class GymGUI{
 		                                						individualMemberButtons_P[i].add(individualMemberFields[0], BorderLayout.SOUTH); // adding field at the bottom	
 		                                					}
 		                                					else{
+		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[1], BorderLayout.NORTH); // adding label at the top
 		                                					}
 		                                					break;
 
@@ -1634,25 +1635,19 @@ public class GymGUI{
 		                                					break;
 
 		                                				case 6: 
-		                                					if (memberInstanceOf.equals("Premium")) {
-		                                						
-		                                						individualMemberButtons_P[i].removeAll();
-		                                						individualMemberButtons_P[i].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
-		                                						individualMemberButtons_P[i].setBackground(LIGHTGRAY);
-		                                						individualMemberButtons_P[i].setLayout(new BorderLayout());
-		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[4], BorderLayout.NORTH); // adding label at the top
-		                                						individualMemberButtons_P[i].add(individualMemberFields[1], BorderLayout.SOUTH); // adding field at the bottom	
-		                                					}
-		                                					else{
+		                                					if (memberInstanceOf.equals("Regular")) {
 		                                						individualMemberButtons_P[i].add(individualMemberButtons[i]);
-		                                						
-		                                						individualMemberButtons_P[i+1].removeAll();
-		                                						individualMemberButtons_P[i+1].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
-		                                						individualMemberButtons_P[i+1].setBackground(LIGHTGRAY);
-		                                						individualMemberButtons_P[i+1].setLayout(new BorderLayout());
-		                                						individualMemberButtons_P[i+1].add(individualMemberFieldTitle[3], BorderLayout.NORTH); // adding label at the top
-		                                						individualMemberButtons_P[i+1].add(individualMemberFields[1], BorderLayout.SOUTH); // adding field at the bottom	
 		                                					}
+		                                					
+		                                					int panelIndex = memberInstanceOf.equals("Premium") ? 0 : 1; // setting which panel to use based on member type
+		                                					
+	                                						individualMemberButtons_P[i+panelIndex].removeAll();
+	                                						individualMemberButtons_P[i+panelIndex].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
+	                                						individualMemberButtons_P[i+panelIndex].setBackground(LIGHTGRAY);
+	                                						individualMemberButtons_P[i+panelIndex].setLayout(new BorderLayout());
+	                                						individualMemberButtons_P[i+panelIndex].add(individualMemberFieldTitle[4-panelIndex], BorderLayout.NORTH); // adding label at the top
+	                                						individualMemberButtons_P[i+panelIndex].add(individualMemberFields[1], BorderLayout.SOUTH); // adding field at the bottom
+	                                						
 		                                					break;
 		                                			}
 		                                		}
@@ -2007,7 +2002,10 @@ public class GymGUI{
                             // that is why the following statement forces the button's pressed state to be false
                             individualMemberButtons[0].getModel().setPressed(false);
                         });
-
+                        
+                        // success dialog
+                        JOptionPane.showOptionDialog(frame, member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!" , wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+                        
                         // refreshing ui  
                         memberManagementContent.revalidate();
                         memberManagementContent.repaint();
