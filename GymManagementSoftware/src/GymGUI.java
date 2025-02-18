@@ -15,7 +15,7 @@
  * #696969 (Gray (for placeholder))
  * 
  * #9A2A2A (Red)
- * #2A6B32 (Green)
+ * #2A5B32 (Green)
  * #7A2A2A (Dark Red)
  * #1F4D2A (Dark Green)
  */
