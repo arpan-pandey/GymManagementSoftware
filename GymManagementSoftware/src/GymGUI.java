@@ -1222,6 +1222,8 @@ public class GymGUI{
             inputField.setFocusable(false);
 		}
 		
+    	individualMemberFields[0].setFont(INPUT_HEADING); // setting font of non focusable field
+    	
 		individualMemberFields[1].setFocusable(true); // setting focusable to true initially 
 
 		individualMemberFields[1].addMouseListener(new MouseAdapter() {
@@ -1474,7 +1476,7 @@ public class GymGUI{
 		                                            	RegularMember regularMember = (RegularMember) member; // downcasting to access child methods
 		                                            	
 		                                            	memberDetails[10] = regularMember.getPlan(); // converting double to string
-		                                            	memberDetails[11] = regularMember.isEligibleForUpgrade() == true ? "Yes" : "No"; // getting boolean and using corresponding string for readability
+		                                            	memberDetails[11] = member.getAttendance()>=regularMember.getAttendanceLimit() ? "Yes" : "No"; // getting boolean using given logic and using corresponding string for readability
 		                                            	memberDetails[12] = regularMember.getReferralSource();
 			                                            memberDetails[13] = regularMember.getRemovalReason().equals("")? "N/A" : regularMember.getRemovalReason(); // showing N/A when removal reason is empty
 		                                            }
@@ -2136,13 +2138,17 @@ public class GymGUI{
 		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
 		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
 		    	
-		    	boolean proceedUpdate = true; // boolean to make the card update or not		    	
+		    	boolean proceedUpdate = true; // boolean to make the card update or not		
+		    	
+	    		// making local variables to store data
+    			String message="";
+    			String title="";
+    			int messageType=-1;
 		    	
 		    	/*
 		    	 * UPGRADE PLAN
 		    	 */
 		    	if(memberInstanceOf.equals("Regular")) {
-	    			
 	    			RegularMember regularMember = (RegularMember) member; // downcasting to GymMember RegularMember
 		    		String selectedPlan = (String) plan_C.getSelectedItem();
 		    		
@@ -2151,15 +2157,22 @@ public class GymGUI{
 		    			proceedUpdate = false;
 		    		}
 		    		else {
-		    			// error dialogs for ineligiblity for upgrade || same as cuurent plan selected
-		    			if(!regularMember.isEligibleForUpgrade() || regularMember.getPlan().equals(selectedPlan)) {
-		    				JOptionPane.showOptionDialog(frame, regularMember.upgradePlan(selectedPlan), "Ineligible for Upgrade", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
-		    				proceedUpdate = false;
+		    			// storing return message in the local variable
+		    			message = regularMember.upgradePlan(selectedPlan);
+		    			
+		    			// if the member is ineligible for upgrade || same plan as current plan is selected 
+		    			if (!regularMember.isEligibleForUpgrade() || regularMember.getPlan().equals(selectedPlan)) {
+		    			    title = "Ineligible for Upgrade";
+		    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
+		    			    proceedUpdate = false;
 		    			}
-		    			// information dialog for success
+		    			// if upgrade is successful
 		    			else {
-		    				JOptionPane.showOptionDialog(frame, regularMember.upgradePlan(selectedPlan), "Upgrade Successful", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+		    			    title = "Upgrade Successful";
+		    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
 		    			}
+
+		    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 		    		}
 	    		}
 		    	
@@ -2168,16 +2181,31 @@ public class GymGUI{
 	    		 * CALCULATE DISCOUNT
 	    		 */
 	    		else {
+	    			PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
 	    			
+	    			// storing return message in the local variable
+	    			message = premiumMember.calculateDiscount();
+	    			
+	    			if(!premiumMember.isFullPayment) {
+	    			    title = "Ineligible for Discount";
+	    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
+	    			    proceedUpdate = false;
+	    			}
+	    			else {
+	    			    title = "Discount Application Successful";
+	    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to error
+	    			    
+	    			    // updating non-focusable field text
+	    			    individualMemberFields[0].setText("Rs. "+Double.toString(premiumMember.getDiscountAmount()));
+	    			}
+	    			
+	    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 	    		}
 		    	
 	    		if(proceedUpdate) {
                     SwingUtilities.invokeLater(() -> {
                     	memberCardUpdate.run(); // executing the card text getting/setting runnable  
                     	showDialog = true; // reverting to true after text update is finished
-                    	
-                    	// success dialog
-                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s data has been successfully reset.", "Reset Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
                     });
 	    		}
             }
@@ -2201,7 +2229,6 @@ public class GymGUI{
 		        	
 		        	String selectedPlan = (String) plan_C.getSelectedItem();
 		        	individualMemberFields[0].setForeground(GREEN);
-		        	individualMemberFields[0].setFont(INPUT_HEADING);
 		        	individualMemberFields[0].setText("Rs. "+Double.toString(regularMember.getPlanPrice(selectedPlan)));
 		        }
 		    }

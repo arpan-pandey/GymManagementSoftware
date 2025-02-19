@@ -4,7 +4,7 @@ public class PremiumMember extends GymMember{
 	//unique instance variable declaration and initialization of default values for Premium members
 	final double premiumCharge=50000d;
 	double paidAmount=0d, discountAmount=0d;
-	boolean isFullPayment=false;
+	boolean isFullPayment=true;
 	String personalTrainer;
 	
 	public PremiumMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate, String personalTrainer){
