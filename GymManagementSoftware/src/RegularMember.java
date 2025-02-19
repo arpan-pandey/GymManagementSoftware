@@ -22,8 +22,9 @@ public class RegularMember extends GymMember{
 	public String getRemovalReason() { return this.removalReason; }
 	public double getPrice() { return this.price; }
 	public boolean isEligibleForUpgrade() { 
-		 // updating isEligibleForUpgrade to true if (attendance of member >= attendance limit)
+		// updating isEligibleForUpgrade to true if (attendance of member >= attendance limit)
 		this.isEligibleForUpgrade = super.getAttendance()>=this.attendanceLimit? true : false;
+		
 		return this.isEligibleForUpgrade;
 	}
 	
@@ -57,6 +58,9 @@ public class RegularMember extends GymMember{
 	
 	// method to upgrade a member's plan
 	public String upgradePlan(String plan) {
+		
+		// updating isEligibleForUpgrade to true if (attendance of member >= attendance limit)
+		this.isEligibleForUpgrade = super.getAttendance()>=this.attendanceLimit? true : false;
 		 
 		// to return error message when the member is not eligible to upgrade
 		if(!this.isEligibleForUpgrade) {
