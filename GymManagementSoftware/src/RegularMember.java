@@ -21,16 +21,9 @@ public class RegularMember extends GymMember{
 	public String getPlan() { return this.plan; }
 	public String getRemovalReason() { return this.removalReason; }
 	public double getPrice() { return this.price; }
-	public boolean isEligibleForUpgrade() { 
-		// updating isEligibleForUpgrade to true if (attendance of member >= attendance limit)
-		this.isEligibleForUpgrade = super.getAttendance()>=this.attendanceLimit? true : false;
-		
-		return this.isEligibleForUpgrade;
-	}
+	public boolean isEligibleForUpgrade() { return this.isEligibleForUpgrade; }
 	
 
-	
-	
 	//implementation of abstract method of parent class
 	@Override
 	public void markAttendance() {
