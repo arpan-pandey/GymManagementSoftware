@@ -960,7 +960,7 @@ public class GymGUI{
 					// event listener for clear all button of each form
 					if(e.getSource()==formControlButtons[0]) {
 						
-						int currentFormIndex = isFormContent[0] ? 0:1;
+                        int currentFormIndex = isFormContent[0] ? 0 : 1; // determining index of the current panel
 						
 						String options[]= {"Yes","No"}; // to explicitly define options in the following dialog box and select no as the focused button
 						
@@ -1269,7 +1269,7 @@ public class GymGUI{
 
 		frame.add(menuBar, BorderLayout.WEST);
 		
-		activeIndex = 2; // setting the lastContent to dashboardContent, initially
+		activeIndex = 1; // setting the lastContent to addMemberContent, initially
 		lastIndex = activeIndex;
 		menuButtons[activeIndex].setFont(BUTTON_FONT_ACTIVE);
 		menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
@@ -1969,47 +1969,54 @@ public class GymGUI{
 			});
 		}
 		
-		// activate membership button  
+		// activate/deactivate membership button  
 		individualMemberButtons[0].addMouseListener(new MouseAdapter() {
 			
 		    @Override
 		    public void mousePressed(MouseEvent e) {
 		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
 		    	
-                if (showDialog) {
-                    showDialog = false; // setting to false so dialog doesn't appear again
-                    
-                    String wishKeyword = member.isActiveStatus()? "Deactivate":"Activate";
-                    int activateWish = JOptionPane.showOptionDialog(frame, wishKeyword+" "+member.getName()+"'s Membership?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
-                    
-                    if(activateWish==0) {
-                    	
-                        if(member.isActiveStatus()) {
-                        	// deactivating membership  
-                        	member.deactivateMembership();
-                        }
-                        else {
-                        	// activating membership  
-                        	member.activateMembership();
-                        }
+		    	
+                showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
+                String wishKeyword = member.isActiveStatus()? "Deactivate":"Activate";
+                int activateWish = JOptionPane.showOptionDialog(frame, wishKeyword+" "+member.getName()+"'s Membership?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
+                
+                if(activateWish==0) {
+                	
+                    if(member.isActiveStatus()) {
+                    	// deactivating membership  
+                    	member.deactivateMembership();
+                    }
+                    else {
+                    	// activating membership  
+                    	member.activateMembership();
+                    }
 
-                        // handling dialog  
-                        SwingUtilities.invokeLater(() -> {
-                            inputDialogHandler.run(); // executing the card text getting/setting runnable  
-                            showDialog = true; // reverting to true after text update is finished
-                            
-                            // since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
-                            // that is why the following statement forces the button's pressed state to be false
-                            individualMemberButtons[0].getModel().setPressed(false);
-                        });
+                    // handling dialog  
+                    SwingUtilities.invokeLater(() -> {
+                        inputDialogHandler.run(); // executing the card text getting/setting runnable  
+                        showDialog = true; // reverting to true after text update is finished
                         
-                        // success dialog
-                        JOptionPane.showOptionDialog(frame, member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!" , wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+                        // since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
+                        // that is why the following statement forces the button's pressed state to be false
+                        individualMemberButtons[0].getModel().setPressed(false);
+                    });
+                    
+                    // success dialog
+                    JOptionPane.showOptionDialog(frame, member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!" , wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+                    
+                    // refreshing ui  
+                    memberManagementContent.revalidate();
+                    memberManagementContent.repaint();
+                } 
+                else { 
+                	SwingUtilities.invokeLater(() -> {
+                        inputDialogHandler.run(); // executing the card text getting/setting runnable  
                         
-                        // refreshing ui  
-                        memberManagementContent.revalidate();
-                        memberManagementContent.repaint();
-                    } 
+                        // since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
+                        // that is why the following statement forces the button's pressed state to be false
+                        individualMemberButtons[0].getModel().setPressed(false);
+                    });
                 }
             }
 		});
