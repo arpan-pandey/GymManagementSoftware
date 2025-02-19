@@ -397,7 +397,7 @@ public class GymGUI{
 							
 						// regular member unique attributes
 						new JLabel("Current Plan : "),
-						new JLabel("Upgrade? : "),
+						new JLabel("Can Upgrade? : "),
 						new JLabel("Referral Source : "),
 						new JLabel("Removal Reason : ")
 
@@ -1676,6 +1676,7 @@ public class GymGUI{
 		                                        	
 		                                            // declaring a variable to store text color for active status / current plan (regularMember)
 		                                            String customDetailTextColor = "";
+		                                            String bold = "font-weight: bold; "; // making the text bold, by storing the CSS attribute in a variable and using it
 		                                            
 		                                            // for active status
 		                                            if(i==2) {
@@ -1686,7 +1687,6 @@ public class GymGUI{
 		                                            	
 		                                            	// for setting colors for different plan types
 			                                            if (i==10) {
-			                                            	String bold = "font-weight: bold; "; // making the text bold, by storing the CSS attribute in a variable and using it
 			                                            	
 			                                            	switch(memberDetails[10]) {
 			                                            	
@@ -1697,6 +1697,12 @@ public class GymGUI{
 			                                            		default : System.out.println("this statement will never print"); // impossible case
 			                                            	}
 			                                            }
+			                                            
+			                                            // for upgrade eligibility when eligible
+			                                            else if(i==11 && !memberDetails[11].equals("No")) {
+			                                            	customDetailTextColor = bold+"color: green";
+			                                            }
+			                                            
 			                                            // for removal reason when it isn't empty
 			                                            else if(i==13 && !memberDetails[13].equals("N/A")) {
 			                                            	customDetailTextColor = "color: red";
@@ -2060,7 +2066,7 @@ public class GymGUI{
 	                    	showDialog = true; // reverting to true after text update is finished
 	                    	
 	                    	// success dialog
-	                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s data has been successfully marked.", "Attendance Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+	                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s attendance has been successfully marked.", "Attendance Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
 	                    });
 			    	}
 		    	}
@@ -2143,7 +2149,7 @@ public class GymGUI{
 	    		// making local variables to store data
     			String message="";
     			String title="";
-    			int messageType=-1;
+    			int messageType=0x696969;
 		    	
 		    	/*
 		    	 * UPGRADE PLAN
@@ -2157,8 +2163,6 @@ public class GymGUI{
 		    			proceedUpdate = false;
 		    		}
 		    		else {
-		    			// storing return message in the local variable
-		    			message = regularMember.upgradePlan(selectedPlan);
 		    			
 		    			// if the member is ineligible for upgrade || same plan as current plan is selected 
 		    			if (!regularMember.isEligibleForUpgrade() || regularMember.getPlan().equals(selectedPlan)) {
@@ -2171,6 +2175,9 @@ public class GymGUI{
 		    			    title = "Upgrade Successful";
 		    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
 		    			}
+		    			
+		    			// storing return message in the local variable
+		    			message = regularMember.upgradePlan(selectedPlan);
 
 		    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 		    		}
@@ -2182,9 +2189,7 @@ public class GymGUI{
 	    		 */
 	    		else {
 	    			PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
-	    			
-	    			// storing return message in the local variable
-	    			message = premiumMember.calculateDiscount();
+
 	    			
 	    			if(!premiumMember.isFullPayment) {
 	    			    title = "Ineligible for Discount";
@@ -2195,9 +2200,12 @@ public class GymGUI{
 	    			    title = "Discount Application Successful";
 	    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to error
 	    			    
-	    			    // updating non-focusable field text
+	    			    // updating non-focusable field text (converting double to String)
 	    			    individualMemberFields[0].setText("Rs. "+Double.toString(premiumMember.getDiscountAmount()));
 	    			}
+	    			
+	    			// storing return message in the local variable
+	    			message = premiumMember.calculateDiscount();
 	    			
 	    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 	    		}
