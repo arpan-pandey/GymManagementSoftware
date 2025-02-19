@@ -2138,6 +2138,9 @@ public class GymGUI{
 		    	
 		    	boolean proceedUpdate = true; // boolean to make the card update or not		    	
 		    	
+		    	/*
+		    	 * UPGRADE PLAN
+		    	 */
 		    	if(memberInstanceOf.equals("Regular")) {
 	    			
 	    			RegularMember regularMember = (RegularMember) member; // downcasting to GymMember RegularMember
@@ -2160,7 +2163,10 @@ public class GymGUI{
 		    		}
 	    		}
 		    	
-	    		// reverting premium member without any confirmation
+		    	
+	    		/*
+	    		 * CALCULATE DISCOUNT
+	    		 */
 	    		else {
 	    			
 	    		}

@@ -85,7 +85,7 @@ public class RegularMember extends GymMember{
 		this.price = price;
 		
 		// success message
-		return String.format("Your plan has been upgraded to %s for Rs.%.2f.%nWe appreciate your continuous support!",this.plan,this.price);
+		return String.format("Your plan has been upgraded to %s for Rs.%.2f.",this.plan,this.price);
 	}
 
 	// method to revert member back to regularMember, and reset all data

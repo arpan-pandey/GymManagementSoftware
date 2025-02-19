@@ -43,7 +43,7 @@ public class PremiumMember extends GymMember{
 		if((this.paidAmount+paidAmount)>this.premiumCharge) {
 			this.paidAmount= this.premiumCharge; // updating the paid amount
 			this.isFullPayment= true; // since full payment is paid amount is equal to premium charge
-			return String.format("Rs.%.2f has been accepted to settle the full payment. Excess amount Rs.%.2f has not been used.%nThank you for your support!",remainingAmount, paidAmount-remainingAmount);
+			return String.format("Rs.%.2f has been accepted to settle the full payment. Excess amount Rs.%.2f has not been used.",remainingAmount, paidAmount-remainingAmount);
 		}
 		
 		this.paidAmount += paidAmount;
@@ -51,15 +51,15 @@ public class PremiumMember extends GymMember{
 		// to check if full payment is complete
 		if(this.paidAmount==this.premiumCharge) {
 			this.isFullPayment = true;
-	        return String.format("Rs.%.2f has been successfully paid, and your total paid amount is Rs.%.2f. Your plan is now fully paid.%nThank you for your support!", paidAmount, this.paidAmount);
+	        return String.format("Rs.%.2f has been successfully paid, and your total paid amount is Rs.%.2f. Your plan is now fully paid.", paidAmount, this.paidAmount);
 		}
 		
-		return String.format("Rs.%.2f has been successfully paid, and your remaining amount is Rs.%.2f.%nThank you!", paidAmount,this.paidAmount);
+		return String.format("Rs.%.2f has been successfully paid, and your remaining amount is Rs.%.2f.", paidAmount,this.paidAmount);
 	}
 	
 	// method to calculate discount for premium members who have paid the full amount
 	public String calculateDiscount() {
-		if(this.isFullPayment==true) {
+		if(this.isFullPayment) {
 			this.discountAmount = 0.1 * this.premiumCharge;
 			return String.format("Congratulations! A discount of Rs.%.2f has been applied to your account.", this.discountAmount);
 		}
