@@ -28,6 +28,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -68,10 +70,10 @@ public class GymGUI{
     final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
     
     // for activate/deactivate buttons
-    final Color RED = new Color(0x9A2A2A);
-    final Color GREEN = new Color(0x2A5B32);
-    final Color DARKRED = new Color(0x7A2A2A);
-    final Color DARKGREEN = new Color(0x1F4D2A);
+    final Color RED = new Color(0x8A2B2B);
+    final Color LIGHTRED = new Color(0xFF8C8C);
+    final Color GREEN = new Color(0x1A5F1A);
+    final Color LIGHTGREEN = new Color(0x9FCC7A);
 
 
     
@@ -260,11 +262,6 @@ public class GymGUI{
 				// radio buttons
 				JRadioButton input_genderMale, input_genderFemale;
 				
-				// combobox (UNUSED FOR NOW)
-				JPanel regular_plan_P;
-					JLabel regular_plan_L = new JLabel("Select a Plan:");
-						String[] plans = {"Basic","Standard","Deluxe"};
-						JComboBox<String> regular_plan_C = new JComboBox<String>(plans);
 						
 				/*
 				 * FORM ARRAYS
@@ -330,18 +327,18 @@ public class GymGUI{
 								"YYYY-MM-DD",			// Membership Start Date
 							};
 					
-					String[][]
-						//array of input field placeholders
-						uniquePlaceholders = {
-							{
-								// premium form placeholder (Trainer name)
-								"Enter trainer's name"
-							},
-							{
-								// regular form placeholders (Referral source)
-								"eg., Friend, Website, Ad"	
-							}
-					};
+				String[][]
+					//array of input field placeholders
+					uniquePlaceholders = {
+						{
+							// premium form placeholder (Trainer name)
+							"Enter trainer's name"
+						},
+						{
+							// regular form placeholders (Referral source)
+							"eg., Friend, Website, Ad"	
+						}
+				};
 					
 					
 				/*
@@ -356,15 +353,7 @@ public class GymGUI{
 								new JButton("Add Premium Member"),
 								new JButton("Add Regular Member")
 						};
-				
 
-			JButton[]
-				//1D array of form control buttons
-				formControlButtons = {
-					formButtons[0],
-					formButtons[1],
-					formButtons[2]
-				};
 	
 	/*
 	 * memberManagement VARIABLES
@@ -435,6 +424,9 @@ public class GymGUI{
 							new JTextField()  // premium plan charge || removal reason  
 					};
 					
+					String[] plans = {"Basic","Standard","Deluxe"};
+					JComboBox<String> plan_C = new JComboBox<String>(plans);
+					
 					JLabel[]
 						individualMemberFieldTitle = {
 							new JLabel("Discount Amount:"),
@@ -452,8 +444,7 @@ public class GymGUI{
 							new JButton("Revert Regular Member"), // seperate button as required
 							
 							new JButton("Calculate Discount"), // OR Upgrade plan 
-							new JButton("Pay Due Amount"),
-							new JButton("Remove Member")
+							new JButton("Pay Due Amount"), // OR Remove member
 					};
 			
 	/*
@@ -522,9 +513,9 @@ public class GymGUI{
 			Buttons= {
 				menuButtons[0],
 				menuButtons[1],
-						formControlButtons[0],
-						formControlButtons[1],
-						formControlButtons[2],
+						formButtons[0],
+						formButtons[1],
+						formButtons[2],
 				menuButtons[2],
 						individualMemberButtons[0],
 						individualMemberButtons[1],
@@ -532,7 +523,6 @@ public class GymGUI{
 						individualMemberButtons[3],
 						individualMemberButtons[4],
 						individualMemberButtons[5],
-						individualMemberButtons[6]
 			},
 			// array of body buttons
 			centralPanelButtons = {
@@ -950,15 +940,15 @@ public class GymGUI{
 		};
 		
 		// for form control buttons functionality
-		for(int k = 0 ; k < formControlButtons.length ; k++) {
-			JButton formButtons = formControlButtons[k];
+		for(int k = 0 ; k < formButtons.length ; k++) {
+			JButton formButton = formButtons[k];
 			
-			formButtons.addMouseListener(new MouseAdapter() {
+			formButton.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					
 					// event listener for clear all button of each form
-					if(e.getSource()==formControlButtons[0]) {
+					if(e.getSource()==formButtons[0]) {
 						
                         int currentFormIndex = isFormContent[0] ? 0 : 1; // determining index of the current panel
 						
@@ -1022,11 +1012,11 @@ public class GymGUI{
 					}
 					
 					// event listener for add premium member/regular member buttons of respective forms
-					if(e.getSource()==formControlButtons[1] || e.getSource()==formControlButtons[2]) {
+					if(e.getSource()==formButtons[1] || e.getSource()==formButtons[2]) {
 						
 						boolean allFieldsFilled = true; // assuming all fields are filled initially
 						
-						int currentFormIndex = e.getSource()==formControlButtons[1] ? 0 : 1;
+						int currentFormIndex = e.getSource()==formButtons[1] ? 0 : 1;
 						
 						String memberType = isFormContent[0] ? "premium" : "regular";
 
@@ -1169,6 +1159,16 @@ public class GymGUI{
 		individualMemberManagement_P.add(memberCard_P, BorderLayout.NORTH);
 		individualMemberManagement_P.add(individualMemberButtonsWrapper_P, BorderLayout.CENTER);
 		
+		// making it so that the caret from the editable form field gets remove when pressed elsewhere
+		individualMemberManagement_P.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				individualMemberFields[1].setEnabled(false);
+				individualMemberFields[1].setFocusable(false);
+				individualMemberFields[1].setEnabled(true);
+			}
+		});
+		
 		// card styling
 		memberCard_P.setBorder(CARD_MARGIN);
 		memberCard_P.setBackground(LIGHTGRAY);
@@ -1179,7 +1179,7 @@ public class GymGUI{
 		
 		// first card panel styling
 		cardCommonAttributes_P.setBackground(LIGHTGRAY);
-		cardCommonAttributes_P.setPreferredSize(new Dimension(475,1));
+		cardCommonAttributes_P.setPreferredSize(new Dimension(455,1));
 		cardCommonAttributes_P.setLayout(new GridLayout(0,2));
 		
 		// second card panel styling
@@ -1191,41 +1191,6 @@ public class GymGUI{
 		individualMemberButtonsWrapper_P.setLayout(new GridLayout(3,3));
 		individualMemberButtonsWrapper_P.setBorder(MANAGEMENT_BUTTON_PANEL_MARGIN);
 		
-		/*
- 			JPanel individualMemberButtonsWrapper_P = new JPanel();
-			
-					JPanel[]
-						individualMemberButtons_P = {
-							new JPanel(), // activate/deactivate membership
-							new JPanel(), // mark attendance
-							new JPanel(), // revert Premium/Regular member
-						
-							new JPanel(), // calculate discount || upgrade plan
-							new JPanel(), // discount amount field || plan combo box
-							new JPanel(), // pay due amount || plan price field
-							new JPanel(), // premium plan charge field || remove member
-							new JPanel()  // removal reason field
-					};
-				
-					JTextField[]
-						individualMemberFields = {
-							new JTextField(), // discount amount field || plan price
-							new JTextField()  // premium plan charge || removal reason  
-					};
-				
-					JButton[]
-						individualMemberButtons = {
-							new JButton("Activate Membership"),
-							new JButton("Mark Attendance"),
-							new JButton("Revert Premium Member"), // seperate button as required
-							new JButton("Revert Regular Member"), // seperate button as required
-							
-							new JButton("Calculate Discount"), // OR Upgrade plan 
-							new JButton("Pay Due Amount"),
-							new JButton("Remove Member")
-					};
-		 */
-		
 		int makrer;
 		
 		for(JPanel buttonPanel : individualMemberButtons_P) {
@@ -1236,6 +1201,16 @@ public class GymGUI{
 		for(JButton managementButtons : individualMemberButtons) {
 			managementButtons.setPreferredSize(new Dimension(220,45));
 			managementButtons.setHorizontalAlignment(SwingConstants.CENTER);
+			
+			// to remove caret from form field
+			managementButtons.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					individualMemberFields[1].setEnabled(false);
+					individualMemberFields[1].setFocusable(false);
+					individualMemberFields[1].setEnabled(true);
+				}
+			});
 		}
 		
 		for(JTextField inputField : individualMemberFields) {
@@ -1247,13 +1222,26 @@ public class GymGUI{
             inputField.setFocusable(false);
 		}
 		
+		individualMemberFields[1].setFocusable(true); // setting focusable to true initially 
+
+		individualMemberFields[1].addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// making cursor change when hovered 
+				individualMemberFields[1].setFocusable(true);
+			}
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// making the field focusable when pressed
+				individualMemberFields[1].setFocusable(true);
+			}
+		});
+		
 		for(JLabel inputHeading : individualMemberFieldTitle) {
 			inputHeading.setForeground(MIDNIGHTBLUE);
 			inputHeading.setFont(MANAGEMENT_INPUT_HEADING);
 		}
 		
-//		individualMemberFields[1].setBorder(MANAGEMENT_INPUT_BORDER); // setting different border for last field
-		individualMemberFields[1].setFocusable(true);
 		
 		/*
 		 * FRAME SECTION
@@ -1503,12 +1491,12 @@ public class GymGUI{
 		                            				individualMemberButtons[0].addMouseListener(new MouseAdapter() { 
 		                            					@Override
 		                            					public void mouseEntered(MouseEvent e) {
-		                            						individualMemberButtons[0].setForeground(LIGHTGRAY);
+		                            						individualMemberButtons[0].setForeground(DARKNAVY);
 		                            						if(member.isActiveStatus()) {
-		                            							individualMemberButtons[0].setBackground(DARKRED);
+		                            							individualMemberButtons[0].setBackground(LIGHTRED);
 		                            						}
 		                            						else {
-		                            							individualMemberButtons[0].setBackground(DARKGREEN);
+		                            							individualMemberButtons[0].setBackground(LIGHTGREEN);
 		                            						}
 		                            					}
 		                            					@Override
@@ -1615,15 +1603,20 @@ public class GymGUI{
 		                                					}
 		                                					else{
 		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[1], BorderLayout.NORTH); // adding label at the top
+		                                						individualMemberButtons_P[i].add(plan_C, BorderLayout.SOUTH); // adding combobox at the bottom
+		                                						
+		                                				        plan_C.setSelectedIndex(-1); // setting null value by default
+		                                				        plan_C.setBackground(LIGHTGRAY);
+		                                				        plan_C.setPreferredSize(new Dimension(1,29));
+		                                				        plan_C.setForeground(MIDNIGHTBLUE);
+		                                				        plan_C.setFont(INPUT_FONT);
+		                                				        plan_C.setFocusable(false); // to make it so that the annoying highlight doesn't appear
 		                                					}
 		                                					break;
 
 		                                				case 5: 
-		                                					if (memberInstanceOf.equals("Premium")) {
-		                                						
-		                                						individualMemberButtons_P[i].add(individualMemberButtons[i]);
-		                                					}
-		                                					else{
+		                                					if (memberInstanceOf.equals("Regular")) {
+
 		                                						individualMemberButtons_P[i].removeAll();
 		                                						individualMemberButtons_P[i].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
 		                                						individualMemberButtons_P[i].setBackground(LIGHTGRAY);
@@ -1632,14 +1625,16 @@ public class GymGUI{
 		                                						individualMemberButtons_P[i].add(individualMemberFields[0], BorderLayout.SOUTH); // adding field at the bottom	
 		                                					}
 		                                					
+		                                					individualMemberFields[0].setText(""); // setting text for unfcusable input field to reset everytme this runnable is called2
+		                                					
 		                                					break;
 
 		                                				case 6: 
-		                                					if (memberInstanceOf.equals("Regular")) {
-		                                						individualMemberButtons_P[i].add(individualMemberButtons[i]);
-		                                					}
+		                                					individualMemberButtons[i-1].setText(memberInstanceOf.equals("Premium") ? "Pay Due Amount" : "Revert Member?"); // setting text of last button relative to member type
 		                                					
 		                                					int panelIndex = memberInstanceOf.equals("Premium") ? 0 : 1; // setting which panel to use based on member type
+		                                					
+		                                					individualMemberButtons_P[5+panelIndex].add(individualMemberButtons[i-1]); // adding the button to the corresponding panel
 		                                					
 	                                						individualMemberButtons_P[i+panelIndex].removeAll();
 	                                						individualMemberButtons_P[i+panelIndex].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
@@ -1831,13 +1826,13 @@ public class GymGUI{
 			        	addMemberTitle_P.add(utilityButtons_P[0],BorderLayout.WEST);
 			        	
 			        	// removing previous buttons from button panel
-			        	for(JButton controlButton : formControlButtons) {
+			        	for(JButton controlButton : formButtons) {
 			        		formControlButtonsPanel.remove(controlButton);
 			        	}
 			        	
 			        	// adding buttons to buttons panel
-			        		formControlButtonsPanel.add(formControlButtons[0]);
-							formControlButtonsPanel.add(formControlButtons[1+formType]); // adding "add premium member" OR "add regular member" based on what form was clicked
+			        		formControlButtonsPanel.add(formButtons[0]);
+							formControlButtonsPanel.add(formButtons[1+formType]); // adding "add premium member" OR "add regular member" based on what form was clicked
 			        	
 						// adding control button panel to bottom panel and add that panel to the main panel
 						formButtons_P.add(formControlButtonsPanel,BorderLayout.EAST);
@@ -1969,17 +1964,21 @@ public class GymGUI{
 			});
 		}
 		
-		// activate/deactivate membership button  
+		
+		
+		/*
+		 *  ACTIVATE/DEACTIVATE MEMBERSHIP BUTTON  
+		 */
+		
 		individualMemberButtons[0].addMouseListener(new MouseAdapter() {
 			
 		    @Override
 		    public void mousePressed(MouseEvent e) {
 		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
-		    	
-		    	
-                showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
-                String wishKeyword = member.isActiveStatus()? "Deactivate":"Activate";
-                int activateWish = JOptionPane.showOptionDialog(frame, wishKeyword+" "+member.getName()+"'s Membership?", "Confirmation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
+		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
+
+		    	String wishKeyword = member.isActiveStatus()? "Deactivate":"Activate";
+                int activateWish = JOptionPane.showOptionDialog(frame, wishKeyword+" "+member.getName()+"'s Membership?", "Confirm "+wishKeyword.substring(0,wishKeyword.length()-1)+"ion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
                 
                 if(activateWish==0) {
                 	
@@ -1991,34 +1990,112 @@ public class GymGUI{
                     	// activating membership  
                     	member.activateMembership();
                     }
-
-                    // handling dialog  
-                    SwingUtilities.invokeLater(() -> {
-                        inputDialogHandler.run(); // executing the card text getting/setting runnable  
-                        showDialog = true; // reverting to true after text update is finished
-                        
-                        // since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
-                        // that is why the following statement forces the button's pressed state to be false
-                        individualMemberButtons[0].getModel().setPressed(false);
-                    });
-                    
-                    // success dialog
-                    JOptionPane.showOptionDialog(frame, member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!" , wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
                     
                     // refreshing ui  
                     memberManagementContent.revalidate();
                     memberManagementContent.repaint();
+                    
+                    SwingUtilities.invokeLater(() -> {
+                    	inputDialogHandler.run(); // executing the card text getting/setting runnable  
+                    	showDialog = true; // reverting to true after text update is finished
+                    	
+                    	// success dialog
+                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!" , wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+                    });                 
                 } 
-                else { 
-                	SwingUtilities.invokeLater(() -> {
-                        inputDialogHandler.run(); // executing the card text getting/setting runnable  
-                        
-                        // since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
-                        // that is why the following statement forces the button's pressed state to be false
-                        individualMemberButtons[0].getModel().setPressed(false);
-                    });
-                }
+                
+            	// since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
+            	// that is why the following statement forces the button's pressed state to be false
+                // since this button's color is differnet from the color scheme of the app, we need to do this as for other buttons, the default JButton pressed state is really identical to PASTELBLUE (mouseEntered color)
+            	individualMemberButtons[0].getModel().setPressed(false);
             }
+		});
+		
+		
+		/*
+		 *  MARK ATTENDANCE BUTTON  
+		 */
+		
+		individualMemberButtons[1].addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mousePressed(MouseEvent e) {
+		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
+		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
+		    	
+                
+		    	if(member.isActiveStatus()) {
+			    	int markWish = JOptionPane.showOptionDialog(frame, "Mark "+member.getName()+"'s attendance?", "Confirm Attendance", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
+			    	
+			    	if(markWish==0) {
+			    		member.markAttendance();
+			    		
+	                    SwingUtilities.invokeLater(() -> {
+	                    	inputDialogHandler.run(); // executing the card text getting/setting runnable  
+	                    	showDialog = true; // reverting to true after text update is finished
+	                    	
+	                    	// success dialog
+	                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s data has been successfully marked.", "Attendance Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+	                    });
+			    	}
+		    	}
+		    	else {
+		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    	}
+            }
+		});
+		
+		/*
+		 *  REVERT MEMBER BUTTON  
+		 */
+		
+		MouseListener revertMember = new MouseAdapter() {
+		    @Override
+		    public void mousePressed(MouseEvent e) {
+		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
+		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
+		    	
+		    	int revertWish = JOptionPane.showOptionDialog(frame, "Proceeding will reset "+member.getName()+"'s data. Are you sure?", "Confirm Reset", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, null, "No");
+		    	
+		    	if(revertWish==0) {
+		    		member.resetMember();
+		    		
+                    SwingUtilities.invokeLater(() -> {
+                    	inputDialogHandler.run(); // executing the card text getting/setting runnable  
+                    	showDialog = true; // reverting to true after text update is finished
+                    	
+                    	// success dialog
+                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s data has been successfully reset.", "Reset Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+                    });
+		    	}
+            }
+		};
+		
+		// adding the mouse listener above to both member reset buttons
+		individualMemberButtons[2].addMouseListener(revertMember);
+		individualMemberButtons[3].addMouseListener(revertMember);
+		
+		
+		/*
+		 *  REGULAR MEMBERMANGEMENT PLAN COMBO BOX
+		 */
+		
+		plan_C.addItemListener(new ItemListener() {
+		    @Override
+		    public void itemStateChanged(ItemEvent e) {
+		    	individualMemberFields[1].setFocusable(false);
+		    	
+		    	GymMember member = members.get(currentMemberIndex);
+		    	RegularMember regularMember = (RegularMember) member; // downcasting member to RegularMember
+		    	
+		    	// checking if an option was selected
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		        	
+		        	String selectedPlan = (String) plan_C.getSelectedItem();
+		        	individualMemberFields[0].setForeground(GREEN);
+		        	individualMemberFields[0].setFont(INPUT_HEADING);
+		        	individualMemberFields[0].setText("Rs. "+Double.toString(regularMember.getPlanPrice(selectedPlan)));
+		        }
+		    }
 		});
 	}
 
