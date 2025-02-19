@@ -20,8 +20,14 @@ public class RegularMember extends GymMember{
 	public String getReferralSource() { return this.referralSource; }
 	public String getPlan() { return this.plan; }
 	public String getRemovalReason() { return this.removalReason; }
-	public boolean isEligibleForUpgrade() { return this.isEligibleForUpgrade; }
 	public double getPrice() { return this.price; }
+	public boolean isEligibleForUpgrade() { 
+		 // updating isEligibleForUpgrade to true if (attendance of member >= attendance limit)
+		this.isEligibleForUpgrade = super.getAttendance()>=this.attendanceLimit? true : false;
+		return this.isEligibleForUpgrade;
+	}
+	
+
 	
 	
 	//implementation of abstract method of parent class
@@ -49,10 +55,8 @@ public class RegularMember extends GymMember{
 		} // break statement isn't needed because return statement is used and a break statement will be unreachable anyways
 	}
 	
-	//method to upgrade a member's plan
+	// method to upgrade a member's plan
 	public String upgradePlan(String plan) {
-		
-		this.isEligibleForUpgrade = super.getAttendance()>=this.attendanceLimit? true : false; //sets isEligibleForUpgrade to true if (attendance of member >= attendance limit)
 		 
 		// to return error message when the member is not eligible to upgrade
 		if(!this.isEligibleForUpgrade) {
