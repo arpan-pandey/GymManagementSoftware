@@ -64,7 +64,7 @@ public class PremiumMember extends GymMember{
 	public String calculateDiscount() {
 		if(this.isFullPayment) {
 			this.discountAmount = 0.1 * this.premiumCharge;
-			return String.format("Congratulations! A discount of Rs.%.2f has been applied to your account.", this.discountAmount);
+			return String.format("Congratulations! A discount of Rs.%.2f has been applied to this membership.", this.discountAmount);
 		}
 		else {
 			return "Sorry! Discount isn't applicable since payment hasn't been paid fully yet.";
