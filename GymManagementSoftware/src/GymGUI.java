@@ -2202,16 +2202,15 @@ public class GymGUI{
 		    		}
 		    		else {
 		    			
-		    			// if the member is ineligible for upgrade || same plan as current plan is selected 
-		    			if (!regularMember.isEligibleForUpgrade() || regularMember.getPlan().equals(selectedPlan)) {
+		    			// if member is eligible
+		    			if(regularMember.isEligibleForUpgrade()) {
+		    			    title = "Upgrade Successful";
+		    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
+		    			}
+		    			else if(!regularMember.isEligibleForUpgrade()){
 		    			    title = "Ineligible for Upgrade";
 		    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
 		    			    proceedUpdate = false;
-		    			}
-		    			// if upgrade is successful
-		    			else {
-		    			    title = "Upgrade Successful";
-		    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
 		    			}
 		    			
 		    			// storing return message in the local variable
