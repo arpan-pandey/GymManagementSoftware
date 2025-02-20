@@ -37,16 +37,19 @@ public class PremiumMember extends GymMember{
 			return "Your plan has already been paid fully.";
 		}
 		
+		this.paidAmount += paidAmount;
 		double remainingAmount = this.premiumCharge-this.paidAmount;
 		
 		// to check if paid amount is more than required
-		if((this.paidAmount+paidAmount)>this.premiumCharge) {
+		if(this.paidAmount>this.premiumCharge) {
+			
+			// calculating excess amount
+			double excessAmount = this.paidAmount-this.premiumCharge;
+					
 			this.paidAmount= this.premiumCharge; // updating the paid amount
 			this.isFullPayment= true; // since full payment is paid amount is equal to premium charge
-			return String.format("Rs.%.2f has been accepted to settle the full payment. Excess amount Rs.%.2f has not been used.",remainingAmount, paidAmount-remainingAmount);
+			return String.format("Rs.%.2f has been accepted to settle the full payment. Excess amount Rs.%.2f has not been used.",this.premiumCharge, excessAmount);
 		}
-		
-		this.paidAmount += paidAmount;
 		
 		// to check if full payment is complete
 		if(this.paidAmount==this.premiumCharge) {
