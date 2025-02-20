@@ -1470,8 +1470,17 @@ public class GymGUI{
 			                                            memberDetails[12] = premiumMember.isFullPayment() == true ? "Yes" : "No"; // getting boolean and using corresponding string for readability
 			                                            memberDetails[13] = !premiumMember.getPersonalTrainer().equals("")? premiumMember.getPersonalTrainer() : "N/A"; // showing N/A when trainer name is empty
 			                                            
+			                                            // setting text of 1st non-editable field
 	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "N/A");
-			                                            
+	                                					
+	                                					// setting text of editable field
+	                                					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? "Fully Paid" : "");
+	                                					
+	                                					if(premiumMember.isFullPayment()) {
+	                                						individualMemberFields[1].setFont(NON_EDITABLE_FIELD_FONT);
+	                                						individualMemberFields[1].setForeground(GREEN);
+	                                					}
+	                                					
 			                                            // setting text of 2nd non-editable field
 			                            				individualMemberFields[2].setText("Rs. "+Double.toString(premiumMember.getPremiumCharge()));
 		                                            }
@@ -2278,8 +2287,34 @@ public class GymGUI{
 		individualMemberButtons[5].addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mousePressed(MouseEvent e) {
+		    	
 		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
 		    	PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
+		    	
+				/*
+				 * PAY DUE AMOUNT FIELD
+				 */
+				
+				individualMemberFields[1].addFocusListener(new FocusAdapter() {
+					@Override
+					public void focusGained(FocusEvent e1) {
+						if(!individualMemberFields[1].getText().equals("")) {
+							individualMemberFields[1].setText("");
+						}
+						
+						individualMemberFields[1].setFont(INPUT_FONT);
+						individualMemberFields[1].setForeground(MIDNIGHTBLUE);
+					}
+					
+					@Override 
+					public void focusLost(FocusEvent e1) {
+						if(premiumMember.isFullPayment) {
+							individualMemberFields[1].setText("Fully Paid");
+							individualMemberFields[1].setFont(NON_EDITABLE_FIELD_FONT);
+							individualMemberFields[1].setForeground(GREEN);
+						}
+					}
+				});
 
 		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
 		    	boolean proceedUpdate = true; // boolean to make the card update or not
@@ -2300,9 +2335,31 @@ public class GymGUI{
 		    		proceedUpdate = false; // no need for update
 		    	}
 		    	else {
-		    		message = premiumMember.payDueAmount(Double.parseDouble(payingAmount)); // parsing string to double
+		    		
 		    		title = "Payment Successful";
 		    		messageType = JOptionPane.INFORMATION_MESSAGE;
+		    		
+		    		try {
+		    			message = premiumMember.payDueAmount(Double.parseDouble(payingAmount)); // parsing string to double		    			
+		    		}
+		    		catch(NumberFormatException e2) {
+		    			if(premiumMember.isFullPayment) {
+			    			// when the user tries to pay "Fully Paid" text
+			    			message = "Your plan has already been paid fully.";
+				    		title = "Already Paid";
+				    		messageType = JOptionPane.INFORMATION_MESSAGE;
+				    		proceedUpdate = false;
+		    			}
+		    			else {
+			    			// when the user tries to pay some text
+			    			message = "Please enter a valid amount.";
+				    		title = "Invalid Amount";
+				    		messageType = JOptionPane.ERROR_MESSAGE;
+				    		proceedUpdate = false;
+				    		individualMemberFields[1].setText(""); // resetting the field
+				    		
+		    			}
+		    		}
 		    	}
 
 		    	JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
