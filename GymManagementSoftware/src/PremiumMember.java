@@ -54,7 +54,7 @@ public class PremiumMember extends GymMember{
 	        return String.format("Rs.%.2f has been successfully paid, and your total paid amount is Rs.%.2f. Your plan is now fully paid.", paidAmount, this.paidAmount);
 		}
 		
-		return String.format("Rs.%.2f has been successfully paid, and your remaining amount is Rs.%.2f.", paidAmount,this.paidAmount);
+		return String.format("Rs.%.2f has been successfully paid, and your remaining amount is Rs.%.2f.", paidAmount, remainingAmount);
 	}
 	
 	// method to calculate discount for premium members who have paid the full amount
