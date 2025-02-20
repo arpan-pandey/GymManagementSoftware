@@ -99,6 +99,7 @@ public class GymGUI{
     
     // memberManagement input font
     final Font MANAGEMENT_INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 13);
+    final Font NON_EDITABLE_FIELD_FONT = new Font("Helvetica", Font.BOLD, 14);
     
     
     
@@ -411,17 +412,18 @@ public class GymGUI{
 							new JPanel(), // mark attendance
 							new JPanel(), // revert Premium/Regular member
 						
-							new JPanel(), // calculate discount || upgrade plan
-							new JPanel(), // discount amount field || plan combo box
-							new JPanel(), // pay due amount || plan price field
-							new JPanel(), // premium plan charge field || remove member
-							new JPanel()  // removal reason field
+							new JPanel(), // calculate discount || removal reason
+							new JPanel(), // discount amount field || upgrade plan
+							new JPanel(), // pay due amount || plan combo box
+							new JPanel(), // pay amount field || plan price
+							new JPanel()  // premium plan charge
 					};
 				
 					JTextField[]
 						individualMemberFields = {
 							new JTextField(), // discount amount field || plan price
-							new JTextField()  // premium plan charge || removal reason  
+							new JTextField(), // paid amount || removal reason
+							new JTextField()  // premium plan charge 
 					};
 					
 					String[] plans = {"Basic","Standard","Deluxe"};
@@ -433,7 +435,8 @@ public class GymGUI{
 							new JLabel("Select A Plan:"),
 							new JLabel("Plan Price:"),
 							new JLabel("Removal Reason:"),
-							new JLabel("Amount:")
+							new JLabel("Amount:"),
+							new JLabel("Total Charge")
 						};
 				
 					JButton[]
@@ -1222,9 +1225,11 @@ public class GymGUI{
             inputField.setFocusable(false);
 		}
 		
-    	individualMemberFields[0].setFont(INPUT_HEADING); // setting font of non focusable field
-    	
-		individualMemberFields[1].setFocusable(true); // setting focusable to true initially 
+    	// setting font for non-editable fields
+    	for(int i = 0; i < individualMemberFields.length ; i+=2) { 
+    		individualMemberFields[i].setForeground(STEELBLUE);
+    		individualMemberFields[i].setFont(NON_EDITABLE_FIELD_FONT); // setting font of non focusable field
+    	}
 
 		individualMemberFields[1].addMouseListener(new MouseAdapter() {
 			@Override
@@ -1232,12 +1237,8 @@ public class GymGUI{
 				// making cursor change when hovered 
 				individualMemberFields[1].setFocusable(true);
 			}
-			@Override
-			public void mousePressed(MouseEvent e) {
-				// making the field focusable when pressed
-				individualMemberFields[1].setFocusable(true);
-			}
 		});
+
 		
 		for(JLabel inputHeading : individualMemberFieldTitle) {
 			inputHeading.setForeground(MIDNIGHTBLUE);
@@ -1389,7 +1390,7 @@ public class GymGUI{
 		                	int memberId = 0x696969;
 		                    @Override
 		                    public void run() {
-		                    	
+		                    			                    	
 		                        // looping until input is valid
 		                        while (true) {
 		                        	String input;
@@ -1467,15 +1468,19 @@ public class GymGUI{
 		                                            	memberDetails[10] = Double.toString(premiumMember.getPaidAmount()); // converting double to string
 			                                            memberDetails[11] = Double.toString(premiumMember.getDiscountAmount()); // converting double to string 
 			                                            memberDetails[12] = premiumMember.isFullPayment() == true ? "Yes" : "No"; // getting boolean and using corresponding string for readability
-			                                            memberDetails[13] = premiumMember.getPersonalTrainer();
+			                                            memberDetails[13] = !premiumMember.getPersonalTrainer().equals("")? premiumMember.getPersonalTrainer() : "N/A"; // showing N/A when trainer name is empty
 			                                            
+	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "N/A");
+			                                            
+			                                            // setting text of 2nd non-editable field
+			                            				individualMemberFields[2].setText("Rs. "+Double.toString(premiumMember.getPremiumCharge()));
 		                                            }
 		                                            // regular member unique getters
 		                                            else {
 
 		                                            	RegularMember regularMember = (RegularMember) member; // downcasting to access child methods
 		                                            	
-		                                            	memberDetails[10] = regularMember.getPlan(); // converting double to string
+		                                            	memberDetails[10] = regularMember.getPlan();
 		                                            	memberDetails[11] = member.getAttendance()>=regularMember.getAttendanceLimit() ? "Yes" : "No"; // getting boolean using given logic and using corresponding string for readability
 		                                            	memberDetails[12] = regularMember.getReferralSource();
 			                                            memberDetails[13] = regularMember.getRemovalReason().equals("")? "N/A" : regularMember.getRemovalReason(); // showing N/A when removal reason is empty
@@ -1488,6 +1493,7 @@ public class GymGUI{
 		                            		    	individualMemberButtons[0].setText(member.isActiveStatus()?"Deactivate Membership":"Activate Membership"); // setting corresponding text of first management button for each member
 		                            				individualMemberButtons[0].setBackground(member.isActiveStatus()?RED:GREEN); // setting green or red for activate or deactivate button
 		                            				individualMemberButtons[0].setBorder(member.isActiveStatus()?DEACTIVATE_BUTTON_OUTLINE:ACTIVATE_BUTTON_OUTLINE);
+		                            				
 		                            				
 		                            				// setting mouse interaction effects for activate/deactivate member button
 		                            				individualMemberButtons[0].addMouseListener(new MouseAdapter() { 
@@ -1552,6 +1558,8 @@ public class GymGUI{
 		                                        // removing all previous button panels, and it's contents
 		                                        individualMemberButtonsWrapper_P.removeAll();
 		                                        
+		        		                    	individualMemberFields[1].setFocusable(false); // making sure the field isn't focusable at first
+		                                        
 		                                        int marker;
 		                                        
 		                                     // adding button panels in corresponding places
@@ -1560,25 +1568,37 @@ public class GymGUI{
 			                                        individualMemberButtons_P[i].removeAll();
 			                                        individualMemberButtons_P[i].setBorder(null);
 			                                        individualMemberButtons_P[i].setLayout(new FlowLayout(FlowLayout.CENTER,0,15));
-                                					individualMemberFields[0].setText(""); // setting text for unfcusable input field to reset everytime this runnable is called2
-		                                			
-                                					// adding empty panels to premium member button wrapper
-		                                			if(memberInstanceOf.equals("Premium") && i==5) {
-		                                				JPanel emptyPanel = new JPanel();
-		                                				emptyPanel.setBackground(LIGHTGRAY);
-		                                				
-                                						individualMemberButtonsWrapper_P.add(emptyPanel);
-		                                			}
-		                                			// adding empty panels to regular member button wrapper
-		                                			else if(memberInstanceOf.equals("Regular") && (i==2 || i==4)) {
-		                                				JPanel emptyPanel = new JPanel();
-		                                				emptyPanel.setBackground(LIGHTGRAY);
-		                                				
-                                						individualMemberButtonsWrapper_P.add(emptyPanel);
-		                                			}
 		                                			
 		                                			// adding corresponding panel to manage member button wrapper
 		                                			individualMemberButtonsWrapper_P.add(individualMemberButtons_P[i]);
+                                					
+                                					// adding empty panels to premium member button wrapper
+		                                			if(memberInstanceOf.equals("Premium")){
+			                                			if(i==4) {
+			                                				JPanel emptyPanel = new JPanel();
+			                                				emptyPanel.setBackground(LIGHTGRAY);
+			                                				
+	                                						individualMemberButtonsWrapper_P.add(emptyPanel);
+			                                			}
+			                                			
+			                                			else if(i==6) {
+			                                				individualMemberButtonsWrapper_P.add(individualMemberButtons_P[i+1]);
+			                                			}
+		                                			}
+		                                			
+		                                			// adding empty panel to regular member button wrapper and resetting form field
+		                                			else if(memberInstanceOf.equals("Regular")) {
+		                                				
+	                                					individualMemberFields[0].setText(""); // setting text for unfcusable input field to reset everytime this runnable is called
+		                                				
+	                                					// adding empty panels
+	                                					if (i==1 || i==3) {
+			                                				JPanel emptyPanel = new JPanel();
+			                                				emptyPanel.setBackground(LIGHTGRAY);
+			                                				
+	                                						individualMemberButtonsWrapper_P.add(emptyPanel);
+		    											}
+		                                			}
 		                                			
 		                                			// setting corresponding buttons using a switch statement on i
 		                                			switch (i) {
@@ -1617,6 +1637,7 @@ public class GymGUI{
 			                                					individualMemberButtons_P[i].setBackground(LIGHTGRAY);
 			                                					individualMemberButtons_P[i].setLayout(new BorderLayout());
 			                                					
+			                                					individualMemberFields[0].setForeground(STEELBLUE);
 		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[0], BorderLayout.NORTH); // adding label at the top
 		                                						individualMemberButtons_P[i].add(individualMemberFields[0], BorderLayout.SOUTH); // adding field at the bottom	
 		                                					}
@@ -1643,20 +1664,28 @@ public class GymGUI{
 		                                				        plan_C.setFont(INPUT_FONT);
 		                                				        plan_C.setFocusable(false); // to make it so that the annoying highlight doesn't appear
 		                                					}
-		                                					
+		                                					else {
+	                                							individualMemberButtons_P[i].add(individualMemberButtons[i]); // adding the button to the corresponding panel
+		                                					}
 		                                					break;
 
 		                                				case 6: 
-		                                					individualMemberButtons_P[6].removeAll();
-	                                						individualMemberButtons_P[6].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
-	                                						individualMemberButtons_P[6].setBackground(LIGHTGRAY);
-	                                						individualMemberButtons_P[6].setLayout(new BorderLayout());
+		                                					for(int k = 0 ; k < 2 ; k++) {
+			                                					individualMemberButtons_P[6+k].removeAll();
+		                                						individualMemberButtons_P[6+k].setBorder(MEMBER_MANAGEMENT_INPUT_MARGIN);
+		                                						individualMemberButtons_P[6+k].setBackground(LIGHTGRAY);
+		                                						individualMemberButtons_P[6+k].setLayout(new BorderLayout());
+		                                					}
 	                                						
 	                                						if(memberInstanceOf.equals("Premium")) {
-	                                							individualMemberButtons_P[i-1].add(individualMemberButtons[i-1]); // adding the button to the corresponding panel
 	                                							
+	                                							// pay amount field
 		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[4], BorderLayout.NORTH); // adding label at the top
 		                                						individualMemberButtons_P[i].add(individualMemberFields[1], BorderLayout.SOUTH); // adding field at the bottom
+		                                						
+		                                						// total amount field
+		                                						individualMemberButtons_P[i+1].add(individualMemberFieldTitle[5], BorderLayout.NORTH); // adding label at the top
+		                                						individualMemberButtons_P[i+1].add(individualMemberFields[2], BorderLayout.SOUTH); // adding field at the bottom
 	                                						}
 	                                						else {
 		                                						individualMemberButtons_P[6].add(individualMemberFieldTitle[2], BorderLayout.NORTH); // adding label at the top
@@ -2239,6 +2268,51 @@ public class GymGUI{
 		        	individualMemberFields[0].setForeground(GREEN);
 		        	individualMemberFields[0].setText("Rs. "+Double.toString(regularMember.getPlanPrice(selectedPlan)));
 		        }
+		    }
+		});
+		
+		/*
+		 * PAY DUE AMOUNT BUTTON
+		 */
+		
+		individualMemberButtons[5].addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mousePressed(MouseEvent e) {
+		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
+		    	PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
+
+		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
+		    	boolean proceedUpdate = true; // boolean to make the card update or not
+
+		    	String payingAmount = individualMemberFields[1].getText();
+		    	
+	    		// making local variables to store data
+    			String message="";
+    			String title="";
+    			int messageType=0x696969;
+		    	
+    			// when field is not filled
+		    	if(payingAmount.equals("")) {
+		    		message = "Please enter amount first.";
+		    		title = "Invalid Amount";
+		    		messageType = JOptionPane.ERROR_MESSAGE;
+		    		
+		    		proceedUpdate = false; // no need for update
+		    	}
+		    	else {
+		    		message = premiumMember.payDueAmount(Double.parseDouble(payingAmount)); // parsing string to double
+		    		title = "Payment Successful";
+		    		messageType = JOptionPane.INFORMATION_MESSAGE;
+		    	}
+
+		    	JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
+	    		
+	    		if(proceedUpdate) {
+                    SwingUtilities.invokeLater(() -> {
+                    	memberCardUpdate.run(); // executing the card text getting/setting runnable  
+                    	showDialog = true; // reverting to true after text update is finished
+                    });
+	    		}
 		    }
 		});
 	}
