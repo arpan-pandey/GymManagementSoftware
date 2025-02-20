@@ -54,7 +54,7 @@ public class PremiumMember extends GymMember{
 		// to check if full payment is complete
 		if(this.paidAmount==this.premiumCharge) {
 			this.isFullPayment = true;
-	        return String.format("Rs.%.2f has been successfully paid, and your total paid amount is Rs.%.2f. Your plan is now fully paid.", paidAmount, this.paidAmount);
+	        return String.format("Rs.%.2f has been successfully paid, and your plan is now fully paid for.", paidAmount, this.paidAmount);
 		}
 		
 		return String.format("Rs.%.2f has been successfully paid, and your remaining amount is Rs.%.2f.", paidAmount, remainingAmount);
