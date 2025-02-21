@@ -3,8 +3,8 @@
  * 
  * #0D1B2A (Dark Navy)
  * #1B263B (Midnight Blue)
+ * #2E4057 (Gunmetal Blue)
  * #415A77 (Steel Blue)
- * #778DA9 (Slate Blue)
  * #A3B7C8 (Pastel Blue)
  * #E0E1DD (Light Gray)
  * 
@@ -14,10 +14,11 @@
  * #DDDEEE (Dark Gray)
  * #696969 (Gray (for placeholder))
  * 
- * #9A2A2A (Red)
- * #2A5B32 (Green)
- * #7A2A2A (Dark Red)
- * #1F4D2A (Dark Green)
+ * #5A1E1E (Red)  
+ * #FF8C8C (Light Red)      
+ * #1A3A1A (Green)  
+ * #9FCC7A (Light Green)     
+ * 
  */
 
 import java.awt.BorderLayout;
@@ -59,8 +60,8 @@ public class GymGUI{
 	// palette colors
 	final Color DARKNAVY = new Color(0x0D1B2A);
     final Color MIDNIGHTBLUE = new Color(0x1B263B);
+    final Color GUNMETALBLUE = new Color(0x2E4057);
     final Color STEELBLUE = new Color(0x415A77);
-    final Color SLATEBLUE = new Color(0x778DA9);
     final Color PASTELBLUE = new Color(0xA3B7C8);
     final Color LIGHTGRAY = new Color(0xF5F5F5);
     
@@ -70,9 +71,9 @@ public class GymGUI{
     final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
     
     // for activate/deactivate buttons
-    final Color RED = new Color(0x7A2C2C);
+    final Color RED = new Color(0x5A1E1E);         
     final Color LIGHTRED = new Color(0xFF8C8C);
-    final Color GREEN = new Color(0x1A3F1A);
+    final Color GREEN = new Color(0x142E14); 
     final Color LIGHTGREEN = new Color(0x9FCC7A);
 
 
@@ -198,7 +199,7 @@ public class GymGUI{
 	 * Frame variables
 	 */
     
-	JFrame frame = new JFrame("Gym Software"); // creating a new frame with the title "Gym GUI"
+	JFrame frame = new JFrame("Gym Management Software"); // creating a new frame with the title "Gym GUI"
     	final int FRAME_HEIGHT = 650, FRAME_WIDTH = 1100; //height and width of frame
 	
 	
@@ -463,7 +464,8 @@ public class GymGUI{
 		},
 		//array of utility buttons
 		utilityButtons_L= {
-			new JLabel(backSymbol), //back button for internal panels
+			new JLabel(backSymbol), //back button for internal forms
+			new JLabel(backSymbol)  //back button for member management
 		},
 		// array of central body panel titles
 		centralPanelTitles = {
@@ -480,11 +482,6 @@ public class GymGUI{
 			memberManagementContent = new JPanel()
 		},
 		
-		// array of memberManagement contents
-		memberManagementPanels = {
-			memberManagementButton_P = new JPanel(),	
-		},	
-		
 		//array of main body title panels
 		contentTitlePanel = {
 			dashboardTitle_P = new JPanel(),	
@@ -494,6 +491,7 @@ public class GymGUI{
 		//array of utility buttons
 		utilityButtons_P = { 
 			new JPanel(), //back button	for add a member forms
+			new JPanel(), // back button for member management
 		},
 		//array of form panels
 		formPanels = {
@@ -728,17 +726,6 @@ public class GymGUI{
 			bodyContent[i+1].add(centralBodyPanels[i], BorderLayout.CENTER);
 		}
 		
-		
-		/*
-		 * DASHBOARD SECTION
-		 */
-		
-		
-		
-		/*
-		 * ADD A MEMBER SECTION
-		 */
-		
 		// setting attributes of utilityButton (back button) text using a for each loop
 		for(JLabel utilityButton_L : utilityButtons_L) {
 			utilityButton_L.setForeground(DARKNAVY);
@@ -786,6 +773,16 @@ public class GymGUI{
 			utilityButton_P.setVisible(true);
 		}
 		
+		
+		/*
+		 * DASHBOARD SECTION
+		 */
+		
+		
+		
+		/*
+		 * ADD A MEMBER SECTION
+		 */
 		
 		/*
 		 * ADD A MEMBER FORM SECTION
@@ -1227,18 +1224,9 @@ public class GymGUI{
 		
     	// setting font for non-editable fields
     	for(int i = 0; i < individualMemberFields.length ; i+=2) { 
-    		individualMemberFields[i].setForeground(STEELBLUE);
+    		individualMemberFields[i].setForeground(GUNMETALBLUE);
     		individualMemberFields[i].setFont(NON_EDITABLE_FIELD_FONT); // setting font of non focusable field
     	}
-
-		individualMemberFields[1].addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent e) {
-				// making cursor change when hovered 
-				individualMemberFields[1].setFocusable(true);
-			}
-		});
-
 		
 		for(JLabel inputHeading : individualMemberFieldTitle) {
 			inputHeading.setForeground(MIDNIGHTBLUE);
@@ -1380,6 +1368,8 @@ public class GymGUI{
 		            	showDialog=true;
 
 		                memberManagementTitle_L.setText("Member Management"); // reverting to original title
+		                memberManagementTitle_P.remove(utilityButtons_P[1]); // removing back button
+		                
 		                bodyContent[2].remove(memberManagementButton_P);
 		                bodyContent[2].remove(individualMemberManagement_P);
 		                
@@ -1471,7 +1461,7 @@ public class GymGUI{
 			                                            memberDetails[13] = !premiumMember.getPersonalTrainer().equals("")? premiumMember.getPersonalTrainer() : "N/A"; // showing N/A when trainer name is empty
 			                                            
 			                                            // setting text of 1st non-editable field
-	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "N/A");
+	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? (premiumMember.getDiscountAmount()!=0.0d? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "Uncalculated") : "Ineligible");
 	                                					
 	                                					// setting text of editable field
 	                                					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? "Fully Paid" : "");
@@ -1557,6 +1547,7 @@ public class GymGUI{
 		                                    	
 		                                        // updating the title
 		                                        memberManagementTitle_L.setText(memberInstanceOf + " Member | " + memberDetails[0] + " (ID: " + memberId + ")");
+		                                        memberManagementTitle_P.add(utilityButtons_P[1], BorderLayout.WEST);
 		                                        
 		                                        // removing previous content
 		                                        memberManagementContent.remove(memberManagementButton_P);
@@ -1646,7 +1637,7 @@ public class GymGUI{
 			                                					individualMemberButtons_P[i].setBackground(LIGHTGRAY);
 			                                					individualMemberButtons_P[i].setLayout(new BorderLayout());
 			                                					
-			                                					individualMemberFields[0].setForeground(STEELBLUE);
+			                                					individualMemberFields[0].setForeground(GUNMETALBLUE);
 		                                						individualMemberButtons_P[i].add(individualMemberFieldTitle[0], BorderLayout.NORTH); // adding label at the top
 		                                						individualMemberButtons_P[i].add(individualMemberFields[0], BorderLayout.SOUTH); // adding field at the bottom	
 		                                					}
@@ -1713,12 +1704,12 @@ public class GymGUI{
 		                                        for (int i = 0; i < cardLabels.length-4 ; i++) {  
 		                                        	
 		                                            // declaring a variable to store text color for active status / current plan (regularMember)
-		                                            String customDetailTextColor = "";
+		                                            String customDetailAttribute = "";
 		                                            String bold = "font-weight: bold; "; // making the text bold, by storing the CSS attribute in a variable and using it
 		                                            
 		                                            // for active status
 		                                            if(i==2) {
-		                                            	customDetailTextColor = (memberDetails[2].equals("Active")) ? "color: green" : "color: red"; // red for inactive, green for active
+		                                            	customDetailAttribute = (memberDetails[2].equals("Active")) ? "color: green" : "color: red"; // red for inactive, green for active
 		                                            }
 		                                            // for current plan (regularMember)
 		                                            else if(memberInstanceOf.equals("Regular")) {
@@ -1726,25 +1717,33 @@ public class GymGUI{
 		                                            	// for setting colors for different plan types
 			                                            if (i==10) {
 			                                            	
-			                                            	switch(memberDetails[10]) {
+			                                            	switch(memberDetails[i]) {
 			                                            	
-			                                            		case "Basic" : customDetailTextColor = bold + "color: #16A085"; break; // dark turquoise
-			                                            		case "Standard" : customDetailTextColor = bold + "color: #9B59B6"; break; // dark pastel purple
-			                                            		case "Deluxe" : customDetailTextColor = bold + "color: #27AE60"; break; // dark emerald green
+			                                            		case "Basic" : customDetailAttribute = bold + "color: #16A085"; break; // dark turquoise
+			                                            		case "Standard" : customDetailAttribute = bold + "color: #9B59B6"; break; // dark pastel purple
+			                                            		case "Deluxe" : customDetailAttribute = bold + "color: #27AE60"; break; // dark emerald green
 			                                            		
 			                                            		default : System.out.println("this statement will never print"); // impossible case
 			                                            	}
 			                                            }
 			                                            
 			                                            // for upgrade eligibility when eligible
-			                                            else if(i==11 && !memberDetails[11].equals("No")) {
-			                                            	customDetailTextColor = bold+"color: green";
+			                                            else if(i==11 && !memberDetails[i].equals("No")) {
+			                                            	customDetailAttribute = bold+"color: green";
 			                                            }
 			                                            
 			                                            // for removal reason when it isn't empty
-			                                            else if(i==13 && !memberDetails[13].equals("N/A")) {
-			                                            	customDetailTextColor = "color: red";
+			                                            else if(i==13 && !memberDetails[i].equals("N/A")) {
+			                                            	customDetailAttribute = "color: red";
 			                                            }
+		                                            }
+		                                            else if(memberInstanceOf.equals("Premium")) {
+		                                            	if(i==11 && !memberDetails[i].equals("0.0")) {
+		                                            		customDetailAttribute = bold+"color: green"; 
+		                                            	}
+		                                            	else if(i==12 && !memberDetails[i].equals("No")) {
+		                                            		customDetailAttribute = bold+"color: green";
+		                                            	}
 		                                            }
 		                                            
 		                                            // using i+4 card titles when i is greater than 9 and the member is a regular member
@@ -1767,7 +1766,7 @@ public class GymGUI{
 			                                                
 			                                                "#1B263B", //MIDNIGHTBLUE
 			                                                detailTitle,
-			                                                customDetailTextColor,
+			                                                customDetailAttribute,
 			                                                (i == 2) ? "⦿ " : ((memberInstanceOf.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""), // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
 			                                                memberDetails[i] 
 			                                            ));  
@@ -1932,6 +1931,7 @@ public class GymGUI{
 
 					JLabel sourceLabel = (JLabel) e.getSource();
 					
+						// add member form back button
 						if (sourceLabel == utilityButtons_L[0]) {
 							
 							int currentFormIndex = isFormContent[0] == true ? 0 : 1; //determining index of current panel
@@ -2024,6 +2024,25 @@ public class GymGUI{
 							}
 						}
 						
+						// member management back button
+						else if (sourceLabel == utilityButtons_L[1]) {
+							
+							// so that button doesn't keep it's pressed state when backbutton is clicked
+							manageMemberButton.getModel().setPressed(false);
+							manageMemberButton.setBackground(MIDNIGHTBLUE);
+							manageMemberButton.setForeground(LIGHTGRAY);
+							
+							// removing individual member management panel and adding default central panel that lets you enter id when button is clicked
+							memberManagementContent.remove(individualMemberManagement_P);
+							memberManagementContent.add(memberManagementButton_P, BorderLayout.CENTER);							
+							
+							// removing back button from title
+							memberManagementTitle_P.remove(utilityButtons_P[1]);
+							
+							// reverting title
+			                memberManagementTitle_L.setText("Member Management");
+						}
+						
 						
 						
 						// refreshing the frame layout to reflect the changes
@@ -2076,7 +2095,7 @@ public class GymGUI{
                 
             	// since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
             	// that is why the following statement forces the button's pressed state to be false
-                // since this button's color is differnet from the color scheme of the app, we need to do this as for other buttons, the default JButton pressed state is really identical to PASTELBLUE (mouseEntered color)
+                // since this button's color is different from the color scheme of the app, we need to do this as for other buttons, the default JButton pressed state is really identical to PASTELBLUE (mouseEntered color)
             	individualMemberButtons[0].getModel().setPressed(false);
             }
 		});
@@ -2188,71 +2207,78 @@ public class GymGUI{
     			String message="";
     			String title="";
     			int messageType=0x696969;
-		    	
-		    	/*
-		    	 * UPGRADE PLAN
-		    	 */
-		    	if(memberInstanceOf.equals("Regular")) {
-	    			RegularMember regularMember = (RegularMember) member; // downcasting to GymMember RegularMember
-		    		String selectedPlan = (String) plan_C.getSelectedItem();
-		    		
-		    		if(plan_C.getSelectedIndex()==-1) {
-		    			JOptionPane.showOptionDialog(frame, "Please select a plan", "Invalid Plan", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
-		    			proceedUpdate = false;
+    			
+		    	if(member.isActiveStatus()) {
+			    	
+			    	/*
+			    	 * UPGRADE PLAN
+			    	 */
+			    	if(memberInstanceOf.equals("Regular")) {
+		    			RegularMember regularMember = (RegularMember) member; // downcasting to GymMember RegularMember
+			    		String selectedPlan = (String) plan_C.getSelectedItem();
+			    		
+			    		if(plan_C.getSelectedIndex()==-1) {
+			    			JOptionPane.showOptionDialog(frame, "Please select a plan", "Invalid Plan", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+			    			proceedUpdate = false;
+			    		}
+			    		else {
+			    			
+			    			// if member is eligible
+			    			if(regularMember.isEligibleForUpgrade()) {
+			    			    title = "Upgrade Successful";
+			    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
+			    			}
+			    			else if(!regularMember.isEligibleForUpgrade()){
+			    			    title = "Ineligible for Upgrade";
+			    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
+			    			    proceedUpdate = false;
+			    			}
+			    			
+			    			// storing return message in the local variable
+			    			message = regularMember.upgradePlan(selectedPlan);
+
+			    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
+			    		}
 		    		}
+			    	
+			    	
+		    		/*
+		    		 * CALCULATE DISCOUNT
+		    		 */
 		    		else {
+		    			PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
+
 		    			
-		    			// if member is eligible
-		    			if(regularMember.isEligibleForUpgrade()) {
-		    			    title = "Upgrade Successful";
-		    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
-		    			}
-		    			else if(!regularMember.isEligibleForUpgrade()){
-		    			    title = "Ineligible for Upgrade";
+		    			if(!premiumMember.isFullPayment) {
+		    			    title = "Ineligible for Discount";
 		    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
 		    			    proceedUpdate = false;
 		    			}
+		    			else {
+		    			    title = "Discount Application Successful";
+		    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to error
+		    			    
+		    			    // updating non-focusable field text (converting double to String)
+		    			    individualMemberFields[0].setText("Rs. "+Double.toString(premiumMember.getDiscountAmount()));
+		    			}
 		    			
 		    			// storing return message in the local variable
-		    			message = regularMember.upgradePlan(selectedPlan);
-
+		    			message = premiumMember.calculateDiscount();
+		    			
 		    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 		    		}
-	    		}
-		    	
-		    	
-	    		/*
-	    		 * CALCULATE DISCOUNT
-	    		 */
-	    		else {
-	    			PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
+			    	
+		    		if(proceedUpdate) {
+	                    SwingUtilities.invokeLater(() -> {
+	                    	memberCardUpdate.run(); // executing the card text getting/setting runnable  
+	                    	showDialog = true; // reverting to true after text update is finished
+	                    });
+		    		}
+		    	}
+		    	else {
+		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    	}
 
-	    			
-	    			if(!premiumMember.isFullPayment) {
-	    			    title = "Ineligible for Discount";
-	    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
-	    			    proceedUpdate = false;
-	    			}
-	    			else {
-	    			    title = "Discount Application Successful";
-	    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to error
-	    			    
-	    			    // updating non-focusable field text (converting double to String)
-	    			    individualMemberFields[0].setText("Rs. "+Double.toString(premiumMember.getDiscountAmount()));
-	    			}
-	    			
-	    			// storing return message in the local variable
-	    			message = premiumMember.calculateDiscount();
-	    			
-	    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
-	    		}
-		    	
-	    		if(proceedUpdate) {
-                    SwingUtilities.invokeLater(() -> {
-                    	memberCardUpdate.run(); // executing the card text getting/setting runnable  
-                    	showDialog = true; // reverting to true after text update is finished
-                    });
-	    		}
             }
 		});
 		
@@ -2262,12 +2288,13 @@ public class GymGUI{
 		 */
 		
 		plan_C.addItemListener(new ItemListener() {
-		    @Override
+			
+			@Override
 		    public void itemStateChanged(ItemEvent e) {
-		    	individualMemberFields[1].setFocusable(false);
+				GymMember member = members.get(currentMemberIndex); // putting current member into a common variable
+				RegularMember regularMember = (RegularMember) member; // downcasting member to RegularMember
 		    	
-		    	GymMember member = members.get(currentMemberIndex);
-		    	RegularMember regularMember = (RegularMember) member; // downcasting member to RegularMember
+		    	individualMemberFields[1].setFocusable(false);
 		    	
 		    	// checking if an option was selected
 		        if (e.getStateChange() == ItemEvent.SELECTED) {
@@ -2277,6 +2304,31 @@ public class GymGUI{
 		        	individualMemberFields[0].setText("Rs. "+Double.toString(regularMember.getPlanPrice(selectedPlan)));
 		        }
 		    }
+		});
+		
+		plan_C.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				GymMember member = members.get(currentMemberIndex); // putting current member into a common variable
+		    	if(!member.isActiveStatus()) {
+		    		plan_C.setEnabled(false);
+		    	}
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				plan_C.setEnabled(true);
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				GymMember member = members.get(currentMemberIndex); // putting current member into a common variable
+
+		    	if(!member.isActiveStatus()) {
+		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    	}
+			}
 		});
 		
 		/*
@@ -2290,86 +2342,96 @@ public class GymGUI{
 		    	GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
 		    	PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
 		    	
-				/*
-				 * PAY DUE AMOUNT FIELD
-				 */
-				
-				individualMemberFields[1].addFocusListener(new FocusAdapter() {
-					@Override
-					public void focusGained(FocusEvent e1) {
-						if(!individualMemberFields[1].getText().equals("")) {
-							individualMemberFields[1].setText("");
-						}
-						
-						individualMemberFields[1].setFont(INPUT_FONT);
-						individualMemberFields[1].setForeground(MIDNIGHTBLUE);
-					}
-					
-					@Override 
-					public void focusLost(FocusEvent e1) {
-						if(premiumMember.isFullPayment) {
-							individualMemberFields[1].setText("Fully Paid");
-							individualMemberFields[1].setFont(NON_EDITABLE_FIELD_FONT);
-							individualMemberFields[1].setForeground(GREEN);
-						}
-					}
-				});
+		    	if(member.isActiveStatus()) {
+					/*
+					 * PAY DUE AMOUNT FIELD
+					 */
 
-		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
-		    	boolean proceedUpdate = true; // boolean to make the card update or not
+			    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
+			    	boolean proceedUpdate = true; // boolean to make the card update or not
 
-		    	String payingAmount = individualMemberFields[1].getText();
-		    	
-	    		// making local variables to store data
-    			String message="";
-    			String title="";
-    			int messageType=0x696969;
-		    	
-    			// when field is not filled
-		    	if(payingAmount.equals("")) {
-		    		message = "Please enter amount first.";
-		    		title = "Invalid Amount";
-		    		messageType = JOptionPane.ERROR_MESSAGE;
+			    	String payingAmount = individualMemberFields[1].getText();
+			    	
+		    		// making local variables to store data
+	    			String message="";
+	    			String title="";
+	    			int messageType=0x696969;
+			    	
+	    			// when field is not filled
+			    	if(payingAmount.equals("") && !premiumMember.isFullPayment()) {
+			    		message = "Please enter amount first.";
+			    		title = "Invalid Amount";
+			    		messageType = JOptionPane.ERROR_MESSAGE;
+			    		
+			    		proceedUpdate = false; // no need for update
+			    	}
+			    	else {
+			    		
+			    		title = "Payment Successful";
+			    		messageType = JOptionPane.INFORMATION_MESSAGE;
+			    		
+			    		try {
+			    			message = premiumMember.payDueAmount(Double.parseDouble(payingAmount)); // parsing string to double		    			
+			    		}
+			    		catch(NumberFormatException e2) {
+			    			if(premiumMember.isFullPayment) {
+				    			// when the user tries to pay "Fully Paid" text
+				    			message = "Your plan has already been paid fully.";
+					    		title = "Already Paid";
+					    		messageType = JOptionPane.INFORMATION_MESSAGE;
+					    		proceedUpdate = false;
+			    			}
+			    			else {
+				    			// when the user tries to pay some text
+				    			message = "Please enter a valid amount.";
+					    		title = "Invalid Amount";
+					    		messageType = JOptionPane.ERROR_MESSAGE;
+					    		proceedUpdate = false;
+					    		individualMemberFields[1].setText(""); // resetting the field
+					    		
+			    			}
+			    		}
+			    	}
+
+			    	JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 		    		
-		    		proceedUpdate = false; // no need for update
+		    		if(proceedUpdate) {
+	                    SwingUtilities.invokeLater(() -> {
+	                    	memberCardUpdate.run(); // executing the card text getting/setting runnable  
+	                    	showDialog = true; // reverting to true after text update is finished
+	                    });
+		    		}
 		    	}
 		    	else {
-		    		
-		    		title = "Payment Successful";
-		    		messageType = JOptionPane.INFORMATION_MESSAGE;
-		    		
-		    		try {
-		    			message = premiumMember.payDueAmount(Double.parseDouble(payingAmount)); // parsing string to double		    			
-		    		}
-		    		catch(NumberFormatException e2) {
-		    			if(premiumMember.isFullPayment) {
-			    			// when the user tries to pay "Fully Paid" text
-			    			message = "Your plan has already been paid fully.";
-				    		title = "Already Paid";
-				    		messageType = JOptionPane.INFORMATION_MESSAGE;
-				    		proceedUpdate = false;
-		    			}
-		    			else {
-			    			// when the user tries to pay some text
-			    			message = "Please enter a valid amount.";
-				    		title = "Invalid Amount";
-				    		messageType = JOptionPane.ERROR_MESSAGE;
-				    		proceedUpdate = false;
-				    		individualMemberFields[1].setText(""); // resetting the field
-				    		
-		    			}
-		    		}
+		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
 		    	}
-
-		    	JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
-	    		
-	    		if(proceedUpdate) {
-                    SwingUtilities.invokeLater(() -> {
-                    	memberCardUpdate.run(); // executing the card text getting/setting runnable  
-                    	showDialog = true; // reverting to true after text update is finished
-                    });
-	    		}
 		    }
+		});
+		
+		
+		// mouse listetner for input fields
+		individualMemberFields[1].addMouseListener(new MouseAdapter() {
+			GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
+			PremiumMember premiumMember = (PremiumMember) member; // downcasting member to premium member
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// showing inactive error dialog only when premiumMember.isFullPayment() is false
+				if(!individualMemberFields[1].getText().equals("Fully Paid")) {
+					if(memberInstanceOf.equals("Premium") && !premiumMember.isActiveStatus()) {	
+			    		individualMemberFields[1].setFocusable(false);
+			    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+			    	}
+				}
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// making the field editable only when premiumMember.isFullPayment() is false
+				if(!individualMemberFields[1].getText().equals("Fully Paid")) {
+					individualMemberFields[1].setFocusable(true);
+				}
+			}
 		});
 	}
 
