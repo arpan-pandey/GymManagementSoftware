@@ -1178,8 +1178,6 @@ public class GymGUI{
 		individualMemberButtonsWrapper_P.setLayout(new GridLayout(3,3));
 		individualMemberButtonsWrapper_P.setBorder(MANAGEMENT_BUTTON_PANEL_MARGIN);
 		
-		int makrer;
-		
 		for(JPanel buttonPanel : individualMemberButtons_P) {
 			buttonPanel.setBackground(LIGHTGRAY);
 			buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER,0,15));
@@ -1526,8 +1524,6 @@ public class GymGUI{
 		                                        individualMemberButtonsWrapper_P.removeAll();
 		                                        
 		        		                    	individualMemberFields[1].setFocusable(false); // making sure the field isn't focusable at first
-		                                        
-		                                        int marker;
 		                                        
 		                                     // adding button panels in corresponding places
 		                                		for(int i = 0 ; i < individualMemberButtons_P.length - 1 ; i++ ) {
@@ -2378,11 +2374,11 @@ public class GymGUI{
 		
 		// mouse listetner for input fields
 		individualMemberFields[1].addMouseListener(new MouseAdapter() {
-			GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
-			PremiumMember premiumMember = (PremiumMember) member; // downcasting member to premium member
-			
 			@Override
 			public void mousePressed(MouseEvent e) {
+				GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
+				PremiumMember premiumMember = (PremiumMember) member; // downcasting member to premium member
+				
 				// showing inactive error dialog only when premiumMember.isFullPayment() is false
 				if(!individualMemberFields[1].getText().equals("Fully Paid")) {
 					if(memberInstanceOf.equals("Premium") && !premiumMember.isActiveStatus()) {	
