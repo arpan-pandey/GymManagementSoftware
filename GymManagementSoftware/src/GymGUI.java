@@ -12,12 +12,7 @@
  * 
  * #FFFFFF (White)
  * #DDDEEE (Dark Gray)
- * #696969 (Gray (for placeholder))
- * 
- * #5A1E1E (Red)  
- * #FF8C8C (Light Red)      
- * #1A3A1A (Green)  
- * #9FCC7A (Light Green)     
+ * #696969 (Gray (for placeholder))   
  * 
  */
 
@@ -69,13 +64,6 @@ public class GymGUI{
     final Color DARKGRAY = new Color(0xDDDEEE);
     final Color WHITE = new Color(0xFFFFFF);
     final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
-    
-    // for activate/deactivate buttons
-    final Color RED = new Color(0x5A1E1E);         
-    final Color LIGHTRED = new Color(0xFF8C8C);
-    final Color GREEN = new Color(0x142E14); 
-    final Color LIGHTGREEN = new Color(0x9FCC7A);
-
 
     
     
@@ -127,8 +115,7 @@ public class GymGUI{
     // borders for button states
     final Border DEFAULT_BUTTON_OUTLINE = BorderFactory.createLineBorder(DARKNAVY, 1);
     
-    final Border ACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(GREEN, 1);
-    final Border DEACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(RED, 1);
+    final Border ACTIVATE$DEACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(STEELBLUE, 1);
     
     final Border ACTIVE_BUTTON_HIGHLIGHT = BorderFactory.createMatteBorder(0, 2, 0, 0, LIGHTGRAY);
     
@@ -1468,7 +1455,7 @@ public class GymGUI{
 	                                					
 	                                					if(premiumMember.isFullPayment()) {
 	                                						individualMemberFields[1].setFont(NON_EDITABLE_FIELD_FONT);
-	                                						individualMemberFields[1].setForeground(GREEN);
+	                                						individualMemberFields[1].setForeground(STEELBLUE);
 	                                					}
 	                                					
 			                                            // setting text of 2nd non-editable field
@@ -1490,48 +1477,28 @@ public class GymGUI{
 		                                             * STYLING THE ACTIVATE/DEACTIVATE BUTTON
 		                                             */
 		                            		    	individualMemberButtons[0].setText(member.isActiveStatus()?"Deactivate Membership":"Activate Membership"); // setting corresponding text of first management button for each member
-		                            				individualMemberButtons[0].setBackground(member.isActiveStatus()?RED:GREEN); // setting green or red for activate or deactivate button
-		                            				individualMemberButtons[0].setBorder(member.isActiveStatus()?DEACTIVATE_BUTTON_OUTLINE:ACTIVATE_BUTTON_OUTLINE);
+		                            				individualMemberButtons[0].setBackground(STEELBLUE); // setting green or red for activate or deactivate button
+		                            				individualMemberButtons[0].setBorder(ACTIVATE$DEACTIVATE_BUTTON_OUTLINE);
 		                            				
 		                            				
 		                            				// setting mouse interaction effects for activate/deactivate member button
 		                            				individualMemberButtons[0].addMouseListener(new MouseAdapter() { 
 		                            					@Override
 		                            					public void mouseEntered(MouseEvent e) {
-		                            						individualMemberButtons[0].setForeground(DARKNAVY);
-		                            						if(member.isActiveStatus()) {
-		                            							individualMemberButtons[0].setBackground(LIGHTRED);
-		                            						}
-		                            						else {
-		                            							individualMemberButtons[0].setBackground(LIGHTGREEN);
-		                            						}
+		                            						individualMemberButtons[0].setForeground(LIGHTGRAY);
+		                            						individualMemberButtons[0].setBackground(GUNMETALBLUE);
 		                            					}
 		                            					@Override
 		                            					public void mouseExited(MouseEvent e) {
-		                            						if(member.isActiveStatus()) {
-		                            							individualMemberButtons[0].setBackground(RED);
-		                            						}
-		                            						else {
-		                            							individualMemberButtons[0].setBackground(GREEN);
-		                            						}
+		                            						individualMemberButtons[0].setBackground(STEELBLUE);
 		                            					}
 		                            					@Override
 		                            					public void mouseClicked(MouseEvent e) {
-		                            						if(member.isActiveStatus()) {
-		                            							individualMemberButtons[0].setBackground(RED);
-		                            						}
-		                            						else {
-		                            							individualMemberButtons[0].setBackground(GREEN);
-		                            						}
+		                            						individualMemberButtons[0].setBackground(STEELBLUE);
 		                            					}
 		                            					@Override
 		                            					public void mouseReleased(MouseEvent e) {
-		                            						if(member.isActiveStatus()) {
-		                            							individualMemberButtons[0].setBackground(RED);
-		                            						}
-		                            						else {
-		                            							individualMemberButtons[0].setBackground(GREEN);
-		                            						}
+		                            						individualMemberButtons[0].setBackground(STEELBLUE);
 		                            					}
 		                            				});
 		                            		    	
@@ -2300,7 +2267,7 @@ public class GymGUI{
 		        if (e.getStateChange() == ItemEvent.SELECTED) {
 		        	
 		        	String selectedPlan = (String) plan_C.getSelectedItem();
-		        	individualMemberFields[0].setForeground(GREEN);
+		        	individualMemberFields[0].setForeground(STEELBLUE);
 		        	individualMemberFields[0].setText("Rs. "+Double.toString(regularMember.getPlanPrice(selectedPlan)));
 		        }
 		    }
