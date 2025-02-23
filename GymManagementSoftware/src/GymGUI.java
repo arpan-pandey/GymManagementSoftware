@@ -125,12 +125,8 @@ public class GymGUI{
     final Border FORM_INPUT_PADDING = BorderFactory.createEmptyBorder(0, horizontalMargin, 0, horizontalMargin);
     final Border FORM_INPUT_MARGIN = BorderFactory.createEmptyBorder(formMarginTop, horizontalMargin, formMarginBottom, horizontalMargin);
     
-    // border for plan selection
-    final Border PLAN_SELECTION_MARGIN = BorderFactory.createEmptyBorder((formMarginTop - planMarginTop), (horizontalMargin - planMarginLeft), formMarginBottom, horizontalMargin);
-    
     // padding for member management card
     final Border CARD_MARGIN = BorderFactory.createEmptyBorder(cardMarginTop, cardMarginHorizontal, cardMarginBottom, cardMarginHorizontal);
-    final Border CARD_CONTENT_MARGIN = BorderFactory.createEmptyBorder(cardContentMarginVertical, cardContentMarginHorizontal, cardContentMarginVertical, cardContentMarginHorizontal);
     
     // margin for member management card labels
     final Border CARD_UNIQUE_LABEL_MARGIN_LEFT = BorderFactory.createEmptyBorder(0,cardUniqueLabelMarginLeft,0,0);
@@ -151,37 +147,7 @@ public class GymGUI{
     
     final Border DEFAULT_INPUT_BORDER = BorderFactory.createCompoundBorder(FORM_INPUT_OUTLINE, FORM_INPUT_PADDING);
     final Border ACTIVE_INPUT_BORDER = BorderFactory.createCompoundBorder(FORM_INPUT_ACTIVE_OUTLINE, FORM_INPUT_PADDING);
-
-
-    /*
-     * extra variables
-     */
     
-	int activeIndex; // variable to store index of active content
-	int lastIndex; // variable to store index of last body content
-	
-	final ButtonGroup GENDER = new ButtonGroup(); // button group for gender radio buttons
-	boolean isGenderSelected = false;
-	int indexOfGenderSelected = -1; // initially
-	
-	// boolean for if the current panel is membertype content or not (intially false)
-	boolean[] isFormContent = {
-			false, //premium
-			false //regular
-			}; 
-	
-	// for member card buttons funcitonality
-    boolean showDialog = true;
-    
-    // last member id and type of member
-    int currentMemberIndex = 0;
-    String lastMemberID = "-1";
-    String memberInstanceOf = "";
-    
-    Runnable memberCardUpdate; // declaring a runnable
-    
-    String fullyPaidText = "Fully Paid❗"; // creating a String with a 'heavy exclamation' unicode character so that users cannot lock themselves out of the field accidentally
-	
     
 	/*
 	 * Frame variables
@@ -208,6 +174,9 @@ public class GymGUI{
 				new JButton("Member Management")
 		};
 	
+	int activeIndex; // variable to store index of active content
+	int lastIndex; // variable to store index of last body content
+	
 	
 	/*
 	 * dashboard VARIABLES
@@ -218,7 +187,8 @@ public class GymGUI{
 		JPanel dashboardTitle_P;
 			JLabel dashboardTitle_L;
 	
-	
+		JPanel dashboardTableWrapper_P;
+			
 	/*
 	 * addMember VARIABLES
 	 */
@@ -235,6 +205,18 @@ public class GymGUI{
 						new JButton("Regular Member")
 					};
 				
+				// boolean for if the current panel is membertype content or not (intially false)
+				boolean[] isFormContent = {
+						false, //premium
+						false //regular
+						}; 
+				
+				JPanel[]
+				//array of form panels
+				formPanels = {
+					prem_form_P = new JPanel(),
+					regular_form_P = new JPanel()
+				};
 				
 				// member form panels
 				JPanel prem_form_P = new JPanel();
@@ -299,6 +281,10 @@ public class GymGUI{
 						input_referralSource_F = new JTextField()	
 				};
 				
+				final ButtonGroup GENDER = new ButtonGroup(); // button group for gender radio buttons
+				boolean isGenderSelected = false;
+				int indexOfGenderSelected = -1; // initially
+				
 				// array of gender radio buttons + initialization
 				JRadioButton[] genderRadioButtons = {
 						input_genderMale = new JRadioButton("Male"),
@@ -325,7 +311,7 @@ public class GymGUI{
 							"Enter trainer's name"
 						},
 						{
-							// regular form placeholders (Referral source)
+							// regular form placeholder (Referral source)
 							"eg., Friend, Website, Ad"	
 						}
 				};
@@ -363,6 +349,13 @@ public class GymGUI{
 				
 				JPanel cardCommonAttributes_P = new JPanel();
 				JPanel cardUniqueAttributes_P = new JPanel();
+				
+				JPanel[]
+				//array of member card panels
+				cardPanels = {
+					cardCommonAttributes_P,
+					cardUniqueAttributes_P
+				};
 				
 				JLabel[]
 					// card keyword labels
@@ -438,6 +431,19 @@ public class GymGUI{
 							new JButton("Calculate Discount"), // OR Upgrade plan 
 							new JButton("Pay Due Amount"),
 					};
+					
+        // last member id and type of member
+		int currentMemberIndex = 0;
+		String lastMemberID = "-1";
+		String memberInstanceOf = "";
+		
+		Runnable memberCardUpdate; // declaring a runnable
+		
+		// for member card buttons funcitonality
+	    boolean showDialog = true;
+	    
+		String fullyPaidText = "Fully Paid❗"; // creating a String with a 'heavy exclamation' unicode character so that users cannot lock themselves out of the field accidentally
+
 			
 	/*
 	 * ARRAYS
@@ -489,20 +495,11 @@ public class GymGUI{
 			new JPanel(), //back button	for add a member forms
 			new JPanel(), // back button for member management
 		},
-		//array of form panels
-		formPanels = {
-			prem_form_P = new JPanel(),
-			regular_form_P = new JPanel()
-		},
 		// array of center body panels
 		centralBodyPanels = {
+			dashboardTableWrapper_P = new JPanel(),
 			memberTypeSelect_P = new JPanel(),
 			memberManagementButton_P = new JPanel()
-		},
-		//array of member card panels
-		cardPanels = {
-			cardCommonAttributes_P,
-			cardUniqueAttributes_P
 		};
 	
 	JButton[]
@@ -695,31 +692,37 @@ public class GymGUI{
 			content.setBorder(CONTENT_MARGIN);
 		}
 		
-		for(int i = 0 ; i < bodyContent.length - 1; i++) {
+		for(int i = 0 ; i < bodyContent.length; i++) {
 			
-			// styling the central panel titles
-			centralPanelTitles[i].setFont(HEADING1_FONT);
-			centralPanelTitles[i].setForeground(MIDNIGHTBLUE);
-			centralPanelTitles[i].setPreferredSize(new Dimension(600,150));
-			centralPanelTitles[i].setBorder(CONTENT_MARGIN); // setting margin
-			centralPanelTitles[i].setHorizontalAlignment(SwingConstants.CENTER);
-			centralPanelTitles[i].setVerticalAlignment(SwingConstants.BOTTOM);
 			
 			//styling the central panel
 			centralBodyPanels[i].setPreferredSize(new Dimension(1,1)); 
-			centralBodyPanels[i].add(centralPanelTitles[i]);
 			centralBodyPanels[i].setBackground(LIGHTGRAY);
 			centralBodyPanels[i].setBorder(CONTENT_MARGIN);
 			
-			if(i==0) {
+			if(i!=0) { 
+			// styling the central panel titles
+			centralPanelTitles[i-1].setFont(HEADING1_FONT);
+			centralPanelTitles[i-1].setForeground(MIDNIGHTBLUE);
+			centralPanelTitles[i-1].setPreferredSize(new Dimension(600,150));
+			centralPanelTitles[i-1].setBorder(CONTENT_MARGIN); // setting margin
+			centralPanelTitles[i-1].setHorizontalAlignment(SwingConstants.CENTER);
+			centralPanelTitles[i-1].setVerticalAlignment(SwingConstants.BOTTOM);
+
+			centralBodyPanels[i].add(centralPanelTitles[i-1]);
+			}
+			
+			if(i==0) {continue;} // doing nothing when index is of dashboard
+			
+			else if(i==1) {
 				// adding one extra button to the select member type panel
-				centralBodyPanels[i].add(centralPanelButtons[i]);
+				centralBodyPanels[i].add(centralPanelButtons[i-1]);
 			}
 			
 			// adding corresponding buttons to the panels
-			centralBodyPanels[i].add(centralPanelButtons[i+1]);
+			centralBodyPanels[i].add(centralPanelButtons[i]);
 			
-			bodyContent[i+1].add(centralBodyPanels[i], BorderLayout.CENTER);
+			bodyContent[i].add(centralBodyPanels[i], BorderLayout.CENTER);
 		}
 		
 		// setting attributes of utilityButton (back button) text using a for each loop
