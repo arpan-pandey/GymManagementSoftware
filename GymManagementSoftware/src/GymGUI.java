@@ -764,18 +764,15 @@ public class GymGUI{
 		/*
 		 * DASHBOARD SECTION
 		 */
+			int marker;
 		
 		
-		
+
 		/*
 		 * ADD A MEMBER SECTION
 		 */
 		
-		/*
-		 * ADD A MEMBER FORM SECTION
-		 */
-		
-		// forms styling, put into a runnable 
+		// form styling, put into a runnable 
 		Runnable showFormContent = new Runnable() {
 		
 			@Override
@@ -2376,23 +2373,25 @@ public class GymGUI{
 		individualMemberFields[1].addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
-				PremiumMember premiumMember = (PremiumMember) member; // downcasting member to premium member
-				
-				// showing inactive error dialog only when premiumMember.isFullPayment() is false
-				if(!individualMemberFields[1].getText().equals("Fully Paid")) {
-					if(memberInstanceOf.equals("Premium") && !premiumMember.isActiveStatus()) {	
-			    		individualMemberFields[1].setFocusable(false);
-			    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
-			    	}
+				if(memberInstanceOf.equals("Premium")) {
+					GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
+					PremiumMember premiumMember = (PremiumMember) member; // downcasting member to premium member
+					
+					// showing inactive error dialog only when premiumMember.isFullPayment() is false
+					if(!individualMemberFields[1].getText().equals("Fully Paid")) {
+						if(memberInstanceOf.equals("Premium") && !premiumMember.isActiveStatus()) {	
+				    		individualMemberFields[1].setFocusable(false);
+				    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+				    	}
+					}
 				}
 			}
 			
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				// making the field editable only when premiumMember.isFullPayment() is false
-				if(!individualMemberFields[1].getText().equals("Fully Paid")) {
-					individualMemberFields[1].setFocusable(true);
+					// making the field editable only when premiumMember.isFullPayment() is false
+					if(!individualMemberFields[1].getText().equals("Fully Paid")) {
+						individualMemberFields[1].setFocusable(true);	
 				}
 			}
 		});
