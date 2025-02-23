@@ -179,6 +179,8 @@ public class GymGUI{
     String memberInstanceOf = "";
     
     Runnable memberCardUpdate; // declaring a runnable
+    
+    String fullyPaidText = "Fully Paid❗"; // creating a String with a 'heavy exclamation' unicode character so that users cannot lock themselves out of the field accidentally
 	
     
 	/*
@@ -1454,7 +1456,7 @@ public class GymGUI{
 	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? (premiumMember.getDiscountAmount()!=0.0d? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "Uncalculated") : "Ineligible");
 	                                					
 	                                					// setting text of editable field
-	                                					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? "Fully Paid" : "");
+	                                					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? fullyPaidText : "");
 	                                					
 	                                					if(premiumMember.isFullPayment()) {
 	                                						individualMemberFields[1].setFont(NON_EDITABLE_FIELD_FONT);
@@ -2386,7 +2388,7 @@ public class GymGUI{
 					PremiumMember premiumMember = (PremiumMember) member; // downcasting member to premium member
 					
 					// showing inactive error dialog only when premiumMember.isFullPayment() is false
-					if(!individualMemberFields[1].getText().equals("Fully Paid")) {
+					if(!individualMemberFields[1].getText().equals(fullyPaidText)) {
 						if(memberInstanceOf.equals("Premium") && !premiumMember.isActiveStatus()) {	
 				    		individualMemberFields[1].setFocusable(false);
 				    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
@@ -2398,7 +2400,7 @@ public class GymGUI{
 			@Override
 			public void mouseEntered(MouseEvent e) {
 					// making the field editable only when premiumMember.isFullPayment() is false
-					if(!individualMemberFields[1].getText().equals("Fully Paid")) {
+					if(!individualMemberFields[1].getText().equals(fullyPaidText)) {
 						individualMemberFields[1].setFocusable(true);	
 				}
 			}
