@@ -159,7 +159,6 @@ public class GymGUI{
     
 	int activeIndex; // variable to store index of active content
 	int lastIndex; // variable to store index of last body content
-	String backSymbol = "◄"; // arrow symbol for backButton
 	
 	final ButtonGroup GENDER = new ButtonGroup(); // button group for gender radio buttons
 	boolean isGenderSelected = false;
@@ -441,6 +440,14 @@ public class GymGUI{
 	/*
 	 * ARRAYS
 	 */
+					
+					
+		String backSymbol, searchSymbol; // symbols
+		// array of String icons
+		String[] icons = {
+			backSymbol = "◄",	
+			searchSymbol = "⌕",
+		};			
 	
 	JLabel[]
 		//array of body titles
@@ -766,6 +773,7 @@ public class GymGUI{
 		 */
 			int marker;
 		
+			
 		
 
 		/*
@@ -2055,7 +2063,7 @@ public class GymGUI{
                 
             	// since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
             	// that is why the following statement forces the button's pressed state to be false
-                // since this button's color is different from the color scheme of the app, we need to do this as for other buttons, the default JButton pressed state is really identical to PASTELBLUE (mouseEntered color)
+                // we do this only for this differently colored button since, for other buttons, pressed state is really identical to PASTELBLUE (mouseEntered color)
             	individualMemberButtons[0].getModel().setPressed(false);
             }
 		});
