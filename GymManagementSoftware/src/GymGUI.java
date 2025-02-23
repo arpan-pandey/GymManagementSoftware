@@ -1244,7 +1244,7 @@ public class GymGUI{
 
 		frame.add(menuBar, BorderLayout.WEST);
 		
-		activeIndex = 1; // setting the lastContent to addMemberContent, initially
+		activeIndex = 0; // setting the lastContent to addMemberContent, initially
 		lastIndex = activeIndex;
 		menuButtons[activeIndex].setFont(BUTTON_FONT_ACTIVE);
 		menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
@@ -1779,25 +1779,27 @@ public class GymGUI{
 		                                }
 		                            }
 		                        }
+		                    	
+		                        // to make sure that the button doesn't keep it's pressed state when the JOptionPane blocks the EDT
+		                    	menuButtons[2].getModel().setPressed(false);
+		                    	
+		                    	// refreshing menubutton panel
+		                    	menuButtonPanel.revalidate();
+		                    	menuButtonPanel.repaint();
 		                    }
 		                };
 		                
 		                // calling the run function initalized above, initially
 		                memberCardUpdate.run();
-
-		                // removing all mouse listeners from the manageMemberButton so that it doesnt keep it's pressed state even after changing panels
-		                for (MouseListener listener : manageMemberButton.getMouseListeners()) {
-		                    manageMemberButton.removeMouseListener(listener);
-		                }
 		                
 		                // adding an action listener to the button (when it's re-added to the panel)
 		                manageMemberButton.addMouseListener(new MouseAdapter() {
 		                    @Override
 		                    public void mousePressed(MouseEvent e) {
 		                    	manageMemberButton.setForeground(MIDNIGHTBLUE);
-		                    	
-		                        // triggering the same dialog input handling (run() function) when the button is clicked
-		                        memberCardUpdate.run();
+
+		                    	// triggering the same dialog input handling (run() function) when the button is clicked
+		                    	memberCardUpdate.run();
 		                    }
 		                    @Override
 		    		        public void mouseEntered(MouseEvent e) {
