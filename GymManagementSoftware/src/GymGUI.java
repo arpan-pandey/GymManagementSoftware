@@ -188,6 +188,7 @@ public class GymGUI{
 			JLabel dashboardTitle_L;
 	
 		JPanel dashboardTableWrapper_P;
+			JPanel dashboardTable_P;
 			
 	/*
 	 * addMember VARIABLES
