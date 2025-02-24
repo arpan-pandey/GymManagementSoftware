@@ -53,17 +53,17 @@ public class GymGUI{
 	 */
 	
 	// palette colors
-	final Color DARKNAVY = new Color(0x0D1B2A);
-    final Color MIDNIGHTBLUE = new Color(0x1B263B);
-    final Color GUNMETALBLUE = new Color(0x2E4057);
-    final Color STEELBLUE = new Color(0x415A77);
-    final Color PASTELBLUE = new Color(0xA3B7C8);
-    final Color LIGHTGRAY = new Color(0xF5F5F5);
+	private final Color DARKNAVY = new Color(0x0D1B2A);
+    private final Color MIDNIGHTBLUE = new Color(0x1B263B);
+    private final Color GUNMETALBLUE = new Color(0x2E4057);
+    private final Color STEELBLUE = new Color(0x415A77);
+    private final Color PASTELBLUE = new Color(0xA3B7C8);
+    private final Color LIGHTGRAY = new Color(0xF5F5F5);
     
     //extra colors
-    final Color DARKGRAY = new Color(0xDDDEEE);
-    final Color WHITE = new Color(0xFFFFFF);
-    final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
+    private final Color DARKGRAY = new Color(0xDDDEEE);
+    private final Color WHITE = new Color(0xFFFFFF);
+    private final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
 
     
     
@@ -72,23 +72,23 @@ public class GymGUI{
 	 */
     
     // button fonts
-    final Font BUTTON_FONT = new Font("Century Gothic", Font.PLAIN, 14);
-    final Font BUTTON_FONT_ACTIVE = new Font("Century Gothic", Font.BOLD, 14);
+    private final Font BUTTON_FONT = new Font("Century Gothic", Font.PLAIN, 14);
+    private final Font BUTTON_FONT_ACTIVE = new Font("Century Gothic", Font.BOLD, 14);
     
     // body fonts
-    final Font CONTENT_TITLE_FONT = new Font("Century Gothic", Font.BOLD, 20);
-    final Font TITLE_SYMBOL_FONT = new Font("Century Gothic", Font.PLAIN, 20);
-    final Font HEADING1_FONT = new Font("Century Gothic", Font.BOLD, 18);
-    final Font PARAGRAPH_FONT = new Font("Century Gothic", Font.PLAIN, 16);
+    private final Font CONTENT_TITLE_FONT = new Font("Century Gothic", Font.BOLD, 20);
+    private final Font TITLE_SYMBOL_FONT = new Font("Century Gothic", Font.PLAIN, 20);
+    private final Font HEADING1_FONT = new Font("Century Gothic", Font.BOLD, 18);
+    private final Font PARAGRAPH_FONT = new Font("Century Gothic", Font.PLAIN, 16);
     
     // form font
-    final Font INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 15);
-    final Font INPUT_FONT = new Font("Helvetica", Font.PLAIN, 14);
-    final Font RADIO_FONT = new Font("Century Gothic", Font.BOLD, 14);
+    private final Font INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 15);
+    private final Font INPUT_FONT = new Font("Helvetica", Font.PLAIN, 14);
+    private final Font RADIO_FONT = new Font("Century Gothic", Font.BOLD, 14);
     
     // memberManagement input font
-    final Font MANAGEMENT_INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 13);
-    final Font NON_EDITABLE_FIELD_FONT = new Font("Helvetica", Font.BOLD, 14);
+    private final Font MANAGEMENT_INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 13);
+    private final Font NON_EDITABLE_FIELD_FONT = new Font("Helvetica", Font.BOLD, 14);
     
     
     
@@ -96,123 +96,179 @@ public class GymGUI{
      * Border, Margin & Padding Variables
      */
     
-    final int horizontalMargin = 15;
+    private final int horizontalMargin = 15;
     
-    final int marginTopBottom = 38, marginLeftRight = 50; // margins for content sections
-    final int buttonPaddingVertical = 10; // padding inside buttons
-    final int formMarginTop = 45, formMarginBottom = 28; // margins for content sections
-    final int planMarginTop = 14, planMarginLeft = 10; // margins for content sections
+    private final int marginTopBottom = 38, marginLeftRight = 50; // margins for content sections
+    private final int buttonPaddingVertical = 10; // padding inside buttons
+    private final int formMarginTop = 45, formMarginBottom = 28; // margins for content sections
     
-    final int cardMarginTop = 22, cardMarginBottom = 5, cardMarginHorizontal = 20; // margin for individual member card
-    final int cardContentMarginVertical = 15, cardContentMarginHorizontal = 10;
-    final int cardOddLabelMarginLeft = 11, cardUniqueLabelMarginLeft = 19;
+    private final int cardMarginTop = 22, cardMarginBottom = 5, cardMarginHorizontal = 20; // margin for individual member card
+
+    private final int cardOddLabelMarginLeft = 11, cardUniqueLabelMarginLeft = 19;
     
-    final int managementInputMarginTop = 8, managementInputMarginBottom = 18, managementInputMarginHorizontal = 18;
+    private final int managementInputMarginTop = 8, managementInputMarginBottom = 18, managementInputMarginHorizontal = 18;
 
     // content margin
-    final Border CONTENT_MARGIN = BorderFactory.createEmptyBorder(marginTopBottom, marginLeftRight, marginTopBottom, marginLeftRight);
+    private final Border CONTENT_MARGIN = BorderFactory.createEmptyBorder(marginTopBottom, marginLeftRight, marginTopBottom, marginLeftRight);
 
     // borders for button states
-    final Border DEFAULT_BUTTON_OUTLINE = BorderFactory.createLineBorder(DARKNAVY, 1);
+    private final Border DEFAULT_BUTTON_OUTLINE = BorderFactory.createLineBorder(DARKNAVY, 1);
     
-    final Border ACTIVATE$DEACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(STEELBLUE, 1);
+    private final Border ACTIVATE$DEACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(STEELBLUE, 1);
     
-    final Border ACTIVE_BUTTON_HIGHLIGHT = BorderFactory.createMatteBorder(0, 2, 0, 0, LIGHTGRAY);
+    private final Border ACTIVE_BUTTON_HIGHLIGHT = BorderFactory.createMatteBorder(0, 2, 0, 0, LIGHTGRAY);
     
     // borders for input field
-    final Border FORM_INPUT_OUTLINE = BorderFactory.createMatteBorder(0, 0, 1, 0, MIDNIGHTBLUE);
-    final Border FORM_INPUT_ACTIVE_OUTLINE = BorderFactory.createMatteBorder(0, 0, 2, 0, STEELBLUE);
-    final Border FORM_INPUT_PADDING = BorderFactory.createEmptyBorder(0, horizontalMargin, 0, horizontalMargin);
-    final Border FORM_INPUT_MARGIN = BorderFactory.createEmptyBorder(formMarginTop, horizontalMargin, formMarginBottom, horizontalMargin);
+    private final Border FORM_INPUT_OUTLINE = BorderFactory.createMatteBorder(0, 0, 1, 0, MIDNIGHTBLUE);
+    private final Border FORM_INPUT_ACTIVE_OUTLINE = BorderFactory.createMatteBorder(0, 0, 2, 0, STEELBLUE);
+    private final Border FORM_INPUT_PADDING = BorderFactory.createEmptyBorder(0, horizontalMargin, 0, horizontalMargin);
+    private final Border FORM_INPUT_MARGIN = BorderFactory.createEmptyBorder(formMarginTop, horizontalMargin, formMarginBottom, horizontalMargin);
     
     // padding for member management card
-    final Border CARD_MARGIN = BorderFactory.createEmptyBorder(cardMarginTop, cardMarginHorizontal, cardMarginBottom, cardMarginHorizontal);
+    private final Border CARD_MARGIN = BorderFactory.createEmptyBorder(cardMarginTop, cardMarginHorizontal, cardMarginBottom, cardMarginHorizontal);
     
     // margin for member management card labels
-    final Border CARD_UNIQUE_LABEL_MARGIN_LEFT = BorderFactory.createEmptyBorder(0,cardUniqueLabelMarginLeft,0,0);
-    final Border CARD_ODD_LABEL_MARGIN_LEFT = BorderFactory.createEmptyBorder(0,cardOddLabelMarginLeft,0,0);
+    private final Border CARD_UNIQUE_LABEL_MARGIN_LEFT = BorderFactory.createEmptyBorder(0,cardUniqueLabelMarginLeft,0,0);
+    private final Border CARD_ODD_LABEL_MARGIN_LEFT = BorderFactory.createEmptyBorder(0,cardOddLabelMarginLeft,0,0);
     
     // margin for member management button panel
-    final Border MANAGEMENT_BUTTON_PANEL_MARGIN = BorderFactory.createEmptyBorder(cardMarginTop,0,cardMarginBottom,0);
+    private final Border MANAGEMENT_BUTTON_PANEL_MARGIN = BorderFactory.createEmptyBorder(cardMarginTop,0,cardMarginBottom,0);
     
     // margin for member management input field
-    final Border MEMBER_MANAGEMENT_INPUT_MARGIN = BorderFactory.createEmptyBorder(managementInputMarginTop,managementInputMarginHorizontal,managementInputMarginBottom,managementInputMarginHorizontal);
+    private final Border MEMBER_MANAGEMENT_INPUT_MARGIN = BorderFactory.createEmptyBorder(managementInputMarginTop,managementInputMarginHorizontal,managementInputMarginBottom,managementInputMarginHorizontal);
     
     // padding inside buttons
-    final Border BUTTON_INNER_PADDING = BorderFactory.createEmptyBorder(buttonPaddingVertical, horizontalMargin, buttonPaddingVertical, horizontalMargin);
+    private final Border BUTTON_INNER_PADDING = BorderFactory.createEmptyBorder(buttonPaddingVertical, horizontalMargin, buttonPaddingVertical, horizontalMargin);
 
     // combined borders
-    final Border DEFAULT_BUTTON_BORDER = BorderFactory.createCompoundBorder(DEFAULT_BUTTON_OUTLINE, BUTTON_INNER_PADDING);
-    final Border ACTIVE_BUTTON_BORDER = BorderFactory.createCompoundBorder(ACTIVE_BUTTON_HIGHLIGHT, BUTTON_INNER_PADDING);
+    private final Border DEFAULT_BUTTON_BORDER = BorderFactory.createCompoundBorder(DEFAULT_BUTTON_OUTLINE, BUTTON_INNER_PADDING);
+    private final Border ACTIVE_BUTTON_BORDER = BorderFactory.createCompoundBorder(ACTIVE_BUTTON_HIGHLIGHT, BUTTON_INNER_PADDING);
     
-    final Border DEFAULT_INPUT_BORDER = BorderFactory.createCompoundBorder(FORM_INPUT_OUTLINE, FORM_INPUT_PADDING);
-    final Border ACTIVE_INPUT_BORDER = BorderFactory.createCompoundBorder(FORM_INPUT_ACTIVE_OUTLINE, FORM_INPUT_PADDING);
+    private final Border DEFAULT_INPUT_BORDER = BorderFactory.createCompoundBorder(FORM_INPUT_OUTLINE, FORM_INPUT_PADDING);
+    private final Border ACTIVE_INPUT_BORDER = BorderFactory.createCompoundBorder(FORM_INPUT_ACTIVE_OUTLINE, FORM_INPUT_PADDING);
     
     
 	/*
 	 * Frame variables
 	 */
     
-	JFrame frame = new JFrame("Gym Management Software"); // creating a new frame with the title "Gym GUI"
-    	final int FRAME_HEIGHT = 650, FRAME_WIDTH = 1100; //height and width of frame
+    private JFrame frame = new JFrame("Gym Management Software"); // creating a new frame with the title "Gym GUI"
+    	private final int FRAME_HEIGHT = 650, FRAME_WIDTH = 1100; //height and width of frame
 	
 	
 	/*
 	 * MENUBAR VARIABLES
 	 */
 	
-	JPanel menuBar, menuButtonPanel;
-		final int MENU_BAR_WIDTH=225; // width of menuBar
+    private JPanel menuBar, menuButtonPanel;
+    	private final int MENU_BAR_WIDTH=225; // width of menuBar
 
-	JLabel menuTitle;
+    private JLabel menuTitle;
 	
 	//array of menuBar buttons
-	JButton[]
+    private JButton[]
 		menuButtons = {
 				new JButton("Dashboard"),
 				new JButton("Add a Member"),
 				new JButton("Member Management")
 		};
 	
-	int activeIndex; // variable to store index of active content
-	int lastIndex; // variable to store index of last body content
+    private int activeIndex; // variable to store index of active content
+    private int lastIndex; // variable to store index of last body content
 	
 	
 	/*
 	 * dashboard VARIABLES
 	 */
 	
-	JPanel dashboardContent;
+    private JPanel dashboardContent;
 	
-		JPanel dashboardTitle_P;
-			JLabel dashboardTitle_L;
+		private JPanel dashboardTitle_P;
+			private JLabel dashboardTitle_L;
+			private JButton loadFromFileButton;
 	
-		JPanel dashboardTableWrapper_P;
-			JPanel dashboardTable_P;
+		private JPanel dashboardContentWrapper_P;
+		
+			// control panel at the top
+			private JPanel dashboardTableControls_P;
+			
+				private JPanel tableControlSearch_P;
+					private JLabel tableControlSearch_L;
+					private JTextField tableControlSearch_F;
+					
+				private JPanel tableControlComboBox_P;
+				
+					private JPanel controlActiveStatus_P;
+						private JLabel controlActiveStatus_L;
+						private JComboBox<String> controlActiveStatus_C;
+						
+					private JPanel controlMemberType_P;
+						private JLabel controlMemberType_L;
+						private JComboBox<String> controlMemberType_C;
+						
+			    // table wrapper panel
+				private JPanel tableWrapper_P;
+					
+					// header above the actual table 
+					private JPanel tableHeader_P;
+					
+						private JPanel tableHeaderTitle_P;
+							private JLabel tableHeaderTitle_L;
+							
+						private JPanel columnSelector_P;
+							private JLabel columnSelectorHeading_L;
+							private JComboBox<String> columnSelector_C;
+							
+						private JPanel exportButton_P;
+							private JButton exportToFileButton;
+					
+					// panel which has the table
+					private JPanel table_P;
+						
+						// general fields
+						private String[] allMembersColumns = {
+						    "ID", "NAME", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
+						    "START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
+						};
+						
+						// fields for premium members
+						private String[] premiumColumns = {
+							    "ID", "NAME", "STATUS", "ATTENDANCE", "PAID AMOUNT",
+							    "FULL PAYMENT?", "DISCOUNT AMOUNT", "TRAINER"
+							};
+
+						// fields for regular members
+						private String[] regularColumns = {
+							    "ID", "NAME", "STATUS", "ATTENDANCE", "CURRENT PLAN",
+							    "CAN UPGRADE?", "REFERRAL SOURCE", "REMOVAL REASON"
+							};
+						
+						
+						
 			
 	/*
 	 * addMember VARIABLES
 	 */
 
-	JPanel addMemberContent;
-		JPanel addMemberTitle_P;
-			JLabel addMemberTitle_L;
-			
-		JPanel memberTypeSelect_P;
-			JLabel memberTypeSelect_L;
-				JButton[]
+	private JPanel addMemberContent;
+		private JPanel addMemberTitle_P;
+			private JLabel addMemberTitle_L;
+
+		private JPanel memberTypeSelect_P;
+			private JLabel memberTypeSelect_L;
+				private JButton[]
 					memberTypeButtons = {
 						new JButton("Premium Member"),
 						new JButton("Regular Member")
 					};
 				
 				// boolean for if the current panel is membertype content or not (intially false)
-				boolean[] isFormContent = {
+				private boolean[] isFormContent = {
 						false, //premium
 						false //regular
 						}; 
 				
-				JPanel[]
+				private JPanel[]
 				//array of form panels
 				formPanels = {
 					prem_form_P = new JPanel(),
@@ -220,20 +276,20 @@ public class GymGUI{
 				};
 				
 				// member form panels
-				JPanel prem_form_P = new JPanel();
-				JPanel regular_form_P = new JPanel();
+				private JPanel prem_form_P = new JPanel();
+				private JPanel regular_form_P = new JPanel();
 				
 				// input panels
-				JPanel input_id_P, input_name_P, input_location_P, input_phone_P, input_email_P, input_gender_P, input_DOB_P, input_membershipStartDate_P, input_personalTrainer_P, input_referralSource_P;
+				private JPanel input_id_P, input_name_P, input_location_P, input_phone_P, input_email_P, input_gender_P, input_DOB_P, input_membershipStartDate_P, input_personalTrainer_P, input_referralSource_P;
 					
 				// input labels
-				JLabel input_id_L, input_name_L, input_location_L, input_phone_L, input_email_L, input_gender_L, input_DOB_L, input_membershipStartDate_L, input_personalTrainer_L, input_referralSource_L; 
+				private JLabel input_id_L, input_name_L, input_location_L, input_phone_L, input_email_L, input_gender_L, input_DOB_L, input_membershipStartDate_L, input_personalTrainer_L, input_referralSource_L; 
 				
 				// input fields
-				JTextField input_id_F, input_name_F, input_location_F, input_phone_F, input_email_F, input_DOB_F, input_membershipStartDate_F, input_personalTrainer_F, input_referralSource_F;
+				private JTextField input_id_F, input_name_F, input_location_F, input_phone_F, input_email_F, input_DOB_F, input_membershipStartDate_F, input_personalTrainer_F, input_referralSource_F;
 				
 				// radio buttons
-				JRadioButton input_genderMale, input_genderFemale;
+				private JRadioButton input_genderMale, input_genderFemale;
 				
 						
 				/*
@@ -241,7 +297,7 @@ public class GymGUI{
 				 */
 					
 				//array of form panels + initialization
-				JPanel[] inputPanels = {
+				private JPanel[] inputPanels = {
 						input_id_P = new JPanel(),
 						input_name_P = new JPanel(),
 						input_location_P = new JPanel(),
@@ -256,7 +312,7 @@ public class GymGUI{
 						
 						
 				// array of input labels + initialization
-				JLabel[] inputLabels = {
+				private JLabel[] inputLabels = {
 						input_id_L = new JLabel("ID:"),
 						input_name_L = new JLabel("Name:"),
 						input_location_L = new JLabel("Location:"),
@@ -270,7 +326,7 @@ public class GymGUI{
 				};
 				
 				// array of input fields + initialization
-				JTextField[] inputFields = {
+				private JTextField[] inputFields = {
 						input_id_F = new JTextField(),
 						input_name_F = new JTextField(),
 						input_location_F = new JTextField(),
@@ -282,17 +338,17 @@ public class GymGUI{
 						input_referralSource_F = new JTextField()	
 				};
 				
-				final ButtonGroup GENDER = new ButtonGroup(); // button group for gender radio buttons
-				boolean isGenderSelected = false;
-				int indexOfGenderSelected = -1; // initially
+				private final ButtonGroup GENDER = new ButtonGroup(); // button group for gender radio buttons
+				private boolean isGenderSelected = false;
+				private int indexOfGenderSelected = -1; // initially
 				
 				// array of gender radio buttons + initialization
-				JRadioButton[] genderRadioButtons = {
+				private JRadioButton[] genderRadioButtons = {
 						input_genderMale = new JRadioButton("Male"),
 						input_genderFemale = new JRadioButton("Female")
 				};
 				
-				String[]
+				private String[]
 						//array of common input placeholders
 						commonPlaceholders = {
 								"Enter a unique ID", 	// id
@@ -304,7 +360,7 @@ public class GymGUI{
 								"YYYY-MM-DD",			// Membership Start Date
 							};
 					
-				String[][]
+				private String[][]
 					//array of input field placeholders
 					uniquePlaceholders = {
 						{
@@ -322,9 +378,9 @@ public class GymGUI{
 				 * FORM CONTROL BUTTONS VARIBALES
 				 */
 							
-				JPanel formButtons_P = new JPanel();
-				JPanel formControlButtonsPanel = new JPanel();
-					JButton[]
+				private JPanel formButtons_P = new JPanel();
+				private JPanel formControlButtonsPanel = new JPanel();
+					private JButton[]
 						formButtons= {
 								new JButton("Clear All"), // clear form button
 								new JButton("Add Premium Member"),
@@ -336,29 +392,29 @@ public class GymGUI{
 	 * memberManagement VARIABLES
 	 */
 	
-	JPanel memberManagementContent;
+	private JPanel memberManagementContent;
 	
-		JPanel memberManagementTitle_P;
-				JLabel memberManagementTitle_L;
+		private JPanel memberManagementTitle_P;
+			private JLabel memberManagementTitle_L;
 				
-			JPanel memberManagementButton_P;
-				JLabel memberManagementButton_L;
-				JButton manageMemberButton = new JButton("Enter member ID");
+			private JPanel memberManagementButton_P;
+				private JLabel memberManagementButton_L;
+				private JButton manageMemberButton = new JButton("Enter member ID");
 				
-			JPanel individualMemberManagement_P = new JPanel();
-				JPanel memberCard_P = new JPanel();
+			private JPanel individualMemberManagement_P = new JPanel();
+				private JPanel memberCard_P = new JPanel();
 				
-				JPanel cardCommonAttributes_P = new JPanel();
-				JPanel cardUniqueAttributes_P = new JPanel();
+				private JPanel cardCommonAttributes_P = new JPanel();
+				private JPanel cardUniqueAttributes_P = new JPanel();
 				
-				JPanel[]
+				private JPanel[]
 				//array of member card panels
 				cardPanels = {
 					cardCommonAttributes_P,
 					cardUniqueAttributes_P
 				};
 				
-				JLabel[]
+				private JLabel[]
 					// card keyword labels
 					cardLabels = {
 							
@@ -387,9 +443,9 @@ public class GymGUI{
 
 				};
 				
-				JPanel individualMemberButtonsWrapper_P = new JPanel();
+				private JPanel individualMemberButtonsWrapper_P = new JPanel();
 			
-					JPanel[]
+					private JPanel[]
 						individualMemberButtons_P = {
 							new JPanel(), // activate/deactivate membership
 							new JPanel(), // mark attendance
@@ -402,17 +458,17 @@ public class GymGUI{
 							new JPanel()  // premium plan charge
 					};
 				
-					JTextField[]
+					private JTextField[]
 						individualMemberFields = {
 							new JTextField(), // discount amount field || plan price
 							new JTextField(), // paid amount || removal reason
 							new JTextField()  // premium plan charge 
 					};
 					
-					String[] plans = {"Basic","Standard","Deluxe"};
-					JComboBox<String> plan_C = new JComboBox<String>(plans);
+					private String[] plans = {"Basic","Standard","Deluxe"};
+					private JComboBox<String> plan_C = new JComboBox<String>(plans);
 					
-					JLabel[]
+					private JLabel[]
 						individualMemberFieldTitle = {
 							new JLabel("Discount Amount:"),
 							new JLabel("Select A Plan:"),
@@ -422,7 +478,7 @@ public class GymGUI{
 							new JLabel("Total Charge")
 						};
 				
-					JButton[]
+					private JButton[]
 						individualMemberButtons = {
 							new JButton("Activate Membership"),
 							new JButton("Mark Attendance"),
@@ -434,16 +490,16 @@ public class GymGUI{
 					};
 					
         // last member id and type of member
-		int currentMemberIndex = 0;
-		String lastMemberID = "-1";
-		String memberInstanceOf = "";
+		private int currentMemberIndex = 0;
+		private String lastMemberID = "-1";
+		private String memberInstanceOf = "";
 		
-		Runnable memberCardUpdate; // declaring a runnable
+		private Runnable memberCardUpdate; // declaring a runnable
 		
 		// for member card buttons funcitonality
-	    boolean showDialog = true;
+		private boolean showDialog = true;
 	    
-		String fullyPaidText = "Fully Paid❗"; // creating a String with a 'heavy exclamation' unicode character so that users cannot lock themselves out of the field accidentally
+		private String fullyPaidText = "Fully Paid❗"; // creating a String with a 'heavy exclamation' unicode character so that users cannot lock themselves out of the field accidentally
 
 			
 	/*
@@ -451,14 +507,14 @@ public class GymGUI{
 	 */
 					
 					
-		String backSymbol, searchSymbol; // symbols
+		private String backSymbol, searchSymbol; // symbols
 		// array of String icons
-		String[] icons = {
+		private String[] icons = {
 			backSymbol = "◄",	
 			searchSymbol = "⌕",
 		};			
 	
-	JLabel[]
+	private JLabel[]
 		//array of body titles
 		contentTitles= {
 			dashboardTitle_L = new JLabel("Dashboard"),		
@@ -477,7 +533,7 @@ public class GymGUI{
 		};
 	
 	
-	JPanel[] 
+	private JPanel[] 
 		//array of main body content panels
 		bodyContent = {
 			dashboardContent = new JPanel(),
@@ -498,12 +554,12 @@ public class GymGUI{
 		},
 		// array of center body panels
 		centralBodyPanels = {
-			dashboardTableWrapper_P = new JPanel(),
+			dashboardContentWrapper_P = new JPanel(),
 			memberTypeSelect_P = new JPanel(),
 			memberManagementButton_P = new JPanel()
 		};
 	
-	JButton[]
+	private JButton[]
 			//array of all buttons
 			Buttons= {
 				menuButtons[0],
@@ -535,9 +591,8 @@ public class GymGUI{
 	private ArrayList<GymMember> members = new ArrayList<GymMember>(); // private for data hiding 
 	
 	// initializing test objects
-	GymMember testPremiumMember = new PremiumMember(1,"Ram Sapkota","Kathmandu","+977 9812345678","test_member1@gmail.com","Male","2004-12-12","2025-02-03","Alex Smith");
-	GymMember testRegularMember = new RegularMember(2,"Sita Phuyal","Pokhara","+977 9876543210","test_member2@gmail.com","Female","2002-04-29","2025-01-13","Instagram Ad");
-	
+	private GymMember testPremiumMember = new PremiumMember(1,"Ram Sapkota","Kathmandu","+977 9812345678","test_member1@gmail.com","Male","2004-12-12","2025-02-03","Alex Smith");
+	private GymMember testRegularMember = new RegularMember(2,"Sita Phuyal","Pokhara","+977 9876543210","test_member2@gmail.com","Female","2002-04-29","2025-01-13","Instagram Ad");
 	
 	
 	//constructor
