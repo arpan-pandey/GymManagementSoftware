@@ -1457,7 +1457,8 @@ public class GymGUI{
 			                                            memberDetails[13] = !premiumMember.getPersonalTrainer().equals("")? premiumMember.getPersonalTrainer() : "N/A"; // showing N/A when trainer name is empty
 			                                            
 			                                            // setting text of 1st non-editable field
-	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? (premiumMember.getDiscountAmount()!=0.0d? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "Uncalculated") : "Ineligible");
+	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? 
+	                                													 (premiumMember.getDiscountAmount()!=0.0d? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "Uncalculated") : "Ineligible");
 	                                					
 	                                					// setting text of editable field
 	                                					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? fullyPaidText : "");
@@ -1476,7 +1477,9 @@ public class GymGUI{
 		                                            	RegularMember regularMember = (RegularMember) member; // downcasting to access child methods
 		                                            	
 		                                            	memberDetails[10] = regularMember.getPlan();
-		                                            	memberDetails[11] = member.getAttendance()>=regularMember.getAttendanceLimit() ? "Yes" : "No"; // getting boolean using given logic and using corresponding string for readability
+		                                            	
+		                                            	 // getting boolean using given logic and using corresponding string for readability
+		                                            	memberDetails[11] = member.getAttendance()>=regularMember.getAttendanceLimit() ? "Yes" : "No";
 		                                            	memberDetails[12] = regularMember.getReferralSource();
 			                                            memberDetails[13] = regularMember.getRemovalReason().equals("")? "N/A" : regularMember.getRemovalReason(); // showing N/A when removal reason is empty
 		                                            }
@@ -1485,7 +1488,9 @@ public class GymGUI{
 		                                            /*
 		                                             * STYLING THE ACTIVATE/DEACTIVATE BUTTON
 		                                             */
-		                            		    	individualMemberButtons[0].setText(member.isActiveStatus()?"Deactivate Membership":"Activate Membership"); // setting corresponding text of first management button for each member
+		                                            
+		                                            // setting corresponding text of first management button for each member
+		                            		    	individualMemberButtons[0].setText(member.isActiveStatus()?"Deactivate Membership":"Activate Membership"); 
 		                            				individualMemberButtons[0].setBackground(STEELBLUE); // setting green or red for activate or deactivate button
 		                            				individualMemberButtons[0].setBorder(ACTIVATE$DEACTIVATE_BUTTON_OUTLINE);
 		                            				
@@ -1741,7 +1746,8 @@ public class GymGUI{
 			                                                "#1B263B", //MIDNIGHTBLUE
 			                                                detailTitle,
 			                                                customDetailAttribute,
-			                                                (i == 2) ? "⦿ " : ((memberInstanceOf.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""), // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
+			                                             // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
+			                                                (i == 2) ? "⦿ " : ((memberInstanceOf.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""),
 			                                                memberDetails[i] 
 			                                            ));  
 			                                            
@@ -1760,12 +1766,22 @@ public class GymGUI{
 		                                    } 
 		                                    
 		                                    else {
-		                                        JOptionPane.showConfirmDialog(frame, "Invalid ID! This ID doesn't exist.", "Invalid input", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+		                                        JOptionPane.showConfirmDialog(
+		                                        		frame,
+		                                        		"Invalid ID! This ID doesn't exist.",
+		                                        		"Invalid input",
+		                                        		JOptionPane.DEFAULT_OPTION,
+		                                        		JOptionPane.ERROR_MESSAGE);
 		                                    }
 		                                }
 		                            } catch (NumberFormatException e1) {
 		                                // error message
-		                                byte errorWish = (byte) JOptionPane.showConfirmDialog(frame, "Invalid ID! Please enter a valid number.", "Invalid input", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+		                                byte errorWish = (byte) JOptionPane.showConfirmDialog(
+		                                								frame,
+		                                								"Invalid ID! Please enter a valid number.",
+		                                								"Invalid input",
+		                                								JOptionPane.DEFAULT_OPTION,
+		                                								JOptionPane.ERROR_MESSAGE);
 
 		                                if (errorWish != 0) {
 		                                	memberManagementContent.remove(memberManagementButton_P);
@@ -1933,7 +1949,15 @@ public class GymGUI{
 								String options[]= {"Yes","No"}; // to explicitly define options in the following dialog box and select no as the focused button
 								
 								// showing a confirmation dialog to make sure that all fields are meant to be reset (byte to save memory)
-								byte backWish = (byte) JOptionPane.showOptionDialog(frame, "Are you sure you want to clear all fields and go back?", "Caution: Fields will be reset", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+								byte backWish = (byte) JOptionPane.showOptionDialog(
+																frame,
+																"Are you sure you want to clear all fields and go back?",
+																"Caution: Fields will be reset",
+																JOptionPane.YES_NO_OPTION,
+																JOptionPane.WARNING_MESSAGE,
+																null,
+																options, 
+																options[1]);
 								
 			                    GENDER.clearSelection(); // deselecting radio buttons
 			                    isGenderSelected = false; // since gender is deselected
@@ -2043,7 +2067,15 @@ public class GymGUI{
 		    	showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
 
 		    	String wishKeyword = member.isActiveStatus()? "Deactivate":"Activate";
-                int activateWish = JOptionPane.showOptionDialog(frame, wishKeyword+" "+member.getName()+"'s Membership?", "Confirm "+wishKeyword.substring(0,wishKeyword.length()-1)+"ion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
+                int activateWish = JOptionPane.showOptionDialog(
+                							frame,
+                							wishKeyword+" "+member.getName()+"'s Membership?",
+                							"Confirm "+wishKeyword.substring(0,wishKeyword.length()-1)+"ion",
+                							JOptionPane.YES_NO_OPTION,
+                							JOptionPane.QUESTION_MESSAGE,
+                							null,
+                							null,
+                							0);
                 
                 if(activateWish==0) {
                 	
@@ -2065,7 +2097,15 @@ public class GymGUI{
                     	showDialog = true; // reverting to true after text update is finished
                     	
                     	// success dialog
-                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!" , wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+                    	JOptionPane.showOptionDialog(
+                    			frame,
+                    			member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!",
+                    			wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!",
+                    			JOptionPane.DEFAULT_OPTION,
+                    			JOptionPane.INFORMATION_MESSAGE,
+                    			null,
+                    			null,
+                    			0);
                     });                 
                 } 
                 
@@ -2089,7 +2129,15 @@ public class GymGUI{
 		    	
                 
 		    	if(member.isActiveStatus()) {
-			    	int markWish = JOptionPane.showOptionDialog(frame, "Mark "+member.getName()+"'s attendance?", "Confirm Attendance", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, 0);
+			    	int markWish = JOptionPane.showOptionDialog(
+			    			frame,
+			    			"Mark "+member.getName()+"'s attendance?",
+			    			"Confirm Attendance",
+			    			JOptionPane.YES_NO_OPTION,
+			    			JOptionPane.QUESTION_MESSAGE,
+			    			null,
+			    			null,
+			    			0);
 			    	
 			    	if(markWish==0) {
 			    		member.markAttendance();
@@ -2099,12 +2147,26 @@ public class GymGUI{
 	                    	showDialog = true; // reverting to true after text update is finished
 	                    	
 	                    	// success dialog
-	                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s attendance has been successfully marked.", "Attendance Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+	                    	JOptionPane.showOptionDialog(
+	                    			frame,
+	                    			member.getName()+"'s attendance has been successfully marked.", "Attendance Successful!",
+	                    			JOptionPane.DEFAULT_OPTION,
+	                    			JOptionPane.INFORMATION_MESSAGE,
+	                    			null,
+	                    			null,
+	                    			0);
 	                    });
 			    	}
 		    	}
 		    	else {
-		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    		JOptionPane.showOptionDialog(
+		    				frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.",
+		    				"Inactive Member",
+		    				JOptionPane.DEFAULT_OPTION,
+		    				JOptionPane.ERROR_MESSAGE,
+		    				null,
+		    				null, 
+		    				0);
 		    	}
             }
 		});
@@ -2122,7 +2184,15 @@ public class GymGUI{
 		    	boolean proceedUpdate = true; // boolean to make the card update or not
 		    	
 		    	String options[]= {"Yes","No"}; // to explicitly define options in the following dialog box and select no as the focused button
-		    	int revertWish = JOptionPane.showOptionDialog(frame, "Proceeding will reset "+member.getName()+"'s data. Are you sure?", "Confirm Reset", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+		    	int revertWish = JOptionPane.showOptionDialog(
+		    								frame,
+		    								"Proceeding will reset "+member.getName()+"'s data. Are you sure?",
+		    								"Confirm Reset",
+		    								JOptionPane.YES_NO_OPTION,
+		    								JOptionPane.WARNING_MESSAGE,
+		    								null,
+		    								options,
+		    								options[1]);
 		    	
 		    	if(revertWish==0) {
 		    		
@@ -2134,7 +2204,15 @@ public class GymGUI{
 		    			// showing error if removal reason field is empty
 		    			if(removalReason.equals("")) {
 		    				proceedUpdate = false;
-		    				JOptionPane.showOptionDialog(frame, "Please enter removal reason first.", "Invalid Reason", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    				JOptionPane.showOptionDialog(
+		    						frame,
+		    						"Please enter removal reason first.",
+		    						"Invalid Reason",
+		    						JOptionPane.DEFAULT_OPTION,
+		    						JOptionPane.ERROR_MESSAGE,
+		    						null,
+		    						null,
+		    						0);
 		    			}
 		    			// reverting regular member by passing the non-empty removal reason String
 		    			else {
@@ -2155,7 +2233,15 @@ public class GymGUI{
 	                    	showDialog = true; // reverting to true after text update is finished
 	                    	
 	                    	// success dialog
-	                    	JOptionPane.showOptionDialog(frame, member.getName()+"'s data has been successfully reset.", "Reset Successful!", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, 0);
+	                    	JOptionPane.showOptionDialog(
+	                    			frame,
+	                    			member.getName()+"'s data has been successfully reset.",
+	                    			"Reset Successful!",
+	                    			JOptionPane.DEFAULT_OPTION,
+	                    			JOptionPane.INFORMATION_MESSAGE,
+	                    			null,
+	                    			null,
+	                    			0);
 	                    });
 		    		}
 		    	}
@@ -2195,7 +2281,9 @@ public class GymGUI{
 		    			// putting selected plan into a String || initializing with random value if nothing is selected
 			    		String selectedPlan = plan_C.getSelectedIndex()==-1? "none" : (String) plan_C.getSelectedItem();
 			    		String previousPlan = regularMember.getPlan(); // putting te previous plan in a String before upgradeing to new plan
-			    		boolean isDowngrade = regularMember.getPlanPrice(regularMember.getPlan()) > regularMember.getPlanPrice(selectedPlan); // checking if user is downgrading 
+			    		
+			    		// checking if user is downgrading 
+			    		boolean isDowngrade = regularMember.getPlanPrice(regularMember.getPlan()) > regularMember.getPlanPrice(selectedPlan); 
 			    		
 		    			// storing return message in the local variable
 		    			message = regularMember.upgradePlan(selectedPlan);
@@ -2213,7 +2301,9 @@ public class GymGUI{
 		    				else if(isDowngrade) {
 			    			    title = "Downgrade Successful";
 			    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
-			    				message = "Your plan has been downgraded to "+selectedPlan+" for Rs."+regularMember.getPlanPrice(selectedPlan)+"."; // seperate message for downgrade
+			    			    
+			    			    // seperate message for downgrade
+			    				message = "Your plan has been downgraded to "+selectedPlan+" for Rs."+regularMember.getPlanPrice(selectedPlan)+".";
 		    				}
 		    				// if same plan as currentPlan is selected
 		    				else if(previousPlan.equals(selectedPlan)) {
@@ -2270,7 +2360,15 @@ public class GymGUI{
 		    		}
 		    	}
 		    	else {
-		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    		JOptionPane.showOptionDialog(
+		    				frame,
+		    				member.getName()+"'s membership is currently inactive. Activate membership to proceed.",
+		    				"Inactive Member",
+		    				JOptionPane.DEFAULT_OPTION,
+		    				JOptionPane.ERROR_MESSAGE,
+		    				null,
+		    				null,
+		    				0);
 		    	}
 
             }
@@ -2320,7 +2418,15 @@ public class GymGUI{
 				GymMember member = members.get(currentMemberIndex); // putting current member into a common variable
 
 		    	if(!member.isActiveStatus()) {
-		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    		JOptionPane.showOptionDialog(
+		    				frame,
+		    				member.getName()+"'s membership is currently inactive. Activate membership to proceed.",
+		    				"Inactive Member",
+		    				JOptionPane.DEFAULT_OPTION,
+		    				JOptionPane.ERROR_MESSAGE,
+		    				null,
+		    				null,
+		    				0);
 		    	}
 			}
 		});
@@ -2397,7 +2503,14 @@ public class GymGUI{
 		    		}
 		    	}
 		    	else {
-		    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+		    		JOptionPane.showOptionDialog(
+		    				frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.",
+		    				"Inactive Member",
+		    				JOptionPane.DEFAULT_OPTION,
+		    				JOptionPane.ERROR_MESSAGE,
+		    				null,
+		    				null,
+		    				0);
 		    	}
 		    }
 		});
@@ -2415,7 +2528,15 @@ public class GymGUI{
 					if(!individualMemberFields[1].getText().equals(fullyPaidText)) {
 						if(memberInstanceOf.equals("Premium") && !premiumMember.isActiveStatus()) {	
 				    		individualMemberFields[1].setFocusable(false);
-				    		JOptionPane.showOptionDialog(frame, member.getName()+"'s membership is currently inactive. Activate membership to proceed.", "Inactive Member", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
+				    		JOptionPane.showOptionDialog(
+				    				frame,
+				    				member.getName()+"'s membership is currently inactive. Activate membership to proceed.",
+				    				"Inactive Member",
+				    				JOptionPane.DEFAULT_OPTION,
+				    				JOptionPane.ERROR_MESSAGE,
+				    				null,
+				    				null,
+				    				0);
 				    	}
 					}
 				}
