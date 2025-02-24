@@ -2191,30 +2191,48 @@ public class GymGUI{
 			    	 */
 			    	if(memberInstanceOf.equals("Regular")) {
 		    			RegularMember regularMember = (RegularMember) member; // downcasting to GymMember RegularMember
-			    		String selectedPlan = (String) plan_C.getSelectedItem();
+		    			
+		    			// putting selected plan into a String || initializing with random value if nothing is selected
+			    		String selectedPlan = plan_C.getSelectedIndex()==-1? "none" : (String) plan_C.getSelectedItem();
+			    		String previousPlan = regularMember.getPlan(); // putting te previous plan in a String before upgradeing to new plan
+			    		boolean isDowngrade = regularMember.getPlanPrice(regularMember.getPlan()) > regularMember.getPlanPrice(selectedPlan); // checking if user is downgrading 
 			    		
-			    		if(plan_C.getSelectedIndex()==-1) {
-			    			JOptionPane.showOptionDialog(frame, "Please select a plan", "Invalid Plan", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, null, 0);
-			    			proceedUpdate = false;
-			    		}
-			    		else {
+		    			// storing return message in the local variable
+		    			message = regularMember.upgradePlan(selectedPlan);
+
+		    			// if member is eligible
+		    			if(regularMember.isEligibleForUpgrade()) {
 			    			
-			    			// if member is eligible
-			    			if(regularMember.isEligibleForUpgrade()) {
-			    			    title = "Upgrade Successful";
-			    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
-			    			}
-			    			else if(!regularMember.isEligibleForUpgrade()){
+		    				// if no plan is selected
+		    				if(selectedPlan.equals("none")) {
 			    			    title = "Ineligible for Upgrade";
 			    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
 			    			    proceedUpdate = false;
-			    			}
+		    				}
+		    				// if plan is downgraded
+		    				else if(isDowngrade) {
+			    			    title = "Downgrade Successful";
+			    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information
+			    				message = "Your plan has been downgraded to "+selectedPlan+" for Rs."+regularMember.getPlanPrice(selectedPlan)+"."; // seperate message for downgrade
+		    				}
+		    				// if same plan as currentPlan is selected
+		    				else if(previousPlan.equals(selectedPlan)) {
+			    			    title = "Upgrade Unsuccessful";
+			    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to information
+		    				}
+		    				// if plan is upgraded
+		    				else {
+			    			    title = "Upgrade Successful";
+			    			    messageType = JOptionPane.INFORMATION_MESSAGE; // setting dialog type to information			    					
+		    				}
+		    			}
+		    			else if(!regularMember.isEligibleForUpgrade()){
+		    			    title = "Ineligible for Upgrade";
+		    			    messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
+		    			    proceedUpdate = false;
+		    			}
 			    			
-			    			// storing return message in the local variable
-			    			message = regularMember.upgradePlan(selectedPlan);
-
-			    			JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
-			    		}
+			    		JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 		    		}
 			    	
 			    	
