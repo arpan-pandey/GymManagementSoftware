@@ -1108,7 +1108,10 @@ public class GymGUI{
 									
 									
 									// success dialog
-									JOptionPane.showMessageDialog(frame, "You have successfully added a " + memberType + " member!", "Member Added", JOptionPane.INFORMATION_MESSAGE);
+									JOptionPane.showMessageDialog(frame,
+											"You have successfully added a " + memberType + " member!",
+											"Member Added",
+											JOptionPane.INFORMATION_MESSAGE);
 									
 									// clearing the forms after object creation
 									for(int j=0 ; j < inputFields.length ; j++ ) {
@@ -1127,14 +1130,22 @@ public class GymGUI{
 						        
 						        }
 						        else {
-						        	JOptionPane.showMessageDialog(frame, "Member with ID "+inputFields[0].getText()+" already exists! Please enter a new ID.", "Duplicate input", JOptionPane.ERROR_MESSAGE);
+						        	JOptionPane.showMessageDialog(
+						        			frame,
+						        			"Member with ID "+inputFields[0].getText()+" already exists! Please enter a new ID.",
+						        			"Duplicate input",
+						        			JOptionPane.ERROR_MESSAGE);
 						        }
 						    } 
 						    
 						    catch (NumberFormatException e1) {
 						    	
 						    	// error message
-						    	JOptionPane.showMessageDialog(frame, "Invalid ID! Please enter a valid number.", "Invalid input", JOptionPane.ERROR_MESSAGE);
+						    	JOptionPane.showMessageDialog(
+						    			frame,
+						    			"Invalid ID! Please enter a valid number.",
+						    			"Invalid input",
+						    			JOptionPane.ERROR_MESSAGE);
 						    	
 						    }	
 
@@ -1391,7 +1402,11 @@ public class GymGUI{
 		                        	
 		                        	if(showDialog==true) {
 			                            // dialog to input member ID
-			                             input = JOptionPane.showInputDialog(frame, "Enter a member ID:", "Manage membership", JOptionPane.INFORMATION_MESSAGE);
+			                             input = JOptionPane.showInputDialog(frame,
+			                            		 "Enter a member ID:",
+			                            		 "Manage membership",
+			                            		 JOptionPane.INFORMATION_MESSAGE);
+			                             
 			                            // handling the case where no input was provided or dialog was closed
 			    			            if (input == null) {
 			    			                bodyContent[2].add(memberManagementButton_P, BorderLayout.CENTER);
