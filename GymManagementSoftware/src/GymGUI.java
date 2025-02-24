@@ -964,7 +964,15 @@ public class GymGUI{
 							if( ! (inputField.getText().equals(inputPlaceholder)) && ! (inputField.getText().equals(""))) {
 							
 								// showing a confirmation dialog to make sure that all fields are meant to be reset (byte to save memory)
-								byte clearWish = (byte) JOptionPane.showOptionDialog(frame, "Are you sure you want to clear all fields?", "Caution: Fields will be reset", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[1]);
+								byte clearWish = (byte) JOptionPane.showOptionDialog(
+																frame,
+																"Are you sure you want to clear all fields?",
+																"Caution: Fields will be reset",
+																JOptionPane.YES_NO_OPTION,
+																JOptionPane.WARNING_MESSAGE,
+																null,
+																options,
+																options[1]);
 						
 								// only resetting the form if yes is clicked
 								if(clearWish==0) {
