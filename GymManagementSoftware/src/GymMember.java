@@ -54,21 +54,24 @@ public abstract class GymMember {
 		this.loyaltyPoints = 0.0d;
 	}
 	
-	//method to display all details of a member
-	public void display() {
-		String activeStatus = this.activeStatus == true? "Active" : "Inactive"; //simplification of boolean value for user readability
-		
-		//left justifying each attribute name so that it is more readable
-		System.out.printf("%-30s: %s%n", "Active Status", activeStatus); //the local string variable is used
-		System.out.printf("%-30s: %d%n", "Id", this.id);
-		System.out.printf("%-30s: %s%n", "Name", this.name);
-		System.out.printf("%-30s: %s%n", "Gender", this.gender);
-		System.out.printf("%-30s: %d%n", "Attendance", this.attendance);
-		System.out.printf("%-30s: %.1f%n", "Loyalty Points", this.loyaltyPoints);
-		System.out.printf("%-30s: %s%n", "Membership Start Date", this.membershipStartDate);
-		System.out.printf("%-30s: %s%n", "DOB", this.DOB);
-		System.out.printf("%-30s: %s%n", "Phone", this.phone);
-		System.out.printf("%-30s: %s%n", "Email", this.email);
-		System.out.printf("%-30s: %s%n", "Location", this.location);
+	// method to display all details of a member
+	public String display() {
+	    String activeStatus = this.activeStatus ? "Active" : "Inactive"; // simplification of boolean value for user readability
+	    
+	    // constructing a single string with '|' as the delimiter
+	    return String.join("~",
+		    this.name,
+	    	String.valueOf(this.id), // int to String
+	        activeStatus,
+	        this.membershipStartDate,
+	        this.location,
+	        this.phone,
+	        this.email,
+	        this.DOB,
+	        String.valueOf(this.attendance),
+	        String.format("%.1f", this.loyaltyPoints),
+	        this.gender
+	    );
 	}
+
 }

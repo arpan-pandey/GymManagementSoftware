@@ -93,20 +93,22 @@ public class RegularMember extends GymMember{
 	}
 	
 	
-	// overrided method to display all the details of a regular member
+	// overridden method to display all the details of a regular member
 	@Override
-	public void display() {
-		
-		super.display(); // calling super class's display method
-		
-		// displaying the plan and price of every regular member in addition to other details
-		System.out.printf("%-30s: %s%n", "Plan", this.plan);
-		System.out.printf("%-30s: Rs.%.2f%n", "Price", this.price);
-		
-		// displaying removalReason of a regular member, if there is one
-		if(this.removalReason=="") {
-			System.out.printf("%-30s: %s%n", "Reason for Removal", this.removalReason);
-		}
+	public String display() {
+	    // calling the superclass's display method and storing the returned string
+	    String baseDetails = super.display();
+
+	    // constructing the final string with the same delimiter '|'
+	    return String.join("~",
+	        baseDetails,
+	        this.plan,
+	        String.format("%.2f", this.price),
+	        this.isEligibleForUpgrade()?"Yes":"No",
+	        this.getReferralSource(),
+	        (!this.removalReason.isEmpty() ? this.removalReason : "N/A") // Add only if non-empty
+	    );
 	}
+
 }
 	

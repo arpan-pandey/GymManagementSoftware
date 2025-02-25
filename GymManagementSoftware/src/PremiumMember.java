@@ -83,33 +83,26 @@ public class PremiumMember extends GymMember{
 		this.paidAmount = this.discountAmount = 0d;
 	}
 	
-	// overrided method to display all the details of a premium member
+	// overridden method to display all the details of a premium member
 	@Override
-	public void display() {
-		
-		super.display(); // calling super class's display method
-		
-		// displaying the plan and price of every regular member in addition to other details
-		System.out.printf("%-30s: %s%n", "Personal Trainer", this.personalTrainer);
-		System.out.printf("%-30s: Rs.%.2f%n", "Paid Amount", this.paidAmount);
-		
-		// calculation of remaining amount 
-		double remainingAmount = this.premiumCharge-this.paidAmount;
-		
-		// displaying remaining amount only if there is payment remaining
-		if(remainingAmount!=0d) {
-			System.out.printf("%-30s: Rs.%.2f%n", "Remaining Amount", remainingAmount);
-		}
-		
-		String isFullPayment = this.isFullPayment==true? "Yes":"No"; //overriding this sub class's isFullPayment attribute for better understandability
-		System.out.printf("%-30s: Rs.%s%n", "Fully paid?", isFullPayment); //use of overrided attribute
-		
-		// displaying  of a regular member, if there is one
-		if(this.isFullPayment==true) {
-			System.out.printf("%-30s: Rs.%.2f%n", "Discount Amount", this.discountAmount);
-		}
-	}
-		
-		
-		
+	public String display() {
+	    // calling the superclass's display method and storing the returned string
+	    String baseDetails = super.display();
+
+	    // calculation of remaining amount
+	    double remainingAmount = this.premiumCharge - this.paidAmount;
+	    
+	    // converting boolean to a readable format
+	    String isFullPayment = this.isFullPayment ? "Yes" : "No";
+
+	    // constructing the final string with the same delimiter '|'
+	    return String.join("~",
+	        baseDetails,
+	        String.format("%.2f", this.paidAmount),
+	        String.format("%.2f", remainingAmount),
+	        isFullPayment,
+	        (this.isFullPayment ? String.format("%.2f", this.discountAmount) : "Ineligible"), // adding only if fully paid
+	        this.personalTrainer
+	    );
+	}		
 }
