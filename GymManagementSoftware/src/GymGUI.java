@@ -229,7 +229,7 @@ public class GymGUI{
 						private String[] allMembersColumns = {
 						    "ID", "NAME", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
 						    "START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
-						};
+							};
 						
 						// fields for premium members
 						private String[] premiumColumns = {
@@ -431,12 +431,14 @@ public class GymGUI{
 							
 						// premium member unique attributes
 						new JLabel("Paid Amount : "),
-						new JLabel("Discount Amount : "),
+						new JLabel("Remaining Amount : "),
 						new JLabel("Full Payment? : "),
+						new JLabel("Discount Amount : "),
 						new JLabel("Trainer Name : "),
 							
 						// regular member unique attributes
 						new JLabel("Current Plan : "),
+						new JLabel("Plan Price : "),
 						new JLabel("Can Upgrade? : "),
 						new JLabel("Referral Source : "),
 						new JLabel("Removal Reason : ")
@@ -1483,24 +1485,8 @@ public class GymGUI{
 		                                	
 		                                    boolean isExistingId = false; // checking if ID exists
 		                                    
-		                                    String[]
-		                                    	memberDetails = {
-		                                    		"", // name
-		                                    		"", // id
-		                                    		"", // activeStatus
-		                                    		"", // membershipStartDate
-		                                    		"", // location
-		                                    		"", // phone no
-		                                    		"", // email
-		                                    		"", // DOB
-		                                    		"", // attendance
-		                                    		"", // loyalty points
-		                                    		
-		                                    		"", // paid amount || current plan
-		                                    		"", // discount || isEligibleForUpgrade
-		                                    		"", // isFullPayment || referral source
-		                                    		""  // trainer name || removal reason
-		                                    	};
+		                                    String memberDetailsString = "";
+		                                    String[] splitMemberDetails = {};
 
 		                                    // checking if the ID exists using a for loop of GymMember objects
 		                                    for (int i = 0; i<members.size(); i++) {
@@ -1512,28 +1498,21 @@ public class GymGUI{
 		                                            currentMemberIndex = i;
 		                                            memberInstanceOf = member instanceof PremiumMember ? "Premium" : "Regular";
 		                                            
-		                                            // setting values of the array above, using getter methods of the object
-		                                            memberDetails[0] = member.getName();
-		                                            memberDetails[1] = Integer.toString(member.getId()); // converting int to string
-		                                            memberDetails[2] = member.isActiveStatus() == true ? "Active" : "Inactive"; // getting boolean and using corresponding string for readability
-		                                            memberDetails[3] = member.getMembershipStartDate();
-		                                            memberDetails[4] = member.getLocation();
-		                                            memberDetails[5] = member.getPhone();
-		                                            memberDetails[6] = member.getEmail();
-		                                            memberDetails[7] = member.getDOB();
-		                                            memberDetails[8] = Integer.toString(member.getAttendance()); // converting int to string
-		                                            memberDetails[9] = Double.toString(member.getLoyaltyPoints()); // converting double to string
-		                                            
 		                                            // premium member unique getters
 		                                            if(memberInstanceOf.equals("Premium")) { 
 		                                            	
 		                                            	PremiumMember premiumMember = (PremiumMember) member; // downcasting to access child methods
 		                                            	
-		                                            	memberDetails[10] = Double.toString(premiumMember.getPaidAmount()); // converting double to string
-			                                            memberDetails[11] = Double.toString(premiumMember.getDiscountAmount()); // converting double to string 
-			                                            memberDetails[12] = premiumMember.isFullPayment() == true ? "Yes" : "No"; // getting boolean and using corresponding string for readability
-			                                            memberDetails[13] = !premiumMember.getPersonalTrainer().equals("")? premiumMember.getPersonalTrainer() : "N/A"; // showing N/A when trainer name is empty
-			                                            
+		                                            	memberDetailsString = premiumMember.display();
+		                                            	
+		                                            	splitMemberDetails = memberDetailsString.split("~");
+		                                            	
+		                                            	// when the discount amount isn't calculated
+		                                            	if(premiumMember.isFullPayment() && premiumMember.getDiscountAmount()==0.0d) {
+		                                            		splitMemberDetails[14]="Uncalculated";
+		                                            	}
+		                                            	
+		                                            	
 			                                            // setting text of 1st non-editable field
 	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? 
 	                                													 (premiumMember.getDiscountAmount()!=0.0d? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "Uncalculated") : "Ineligible");
@@ -1551,15 +1530,15 @@ public class GymGUI{
 		                                            }
 		                                            // regular member unique getters
 		                                            else {
-
+		                                            	
 		                                            	RegularMember regularMember = (RegularMember) member; // downcasting to access child methods
 		                                            	
-		                                            	memberDetails[10] = regularMember.getPlan();
+		                                            	memberDetailsString = regularMember.display();
 		                                            	
-		                                            	 // getting boolean using given logic and using corresponding string for readability
-		                                            	memberDetails[11] = member.getAttendance()>=regularMember.getAttendanceLimit() ? "Yes" : "No";
-		                                            	memberDetails[12] = regularMember.getReferralSource();
-			                                            memberDetails[13] = regularMember.getRemovalReason().equals("")? "N/A" : regularMember.getRemovalReason(); // showing N/A when removal reason is empty
+		                                            	splitMemberDetails = memberDetailsString.split("~");
+		                                            	
+		                                            	// manually setting eligible? to yes or no based on given logic
+		                                            	splitMemberDetails[13]=regularMember.getAttendance()>=regularMember.getAttendanceLimit() ? "Yes" : "No";
 		                                            }
 		                                            
 		                                            
@@ -1605,7 +1584,7 @@ public class GymGUI{
 		                                        memberManagementContent.repaint();
 		                                    	
 		                                        // updating the title
-		                                        memberManagementTitle_L.setText(memberInstanceOf + " Member | " + memberDetails[0] + " (ID: " + memberId + ")");
+		                                        memberManagementTitle_L.setText(memberInstanceOf + " Member | " + splitMemberDetails[0] + " (ID: " + memberId + ")");
 		                                        memberManagementTitle_P.add(utilityButtons_P[1], BorderLayout.WEST);
 		                                        
 		                                        // removing previous content
@@ -1757,54 +1736,74 @@ public class GymGUI{
 		                                        	cardPanel.removeAll(); // removing all previous labels completely
 		                                        }
 		                                        
-		                                        // Looping through the updated member details and creating new labels dynamically  
-		                                        for (int i = 0; i < cardLabels.length-4 ; i++) {  
+		                                        // looping through the split member details and creating new labels dynamically  
+		                                        for (int i = 0; i < splitMemberDetails.length ; i++) {
 		                                        	
-		                                            // declaring a variable to store text color for active status / current plan (regularMember)
-		                                            String customDetailAttribute = "";
-		                                            String bold = "font-weight: bold; "; // making the text bold, by storing the CSS attribute in a variable and using it
+		                                        	if(i==10) {
+		                                        		continue; // skipping gender
+		                                        	}
+		                                        	
+		                                        	// initializing default values for prefix and custom attributes
+		                                        	String prefix = "";
+		                                        	String customDetailAttribute = "";
+		                                        	String bold = "font-weight: bold; "; // putting CSS attribute for bold text in a variable
+
+		                                        	// determining active status style
+		                                        	if (i == 2) {
+		                                        	    prefix = "⦿ ";
+		                                        	    customDetailAttribute = splitMemberDetails[2].equals("Active") ? "color: green" : "color: red"; // green for active, red for inactive
+		                                        	}
+		                                        	// handling boolean values (isFullPayment && isEligibleForUpgrade)
+		                                        	else if (i == 13) {
+		                                        	    customDetailAttribute = splitMemberDetails[i].equals("Yes") ? bold + "color: green" : bold + "color: red";
+		                                        	}
+		                                        	// Regular Member specific logic
+		                                        	else if (memberInstanceOf.equals("Regular")) {
+		                                        	    // handle plan name/price with different colors
+		                                        	    if (i == 11 || i == 12) {
+		                                        	        // using switch to set colors based on plan type
+		                                        	        switch (splitMemberDetails[11]) {
+		                                        	            case "Basic": customDetailAttribute = bold + "color: #3A9CAC"; break;  // Dark cyan
+		                                        	            case "Standard": customDetailAttribute = bold + "color: #9B59B6"; break; // Dark pastel purple
+		                                        	            case "Deluxe": customDetailAttribute = bold + "color: #BD9934"; break; // Dark gold
+		                                        	            default: break;
+		                                        	        }
+
+		                                        	        if (i == 12) {
+		                                        	            prefix = "Rs."; // for price, setting prefix to Rs.
+		                                        	        }
+		                                        	    }
+		                                        	    // handling removal reason
+		                                        	    else if (i == 15 && !splitMemberDetails[i].equals("N/A")) {
+		                                        	        customDetailAttribute = "color: red";
+		                                        	    }
+		                                        	}
+		                                        	// Premium Member specific logic
+		                                        	else if (memberInstanceOf.equals("Premium")) {
+		                                        	    // Handle Paid Amount
+		                                        	    if (i == 11) {
+		                                        	        prefix = "Rs.";
+		                                        	        customDetailAttribute = "color: green";
+		                                        	    }
+		                                        	    // handling Remaining Amount
+		                                        	    else if (i == 12) {
+		                                        	        prefix = "Rs.";
+		                                        	        customDetailAttribute = "color: red";
+		                                        	    }
+		                                        	    // handling Discount Amount
+		                                        	    else if (i == 14) {
+		                                        	    	
+		                                        	    	// Rs. prefix when actual price is shown
+		                                        	        prefix = !(splitMemberDetails[i].equals("Ineligible") || splitMemberDetails[i].equals("Uncalculated"))?"Rs.":"";
+		                                        	        
+		                                        	        customDetailAttribute = splitMemberDetails[i].equals("Uncalculated") ? bold + "color: maroon": // maroon for uncalculated
+		                                        	        						splitMemberDetails[i].equals("Ineligible") ? "" : bold + "color: green"; // green for discount amount
+		                                        	    }
+		                                        	}
+
 		                                            
-		                                            // for active status
-		                                            if(i==2) {
-		                                            	customDetailAttribute = (memberDetails[2].equals("Active")) ? "color: green" : "color: red"; // red for inactive, green for active
-		                                            }
-		                                            // for current plan (regularMember)
-		                                            else if(memberInstanceOf.equals("Regular")) {
-		                                            	
-		                                            	// for setting colors for different plan types
-			                                            if (i==10) {
-			                                            	
-			                                            	switch(memberDetails[i]) {
-			                                            	
-			                                            		case "Basic" : customDetailAttribute = bold + "color: #16A085"; break; // dark turquoise
-			                                            		case "Standard" : customDetailAttribute = bold + "color: #9B59B6"; break; // dark pastel purple
-			                                            		case "Deluxe" : customDetailAttribute = bold + "color: #27AE60"; break; // dark emerald green
-			                                            		
-			                                            		default : System.out.println("this statement will never print"); // impossible case
-			                                            	}
-			                                            }
-			                                            
-			                                            // for upgrade eligibility when eligible
-			                                            else if(i==11 && !memberDetails[i].equals("No")) {
-			                                            	customDetailAttribute = bold+"color: green";
-			                                            }
-			                                            
-			                                            // for removal reason when it isn't empty
-			                                            else if(i==13 && !memberDetails[i].equals("N/A")) {
-			                                            	customDetailAttribute = "color: red";
-			                                            }
-		                                            }
-		                                            else if(memberInstanceOf.equals("Premium")) {
-		                                            	if(i==11 && !memberDetails[i].equals("0.0")) {
-		                                            		customDetailAttribute = bold+"color: green"; 
-		                                            	}
-		                                            	else if(i==12 && !memberDetails[i].equals("No")) {
-		                                            		customDetailAttribute = bold+"color: green";
-		                                            	}
-		                                            }
-		                                            
-		                                            // using i+4 card titles when i is greater than 9 and the member is a regular member
-		                                            String detailTitle = (i<10) ? cardLabels[i].getText() : cardLabels[i+(memberInstanceOf.equals("Premium")? 0 : 4)].getText();
+		                                            // using corresponding card titles according to member type
+		                                            String detailTitle = (i<10) ? cardLabels[i].getText() : cardLabels[i-1+(memberInstanceOf.equals("Premium")? 0 : 5)].getText();
 		                                            
 		                                            // to add unique labels to second panel
 		                                            JPanel cardPanel = (i<10) ? cardCommonAttributes_P : cardUniqueAttributes_P;
@@ -1824,9 +1823,8 @@ public class GymGUI{
 			                                                "#1B263B", //MIDNIGHTBLUE
 			                                                detailTitle,
 			                                                customDetailAttribute,
-			                                             // adding ⦿ symbol to active status, and adding Rs. prefix to premium member discount amount and paid amount value using ternary operator
-			                                                (i == 2) ? "⦿ " : ((memberInstanceOf.equals("Premium")&&(i==10 || i==11)) ? "Rs." : ""),
-			                                                memberDetails[i] 
+			                                                prefix,
+			                                                splitMemberDetails[i] 
 			                                            ));  
 			                                            
 			                                            // adding margin for unique labels and odd common labels using nested ternary operator
