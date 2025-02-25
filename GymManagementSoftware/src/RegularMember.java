@@ -106,7 +106,7 @@ public class RegularMember extends GymMember{
 	        String.format("%.2f", this.price),
 	        this.isEligibleForUpgrade()?"Yes":"No",
 	        this.getReferralSource(),
-	        (!this.removalReason.isEmpty() ? this.removalReason : "N/A") // Add only if non-empty
+	        (!this.removalReason.isEmpty() ? this.removalReason : "N/A") // adding only if non-empty
 	    );
 	}
 
