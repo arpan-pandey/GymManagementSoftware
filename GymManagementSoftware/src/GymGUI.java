@@ -162,6 +162,18 @@ public class GymGUI{
     private final Border ACTIVE_INPUT_BORDER = BorderFactory.createCompoundBorder(FORM_INPUT_ACTIVE_OUTLINE, FORM_INPUT_PADDING);
     
     
+    /*
+     * Extra variables
+     */
+    
+	private String backSymbol, searchSymbol; // symbols
+	// array of String icons
+	private String[] icons = {
+		backSymbol = "◄",	
+		searchSymbol = "⌕",
+	};
+    
+    
 	/*
 	 * Frame variables
 	 */
@@ -210,6 +222,7 @@ public class GymGUI{
 			
 				private JPanel tableControlSearch_P = new JPanel();
 					private JLabel tableControlSearch_L = new JLabel("Who are you looking for?");
+					private String searchPlaceholder = icons[1] + " Enter ID, name, phone, etc";
 					private JTextField tableControlSearch_F = new JTextField();
 					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
 					
@@ -222,12 +235,14 @@ public class GymGUI{
 				
 					private JPanel controlActiveStatus_P = new JPanel();
 						private JLabel controlActiveStatus_L = new JLabel("Status:");
-						private String[] statuses = {"Active","Inactive"};
+						private String[] statuses = {"All","Active","Inactive"};
 						private JComboBox<String> controlActiveStatus_C = new JComboBox<String>(statuses);
 						
 				private JPanel tableControlSearchButton_P = new JPanel();
 					private JButton searchButton;
 				
+				Runnable loadTableData; // runnable to load table data
+					
 			    // table wrapper panel
 				private JPanel tableWrapper_P = new JPanel();
 					
@@ -281,6 +296,15 @@ public class GymGUI{
 				controlActiveStatus_L
 			};
 		
+		JPanel[] comboBoxPanels = {
+				controlMemberType_P,
+				controlActiveStatus_P
+			};
+		
+		JComboBox[] controlComboBoxes = {
+				controlMemberType_C,
+				controlActiveStatus_C
+			};
 		
 		// array of file system buttons					
 		JButton[] dashboardButtons = {
@@ -297,7 +321,17 @@ public class GymGUI{
 								+ "</html>" 
 								),
 						
-				searchButton = new JButton("Search"),
+						// styling the search button
+				searchButton =
+						new JButton(String.format(
+								"<html>"
+									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
+										+ "%s Search"
+									+"</span>"
+								+ "</html>", 
+								
+								icons[1]
+								)),
 
 				exportFileButton = 
 						new JButton(
@@ -573,15 +607,7 @@ public class GymGUI{
 			
 	/*
 	 * ARRAYS
-	 */
-					
-					
-		private String backSymbol, searchSymbol; // symbols
-		// array of String icons
-		private String[] icons = {
-			backSymbol = "◄",	
-			searchSymbol = "⌕",
-		};			
+	 */			
 	
 	private JLabel[]
 		//array of body titles
@@ -1001,7 +1027,7 @@ public class GymGUI{
 		dashboardContentWrapper_P.add(dashboardTableControls_P,BorderLayout.NORTH);
 		dashboardTableControls_P.setBackground(LIGHTGRAY);
 		dashboardTableControls_P.setBorder(DASHBOARD_CONTENT_MARGIN);
-		dashboardTableControls_P.setPreferredSize(new Dimension(1,112));
+		dashboardTableControls_P.setPreferredSize(new Dimension(1,118));
 		dashboardTableControls_P.setLayout(new BorderLayout());
 		
 		// styling the individual panels of control panel wrapper
@@ -1028,27 +1054,87 @@ public class GymGUI{
 		// styling the search field
 		tableControlSearch_P.add(tableControlSearch_F);
 		tableControlSearch_F.setBorder(DEFAULT_INPUT_BORDER);
-		tableControlSearch_F.setPreferredSize(new Dimension(260,30));
+		tableControlSearch_F.setPreferredSize(new Dimension(260,26));
+		tableControlSearch_F.setFont(INPUT_FONT);
+		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+		tableControlSearch_F.setText(searchPlaceholder);
+		tableControlSearch_F.setFocusable(false);
 		
+		// field mouse listener
+		tableControlSearch_F.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				tableControlSearch_F.setFocusable(true);
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// making caret disappear when pressed outside field 
+				dashboardContent.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mousePressed(MouseEvent e1) {
+						tableControlSearch_F.setFocusable(false);
+						
+						// adding placeholder if nothing is input
+						if(tableControlSearch_F.getText().trim().equals("")) {
+							tableControlSearch_F.setText(searchPlaceholder);
+							tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+						}
+					}
+				});
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				tableControlSearch_F.setForeground(MIDNIGHTBLUE);
+				
+				// removing placeholder when field is clicked
+				if(tableControlSearch_F.getText().equals(searchPlaceholder)) {
+					tableControlSearch_F.setText("");
+				}
+			}
+		});
+		
+		// styling the middle combo box panel wrapper
 		dashboardTableControls_P.add(tableControlComboBox_P,BorderLayout.CENTER);
 		tableControlComboBox_P.setLayout(new GridLayout(1,0));
+		
+		// styling the combo boxes
+		for(int i = 0; i < controlComboBoxes.length ; i++){
 
-		tableControlComboBox_P.add(controlMemberType_P);
-		controlMemberType_P.setBackground(WHITE);
-		
-		tableControlComboBox_P.add(controlActiveStatus_P);
-		controlActiveStatus_P.setBackground(WHITE);
-		
+			JComboBox<String> comboBox = controlComboBoxes[i];
+			
+			comboBox.setPreferredSize(new Dimension(120,27));
+			comboBox.setFocusable(false);
+			comboBox.setBackground(WHITE);
+			comboBox.setForeground(GUNMETALBLUE);
+			
+			// adding to corresponding panel
+			comboBoxPanels[i].add(comboBox);
+			tableControlComboBox_P.add(comboBoxPanels[i]);
+		}
+
+		// styling the search button panel
 		dashboardTableControls_P.add(tableControlSearchButton_P,BorderLayout.EAST);
 		tableControlSearchButton_P.setPreferredSize(new Dimension(160,1));
 		tableControlSearchButton_P.setBackground(WHITE);
-		tableControlSearchButton_P.setLayout(new FlowLayout(FlowLayout.CENTER,0,20)); // overriding layout
+		tableControlSearchButton_P.setLayout(new FlowLayout(FlowLayout.CENTER,0,25)); // overriding layout
 		tableControlSearchButton_P.add(searchButton);
+		
 		searchButton.setHorizontalAlignment(SwingConstants.CENTER);
 		
+		// styling the table wrapper
 		dashboardContentWrapper_P.add(tableWrapper_P,BorderLayout.CENTER);
-		tableWrapper_P.setBackground(Color.green);
+		tableWrapper_P.setBackground(LIGHTGRAY);
 
+		loadTableData = new Runnable() {
+
+			@Override
+			public void run() {
+				
+			}
+		};
+		
 		/*
 		 * ADD A MEMBER SECTION
 		 */
@@ -1532,6 +1618,7 @@ public class GymGUI{
 		menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
 		frame.add(bodyContent[activeIndex], BorderLayout.CENTER); // initially showing dashboard
 		
+		loadTableData.run(); // loading dashboard table initially
 		
 
 		/*
