@@ -101,7 +101,7 @@ public class PremiumMember extends GymMember{
 	        String.format("%.2f", this.paidAmount),
 	        String.format("%.2f", remainingAmount),
 	        isFullPayment,
-	        (this.isFullPayment ? String.format("%.2f", this.discountAmount) : "Ineligible"), // showing corresponding data
+	        (this.isFullPayment ? String.format("%.2f", this.discountAmount) : "Ineligible"), // showing corresponding data (for better readability)
 	        (!this.personalTrainer.isEmpty()?this.personalTrainer:"N/A") // showing N/A when personal trainer is empty
 	    );
 	}		
