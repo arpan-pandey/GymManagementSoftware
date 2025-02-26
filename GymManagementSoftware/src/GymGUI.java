@@ -85,6 +85,10 @@ public class GymGUI{
     private final Font HEADING1_FONT = new Font("Century Gothic", Font.BOLD, 18);
     private final Font PARAGRAPH_FONT = new Font("Century Gothic", Font.PLAIN, 16);
     
+    // dashboard fonts
+    
+    private final Font DASHBOARD_CONTROL_HEADING = new Font("Century Gothic", Font.BOLD, 13);
+    
     // form font
     private final Font INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 15);
     private final Font INPUT_FONT = new Font("Helvetica", Font.PLAIN, 14);
@@ -101,6 +105,8 @@ public class GymGUI{
      */
     
     private final int horizontalMargin = 15;
+    
+    private final int dashboardMarginVertical = 17;
     
     private final int marginTopBottom = 38, marginLeftRight = 50; // margins for content sections
     private final int buttonPaddingVertical = 10; // padding inside buttons
@@ -121,6 +127,10 @@ public class GymGUI{
     private final Border ACTIVATE$DEACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(STEELBLUE, 1);
     
     private final Border ACTIVE_BUTTON_HIGHLIGHT = BorderFactory.createMatteBorder(0, 2, 0, 0, LIGHTGRAY);
+    
+    // border for dashboard content
+    
+    private final Border DASHBOARD_CONTENT_MARGIN = BorderFactory.createEmptyBorder(dashboardMarginVertical, 0, dashboardMarginVertical, 0);
     
     // borders for input field
     private final Border FORM_INPUT_OUTLINE = BorderFactory.createMatteBorder(0, 0, 1, 0, MIDNIGHTBLUE);
@@ -198,21 +208,26 @@ public class GymGUI{
 			// control panel at the top
 			private JPanel dashboardTableControls_P = new JPanel();
 			
-				private JPanel tableControlSearch_P;
-					private JLabel tableControlSearch_L;
-					private JTextField tableControlSearch_F;
+				private JPanel tableControlSearch_P = new JPanel();
+					private JLabel tableControlSearch_L = new JLabel("Who are you looking for?");
+					private JTextField tableControlSearch_F = new JTextField();
 					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
 					
-				private JPanel tableControlComboBox_P;
+				private JPanel tableControlComboBox_P = new JPanel();
 				
-					private JPanel controlActiveStatus_P;
-						private JLabel controlActiveStatus_L;
-						private JComboBox<String> controlActiveStatus_C;
+					private JPanel controlMemberType_P = new JPanel();
+						private JLabel controlMemberType_L = new JLabel("Member Type:");
+						private String[] memberTypes = {"All","Premium","Regular"};
+						private JComboBox<String> controlMemberType_C = new JComboBox<String>(memberTypes);
+				
+					private JPanel controlActiveStatus_P = new JPanel();
+						private JLabel controlActiveStatus_L = new JLabel("Status:");
+						private String[] statuses = {"Active","Inactive"};
+						private JComboBox<String> controlActiveStatus_C = new JComboBox<String>(statuses);
 						
-					private JPanel controlMemberType_P;
-						private JLabel controlMemberType_L;
-						private JComboBox<String> controlMemberType_C;
-						
+				private JPanel tableControlSearchButton_P = new JPanel();
+					private JButton searchButton;
+				
 			    // table wrapper panel
 				private JPanel tableWrapper_P = new JPanel();
 					
@@ -254,11 +269,21 @@ public class GymGUI{
 									"CAN UPGRADE?", "REFERRAL SOURCE", "REMOVAL REASON"
 								};
 				
+		JPanel[] controlPanels = {
+				tableControlSearch_P,
+				controlMemberType_P,
+				controlActiveStatus_P,
+			};
 		
-							
+		JLabel[] controlHeadings = {
+				tableControlSearch_L,
+				controlMemberType_L,
+				controlActiveStatus_L
+			};
+		
 		
 		// array of file system buttons					
-		JButton[] fileSystemButtons = {
+		JButton[] dashboardButtons = {
 				
 				importFileButton = 
 						new JButton(
@@ -271,6 +296,8 @@ public class GymGUI{
 									+"</span>"
 								+ "</html>" 
 								),
+						
+				searchButton = new JButton("Search"),
 
 				exportFileButton = 
 						new JButton(
@@ -605,8 +632,9 @@ public class GymGUI{
 			//array of all buttons
 			Buttons= {
 				menuButtons[0],
-						fileSystemButtons[0],
-						fileSystemButtons[1],
+						dashboardButtons[0],
+						dashboardButtons[1],
+						dashboardButtons[2],
 				menuButtons[1],
 						formButtons[0],
 						formButtons[1],
@@ -886,22 +914,27 @@ public class GymGUI{
 		private JPanel dashboardContentWrapper_P;
 		
 			// control panel at the top
-			private JPanel dashboardTableControls_P;
+			private JPanel dashboardTableControls_P = new JPanel();
 			
-				private JPanel tableControlSearch_P;
-					private JLabel tableControlSearch_L;
+				private JPanel tableControlSearch_P = new JPanel();
+					private JLabel tableControlSearch_L = new JLabel("Who are you looking for?");
 					private JTextField tableControlSearch_F;
 					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
 					
-				private JPanel tableControlComboBox_P;
+				private JPanel tableControlComboBox_P = new JPanel();
 				
-					private JPanel controlActiveStatus_P;
-						private JLabel controlActiveStatus_L;
-						private JComboBox<String> controlActiveStatus_C;
+					private JPanel controlMemberType_P = new JPanel();
+						private JLabel controlMemberType_L = new JLabel("Member Type:");
+						private String[] memberTypes = {"All","Premium","Regular"};
+						private JComboBox<String> controlMemberType_C = new JComboBox<String>(memberTypes);
+				
+					private JPanel controlActiveStatus_P = new JPanel();
+						private JLabel controlActiveStatus_L = new JLabel("Status:");
+						private String[] statuses = {"Active","Inactive"};
+						private JComboBox<String> controlActiveStatus_C = new JComboBox<String>(statuses);
 						
-					private JPanel controlMemberType_P;
-						private JLabel controlMemberType_L;
-						private JComboBox<String> controlMemberType_C;
+				private JPanel tableControlearchButton_P = new JPanel();
+					private JButton searchButton;
 						
 			    // table wrapper panel
 				private JPanel tableWrapper_P;
@@ -948,23 +981,73 @@ public class GymGUI{
 			
 		int marker;
 		
-		dashboardContent.add(dashboardContentWrapper_P);
-//		dashboardContentWrapper_P.setBackground(Color.red);
-		dashboardContentWrapper_P.setBorder(CONTENT_MARGIN);
-		dashboardContentWrapper_P.add(dashboardTableControls_P);
-		dashboardContentWrapper_P.add(tableWrapper_P);
-		
-		dashboardTitle_P.add(importButton_P,BorderLayout.EAST);
-		
-		importButton_P.setBackground(Color.green);
-		importButton_P.setPreferredSize(new Dimension(130,1));
+		// addding import button to the dashboard title
+		dashboardTitle_P.add(importButton_P,BorderLayout.EAST); // adding button to the title panel
 		importButton_P.setLayout(new BorderLayout());
 		importButton_P.add(importFileButton,BorderLayout.CENTER);
 		
-		importFileButton.setSize(new Dimension(1,1));
-		importFileButton.setVerticalAlignment(SwingConstants.CENTER);
-		importFileButton.setHorizontalAlignment(SwingConstants.CENTER);
+		// styling buttons of dashboard
+		for(JButton button : dashboardButtons) {
+			button.setPreferredSize(new Dimension(130,40));
+		}
 		
+		// styling the main dashboard panel
+		dashboardContent.add(dashboardContentWrapper_P);
+		dashboardContentWrapper_P.setBackground(LIGHTGRAY);
+		dashboardContentWrapper_P.setBorder(DASHBOARD_CONTENT_MARGIN);
+		dashboardContentWrapper_P.setLayout(new BorderLayout());
+
+		// styling the control panel wrapper
+		dashboardContentWrapper_P.add(dashboardTableControls_P,BorderLayout.NORTH);
+		dashboardTableControls_P.setBackground(LIGHTGRAY);
+		dashboardTableControls_P.setBorder(DASHBOARD_CONTENT_MARGIN);
+		dashboardTableControls_P.setPreferredSize(new Dimension(1,112));
+		dashboardTableControls_P.setLayout(new BorderLayout());
+		
+		// styling the individual panels of control panel wrapper
+		for(JPanel panel : controlPanels) {
+			panel.setBackground(WHITE);
+			panel.setLayout(new FlowLayout(FlowLayout.LEADING, 15,4));
+		}
+		
+		// styling control panel headings
+		for(int i = 0; i<controlHeadings.length ; i++) {
+			JLabel heading = controlHeadings[i];
+
+			heading.setFont(DASHBOARD_CONTROL_HEADING);
+			heading.setForeground(MIDNIGHTBLUE);
+			heading.setPreferredSize(new Dimension(800,30));
+			
+			controlPanels[i].add(heading); // putting heading in corresponding panel
+		}
+		
+		dashboardTableControls_P.add(tableControlSearch_P,BorderLayout.WEST);
+		tableControlSearch_P.setPreferredSize(new Dimension(300,1));
+		tableControlSearch_P.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, LIGHTGRAY));
+		
+		// styling the search field
+		tableControlSearch_P.add(tableControlSearch_F);
+		tableControlSearch_F.setBorder(DEFAULT_INPUT_BORDER);
+		tableControlSearch_F.setPreferredSize(new Dimension(260,30));
+		
+		dashboardTableControls_P.add(tableControlComboBox_P,BorderLayout.CENTER);
+		tableControlComboBox_P.setLayout(new GridLayout(1,0));
+
+		tableControlComboBox_P.add(controlMemberType_P);
+		controlMemberType_P.setBackground(WHITE);
+		
+		tableControlComboBox_P.add(controlActiveStatus_P);
+		controlActiveStatus_P.setBackground(WHITE);
+		
+		dashboardTableControls_P.add(tableControlSearchButton_P,BorderLayout.EAST);
+		tableControlSearchButton_P.setPreferredSize(new Dimension(160,1));
+		tableControlSearchButton_P.setBackground(WHITE);
+		tableControlSearchButton_P.setLayout(new FlowLayout(FlowLayout.CENTER,0,20)); // overriding layout
+		tableControlSearchButton_P.add(searchButton);
+		searchButton.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		dashboardContentWrapper_P.add(tableWrapper_P,BorderLayout.CENTER);
+		tableWrapper_P.setBackground(Color.green);
 
 		/*
 		 * ADD A MEMBER SECTION
@@ -1357,6 +1440,7 @@ public class GymGUI{
 		bodyContent[2].add(individualMemberManagement_P);
 		
 		individualMemberManagement_P.setLayout(new BorderLayout());
+		individualMemberManagement_P.setBackground(Color.green);
 		individualMemberManagement_P.add(memberCard_P, BorderLayout.NORTH);
 		individualMemberManagement_P.add(individualMemberButtonsWrapper_P, BorderLayout.CENTER);
 		
@@ -1426,11 +1510,6 @@ public class GymGUI{
     		individualMemberFields[i].setForeground(GUNMETALBLUE);
     		individualMemberFields[i].setFont(NON_EDITABLE_FIELD_FONT); // setting font of non focusable field
     	}
-		
-		for(JLabel inputHeading : individualMemberFieldTitle) {
-			inputHeading.setForeground(MIDNIGHTBLUE);
-			inputHeading.setFont(MANAGEMENT_INPUT_HEADING);
-		}
 		
 		
 		/*
