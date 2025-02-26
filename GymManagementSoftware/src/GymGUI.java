@@ -40,10 +40,14 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 public class GymGUI{
 	
@@ -185,16 +189,19 @@ public class GymGUI{
 	
 		private JPanel dashboardTitle_P;
 			private JLabel dashboardTitle_L;
-			private JButton loadFromFileButton;
+			
+			private JPanel importButton_P = new JPanel();
+			private JButton importFileButton;
 	
-		private JPanel dashboardContentWrapper_P;
+		private JPanel dashboardContentWrapper_P = new JPanel();
 		
 			// control panel at the top
-			private JPanel dashboardTableControls_P;
+			private JPanel dashboardTableControls_P = new JPanel();
 			
 				private JPanel tableControlSearch_P;
 					private JLabel tableControlSearch_L;
 					private JTextField tableControlSearch_F;
+					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
 					
 				private JPanel tableControlComboBox_P;
 				
@@ -207,7 +214,7 @@ public class GymGUI{
 						private JComboBox<String> controlMemberType_C;
 						
 			    // table wrapper panel
-				private JPanel tableWrapper_P;
+				private JPanel tableWrapper_P = new JPanel();
 					
 					// header above the actual table 
 					private JPanel tableHeader_P;
@@ -220,32 +227,65 @@ public class GymGUI{
 							private JComboBox<String> columnSelector_C;
 							
 						private JPanel exportButton_P;
-							private JButton exportToFileButton;
+							private JButton exportFileButton;
 					
 					// panel which has the table
 					private JPanel table_P;
+					
+						private JTable table;
+						private DefaultTableModel model;
+						private JScrollPane scrollPane;
 						
-						// general fields
-						private String[] allMembersColumns = {
-						    "ID", "NAME", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
-						    "START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
-							};
+							// general fields
+							private String[] allMembersColumns = {
+									"ID", "NAME", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
+									"START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
+								};
 						
-						// fields for premium members
-						private String[] premiumColumns = {
-							    "ID", "NAME", "STATUS", "ATTENDANCE", "PAID AMOUNT",
-							    "FULL PAYMENT?", "DISCOUNT AMOUNT", "TRAINER"
-							};
+							// fields for premium members
+							private String[] limitedPremiumColumns = {
+									"ID", "NAME", "STATUS", "ATTENDANCE", "PAID AMOUNT",
+									"FULL PAYMENT?", "DISCOUNT AMOUNT", "TRAINER"
+								};
 
-						// fields for regular members
-						private String[] regularColumns = {
-							    "ID", "NAME", "STATUS", "ATTENDANCE", "CURRENT PLAN",
-							    "CAN UPGRADE?", "REFERRAL SOURCE", "REMOVAL REASON"
-							};
-						
-						
-						
-			
+							// fields for regular members
+							private String[] limitedRegularColumns = {
+									"ID", "NAME", "STATUS", "ATTENDANCE", "CURRENT PLAN",
+									"CAN UPGRADE?", "REFERRAL SOURCE", "REMOVAL REASON"
+								};
+				
+		
+							
+		
+		// array of file system buttons					
+		JButton[] fileSystemButtons = {
+				
+				importFileButton = 
+						new JButton(
+								"<html>"
+									+ "<span style=\"font-family: Tahoma; font-size: 14px; font-weight: bold\">"
+										+ "⤵ "
+									+"</span>"
+									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
+										+ "Import File"
+									+"</span>"
+								+ "</html>" 
+								),
+
+				exportFileButton = 
+						new JButton(
+								"<html>"
+									+ "<span style=\"font-family: Tahoma; font-size: 14px; font-weight: bold\">"
+										+ "⤴ "
+									+"</span>"
+									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
+										+ "Export File"
+									+"</span>"
+								+ "</html>" 
+								)
+			};
+		
+		
 	/*
 	 * addMember VARIABLES
 	 */
@@ -525,8 +565,8 @@ public class GymGUI{
 		},
 		//array of utility buttons
 		utilityButtons_L= {
-			new JLabel(backSymbol), //back button for internal forms
-			new JLabel(backSymbol)  //back button for member management
+			new JLabel(icons[0]), //back button for internal forms
+			new JLabel(icons[0])  //back button for member management
 		},
 		// array of central body panel titles
 		centralPanelTitles = {
@@ -565,6 +605,8 @@ public class GymGUI{
 			//array of all buttons
 			Buttons= {
 				menuButtons[0],
+						fileSystemButtons[0],
+						fileSystemButtons[1],
 				menuButtons[1],
 						formButtons[0],
 						formButtons[1],
@@ -734,7 +776,7 @@ public class GymGUI{
 		for(int i=0; i<contentTitlePanel.length;i++) {
 			JPanel titlePanel = contentTitlePanel[i];
 			titlePanel.setVisible(true);
-			titlePanel.setPreferredSize(new Dimension(1,27));
+			titlePanel.setPreferredSize(new Dimension(1,40));
 			titlePanel.setLayout(new BorderLayout());
 			titlePanel.add(contentTitles[i],BorderLayout.CENTER);
 			titlePanel.setBackground(LIGHTGRAY);
@@ -827,16 +869,101 @@ public class GymGUI{
 			utilityButton_P.setPreferredSize(new Dimension(55,1));
 			utilityButton_P.setLayout(new BorderLayout());
 			utilityButton_P.add(utilityButtons_L[i], BorderLayout.CENTER);
-			utilityButton_P.setVisible(true);
 		}
 		
 		
 		/*
 		 * DASHBOARD SECTION
 		 */
-			int marker;
 		
+			/*
+			 *     private JPanel dashboardContent;
+	
+		private JPanel dashboardTitle_P;
+			private JLabel dashboardTitle_L;
+			private JButton loadFromFileButton;
+	
+		private JPanel dashboardContentWrapper_P;
+		
+			// control panel at the top
+			private JPanel dashboardTableControls_P;
 			
+				private JPanel tableControlSearch_P;
+					private JLabel tableControlSearch_L;
+					private JTextField tableControlSearch_F;
+					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
+					
+				private JPanel tableControlComboBox_P;
+				
+					private JPanel controlActiveStatus_P;
+						private JLabel controlActiveStatus_L;
+						private JComboBox<String> controlActiveStatus_C;
+						
+					private JPanel controlMemberType_P;
+						private JLabel controlMemberType_L;
+						private JComboBox<String> controlMemberType_C;
+						
+			    // table wrapper panel
+				private JPanel tableWrapper_P;
+					
+					// header above the actual table 
+					private JPanel tableHeader_P;
+					
+						private JPanel tableHeaderTitle_P;
+							private JLabel tableHeaderTitle_L;
+							
+						private JPanel columnSelector_P;
+							private JLabel columnSelectorHeading_L;
+							private JComboBox<String> columnSelector_C;
+							
+						private JPanel exportButton_P;
+							private JButton exportToFileButton;
+					
+					// panel which has the table
+					private JPanel table_P;
+					
+						private JTable table;
+						private DefaultTableModel model;
+						private JScrollPane scrollPane;
+						
+							// general fields
+							private String[] allMembersColumns = {
+									"ID", "NAME", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
+									"START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
+								};
+						
+							// fields for premium members
+							private String[] limitedPremiumColumns = {
+									"ID", "NAME", "STATUS", "ATTENDANCE", "PAID AMOUNT",
+									"FULL PAYMENT?", "DISCOUNT AMOUNT", "TRAINER"
+								};
+
+							// fields for regular members
+							private String[] limitedRegularColumns = {
+									"ID", "NAME", "STATUS", "ATTENDANCE", "CURRENT PLAN",
+									"CAN UPGRADE?", "REFERRAL SOURCE", "REMOVAL REASON"
+								};
+
+			 */
+			
+		int marker;
+		
+		dashboardContent.add(dashboardContentWrapper_P);
+//		dashboardContentWrapper_P.setBackground(Color.red);
+		dashboardContentWrapper_P.setBorder(CONTENT_MARGIN);
+		dashboardContentWrapper_P.add(dashboardTableControls_P);
+		dashboardContentWrapper_P.add(tableWrapper_P);
+		
+		dashboardTitle_P.add(importButton_P,BorderLayout.EAST);
+		
+		importButton_P.setBackground(Color.green);
+		importButton_P.setPreferredSize(new Dimension(130,1));
+		importButton_P.setLayout(new BorderLayout());
+		importButton_P.add(importFileButton,BorderLayout.CENTER);
+		
+		importFileButton.setSize(new Dimension(1,1));
+		importFileButton.setVerticalAlignment(SwingConstants.CENTER);
+		importFileButton.setHorizontalAlignment(SwingConstants.CENTER);
 		
 
 		/*
