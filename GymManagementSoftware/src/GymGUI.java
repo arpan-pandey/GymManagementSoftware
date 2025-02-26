@@ -1645,6 +1645,12 @@ public class GymGUI{
 		        @Override
 		        public void mousePressed(MouseEvent e) {
 		        	
+		        	// removing mouse listener of manageMemberButton to avoid one bug where no. of dialog boxes keep increasing
+		        	MouseListener[] listeners = manageMemberButton.getMouseListeners();
+		        	for (MouseListener listener : listeners) {
+		        		manageMemberButton.removeMouseListener(listener);
+		        	}
+		        	
 	                // looping through the buttons to find the clicked button and change attributes
 		            for (int i = 0; i < menuButtons.length; i++) {
 
@@ -2411,8 +2417,6 @@ public class GymGUI{
 						// member management back button
 						else if (sourceLabel == utilityButtons_L[1]) {
 							
-							// so that button doesn't keep it's pressed state when backbutton is clicked
-							manageMemberButton.getModel().setPressed(false);
 							manageMemberButton.setBackground(MIDNIGHTBLUE);
 							manageMemberButton.setForeground(LIGHTGRAY);
 							
