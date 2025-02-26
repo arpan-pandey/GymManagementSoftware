@@ -1070,7 +1070,7 @@ public class GymGUI{
 		// styling the search field
 		tableControlSearch_P.add(tableControlSearch_F);
 		tableControlSearch_F.setBorder(DEFAULT_INPUT_BORDER);
-		tableControlSearch_F.setPreferredSize(new Dimension(210,26));
+		tableControlSearch_F.setPreferredSize(new Dimension(218,26));
 		tableControlSearch_F.setFont(INPUT_FONT);
 		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
 		tableControlSearch_F.setText(searchPlaceholder);
@@ -1120,7 +1120,7 @@ public class GymGUI{
 
 			JComboBox<String> comboBox = controlComboBoxes[i];
 			
-			comboBox.setPreferredSize(new Dimension(103,27));
+			comboBox.setPreferredSize(new Dimension(100,27));
 			comboBox.setFocusable(false);
 			comboBox.setBackground(WHITE);
 			comboBox.setForeground(GUNMETALBLUE);
