@@ -1513,10 +1513,8 @@ public class GymGUI{
 		                                            	}
 		                                            	
 		                                            	
-			                                            // setting text of 1st non-editable field
-	                                					individualMemberFields[0].setText(premiumMember.isFullPayment() == true ? 
-	                                													 (premiumMember.getDiscountAmount()!=0.0d? "Rs. "+Double.toString(premiumMember.getDiscountAmount()) : "Uncalculated") : "Ineligible");
-	                                					
+			                                            // setting text of 1st non-editable field (Rs. as prefix for amount)
+	                                					individualMemberFields[0].setText((!(splitMemberDetails[14].equals("Uncalculated") || splitMemberDetails[14].equals("Ineligible"))?"Rs.":"")+splitMemberDetails[14]);	
 	                                					// setting text of editable field
 	                                					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? fullyPaidText : "");
 	                                					
@@ -1755,8 +1753,9 @@ public class GymGUI{
 		                                        	}
 		                                        	// handling boolean values (isFullPayment && isEligibleForUpgrade)
 		                                        	else if (i == 13) {
-		                                        	    customDetailAttribute = splitMemberDetails[i].equals("Yes") ? bold + "color: green" : bold + "color: red";
+		                                        	    customDetailAttribute = splitMemberDetails[i].equals("Yes") ? bold + "color: green" : bold + "color: maroon";
 		                                        	}
+		                                        	
 		                                        	// Regular Member specific logic
 		                                        	else if (memberInstanceOf.equals("Regular")) {
 		                                        	    // handle plan name/price with different colors
@@ -1796,8 +1795,8 @@ public class GymGUI{
 		                                        	    	// Rs. prefix when actual price is shown
 		                                        	        prefix = !(splitMemberDetails[i].equals("Ineligible") || splitMemberDetails[i].equals("Uncalculated"))?"Rs.":"";
 		                                        	        
-		                                        	        customDetailAttribute = splitMemberDetails[i].equals("Uncalculated") ? bold + "color: maroon": // maroon for uncalculated
-		                                        	        						splitMemberDetails[i].equals("Ineligible") ? "" : bold + "color: green"; // green for discount amount
+		                                        	        // green for discount amount, maroon for text
+		                                        	        customDetailAttribute = (splitMemberDetails[i].equals("Uncalculated") || splitMemberDetails[i].equals("Ineligible")) ? bold + "color: maroon": bold + "color: green";
 		                                        	    }
 		                                        	}
 
