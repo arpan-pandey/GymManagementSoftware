@@ -222,7 +222,7 @@ public class GymGUI{
 			
 				private JPanel tableControlSearch_P = new JPanel();
 					private JLabel tableControlSearch_L = new JLabel("Who are you looking for?");
-					private String searchPlaceholder = icons[1] + " Enter ID, name, phone, etc";
+					private String searchPlaceholder = icons[1] + " Enter id, name, etc";
 					private JTextField tableControlSearch_F = new JTextField();
 					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
 					
@@ -238,8 +238,8 @@ public class GymGUI{
 						private String[] statuses = {"All","Active","Inactive"};
 						private JComboBox<String> controlActiveStatus_C = new JComboBox<String>(statuses);
 						
-				private JPanel tableControlSearchButton_P = new JPanel();
-					private JButton searchButton;
+						private JPanel exportButton_P = new JPanel();
+						private JButton exportFileButton;
 				
 				Runnable loadTableData; // runnable to load table data
 					
@@ -255,9 +255,6 @@ public class GymGUI{
 						private JPanel columnSelector_P;
 							private JLabel columnSelectorHeading_L;
 							private JComboBox<String> columnSelector_C;
-							
-						private JPanel exportButton_P;
-							private JButton exportFileButton;
 					
 					// panel which has the table
 					private JPanel table_P;
@@ -320,18 +317,6 @@ public class GymGUI{
 									+"</span>"
 								+ "</html>" 
 								),
-						
-						// styling the search button
-				searchButton =
-						new JButton(String.format(
-								"<html>"
-									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
-										+ "%s Search"
-									+"</span>"
-								+ "</html>", 
-								
-								icons[1]
-								)),
 
 				exportFileButton = 
 						new JButton(
@@ -660,7 +645,6 @@ public class GymGUI{
 				menuButtons[0],
 						dashboardButtons[0],
 						dashboardButtons[1],
-						dashboardButtons[2],
 				menuButtons[1],
 						formButtons[0],
 						formButtons[1],
@@ -1015,6 +999,39 @@ public class GymGUI{
 		// styling buttons of dashboard
 		for(JButton button : dashboardButtons) {
 			button.setPreferredSize(new Dimension(130,40));
+			
+			// changing import/export button colors and mouse effects
+			
+			button.setBackground(MIDNIGHTBLUE);
+		    button.addMouseListener(new MouseAdapter() {
+		        @Override
+		        public void mouseEntered(MouseEvent e) {
+		            button.setBackground(PASTELBLUE);
+		            button.setForeground(MIDNIGHTBLUE);
+		        }
+
+		        @Override
+		        public void mouseExited(MouseEvent e) {
+		            button.setBackground(MIDNIGHTBLUE);
+		            button.setForeground(LIGHTGRAY);
+		        }
+		        
+		        @Override
+		        public void mousePressed(MouseEvent e) {
+		        	button.setForeground(MIDNIGHTBLUE);
+		        }
+		        
+		        @Override
+		        public void mouseClicked(MouseEvent e) {
+		        	button.setBackground(MIDNIGHTBLUE);
+		        }
+		        
+		        @Override
+		        public void mouseReleased(MouseEvent e) {
+		        	button.setForeground(LIGHTGRAY);
+		        	button.setBackground(MIDNIGHTBLUE);
+		        }
+		    });
 		}
 		
 		// styling the main dashboard panel
@@ -1048,13 +1065,12 @@ public class GymGUI{
 		}
 		
 		dashboardTableControls_P.add(tableControlSearch_P,BorderLayout.WEST);
-		tableControlSearch_P.setPreferredSize(new Dimension(300,1));
-		tableControlSearch_P.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 2, LIGHTGRAY));
+		tableControlSearch_P.setPreferredSize(new Dimension(250,1));
 		
 		// styling the search field
 		tableControlSearch_P.add(tableControlSearch_F);
 		tableControlSearch_F.setBorder(DEFAULT_INPUT_BORDER);
-		tableControlSearch_F.setPreferredSize(new Dimension(260,26));
+		tableControlSearch_F.setPreferredSize(new Dimension(210,26));
 		tableControlSearch_F.setFont(INPUT_FONT);
 		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
 		tableControlSearch_F.setText(searchPlaceholder);
@@ -1104,7 +1120,7 @@ public class GymGUI{
 
 			JComboBox<String> comboBox = controlComboBoxes[i];
 			
-			comboBox.setPreferredSize(new Dimension(120,27));
+			comboBox.setPreferredSize(new Dimension(103,27));
 			comboBox.setFocusable(false);
 			comboBox.setBackground(WHITE);
 			comboBox.setForeground(GUNMETALBLUE);
@@ -1115,13 +1131,13 @@ public class GymGUI{
 		}
 
 		// styling the search button panel
-		dashboardTableControls_P.add(tableControlSearchButton_P,BorderLayout.EAST);
-		tableControlSearchButton_P.setPreferredSize(new Dimension(160,1));
-		tableControlSearchButton_P.setBackground(WHITE);
-		tableControlSearchButton_P.setLayout(new FlowLayout(FlowLayout.CENTER,0,25)); // overriding layout
-		tableControlSearchButton_P.add(searchButton);
+		dashboardTableControls_P.add(exportButton_P,BorderLayout.EAST);
+		exportButton_P.setPreferredSize(new Dimension(245,1));
+		exportButton_P.setBackground(WHITE);
+		exportButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,25)); // overriding layout
+		exportButton_P.add(exportFileButton);
 		
-		searchButton.setHorizontalAlignment(SwingConstants.CENTER);
+//		searchButton.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		// styling the table wrapper
 		dashboardContentWrapper_P.add(tableWrapper_P,BorderLayout.CENTER);
@@ -1522,9 +1538,6 @@ public class GymGUI{
 		 * MEMBER MANAGEMENT SECTION
 		 */
 		
-		bodyContent[2].remove(memberManagementButton_P);
-		bodyContent[2].add(individualMemberManagement_P);
-		
 		individualMemberManagement_P.setLayout(new BorderLayout());
 		individualMemberManagement_P.setBackground(Color.green);
 		individualMemberManagement_P.add(memberCard_P, BorderLayout.NORTH);
@@ -1543,7 +1556,7 @@ public class GymGUI{
 		// card styling
 		memberCard_P.setBorder(CARD_MARGIN);
 		memberCard_P.setBackground(LIGHTGRAY);
-		memberCard_P.setPreferredSize(new Dimension(1,245));
+		memberCard_P.setPreferredSize(new Dimension(1,244));
 		memberCard_P.setLayout(new BorderLayout());
 		memberCard_P.add(cardCommonAttributes_P, BorderLayout.WEST);
 		memberCard_P.add(cardUniqueAttributes_P, BorderLayout.CENTER);
@@ -1734,6 +1747,7 @@ public class GymGUI{
 
 		                memberManagementTitle_L.setText("Member Management"); // reverting to original title
 		                memberManagementTitle_P.remove(utilityButtons_P[1]); // removing back button
+
 		                
 		                bodyContent[2].remove(memberManagementButton_P);
 		                bodyContent[2].remove(individualMemberManagement_P);
@@ -1744,8 +1758,7 @@ public class GymGUI{
 		                	// initializing memberId with a placeholder value
 		                	int memberId = 0x696969;
 		                    @Override
-		                    public void run() {
-		                    			                    	
+		                    public void run() {                    	
 		                        // looping until input is valid
 		                        while (true) {
 		                        	String input;
@@ -2152,6 +2165,7 @@ public class GymGUI{
 		                                								JOptionPane.ERROR_MESSAGE);
 
 		                                if (errorWish != 0) {
+		                                	
 		                                	memberManagementContent.remove(memberManagementButton_P);
 	                                        memberManagementContent.remove(individualMemberManagement_P);
 		                                	
@@ -2166,7 +2180,7 @@ public class GymGUI{
 		                    	
 		                        // to make sure that the button doesn't keep it's pressed state when the JOptionPane blocks the EDT
 		                    	menuButtons[2].getModel().setPressed(false);
-		                    	
+	
 		                    	// refreshing menubutton panel
 		                    	menuButtonPanel.revalidate();
 		                    	menuButtonPanel.repaint();
@@ -2183,7 +2197,9 @@ public class GymGUI{
 		                    	manageMemberButton.setForeground(MIDNIGHTBLUE);
 
 		                    	// triggering the same dialog input handling (run() function) when the button is clicked
-		                    	memberCardUpdate.run();
+		                    	SwingUtilities.invokeLater(()->{
+			                    	memberCardUpdate.run();
+		                    	});
 		                    }
 		                    @Override
 		    		        public void mouseEntered(MouseEvent e) {
