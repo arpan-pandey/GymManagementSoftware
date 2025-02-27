@@ -679,17 +679,33 @@ public class GymGUI{
 	 // array list of GymMember objects
 	private ArrayList<GymMember> members = new ArrayList<GymMember>(); // private for data hiding 
 	
-	// initializing test objects
-	private GymMember testPremiumMember = new PremiumMember(1,"Ram Sapkota","Kathmandu","+977 9812345678","test_member1@gmail.com","Male","2004-12-12","2025-02-03","Alex Smith");
-	private GymMember testRegularMember = new RegularMember(2,"Sita Phuyal","Pokhara","+977 9876543210","test_member2@gmail.com","Female","2002-04-29","2025-01-13","Instagram Ad");
-	
+	// initializing test objects    
+	private GymMember[] testMembers = {
+	    new PremiumMember(1, "Ram Sapkota", "Kathmandu", "+977 9812345678", "test_member1@gmail.com", "Male", "2004-12-12", "2025-02-03", "Alex Smith"),
+	    new RegularMember(2, "Sita Phuyal", "Pokhara", "+977 9876543210", "test_member2@gmail.com", "Female", "2002-04-29", "2025-01-13", "Instagram Ad"),
+	    new PremiumMember(3, "Pradeep Sharma", "Chitwan", "+977 9876541234", "test_member3@gmail.com", "Male", "1999-03-15", "2025-05-22", "Referral"),
+	    new RegularMember(4, "Maya Tamang", "Lalitpur", "+977 9812349087", "test_member4@gmail.com", "Female", "1998-06-10", "2025-03-30", "Social Media"),
+	    new PremiumMember(5, "Nabin KC", "Butwal", "+977 9836729145", "test_member5@gmail.com", "Male", "2000-01-02", "2025-07-17", "Friend Referral"),
+	    new RegularMember(6, "Anjali Rai", "Dhulikhel", "+977 9845613247", "test_member6@gmail.com", "Female", "2003-11-23", "2025-02-08", "Flyer"),
+	    new PremiumMember(7, "Bishal Ghimire", "Biratnagar", "+977 9865432109", "test_member7@gmail.com", "Male", "1997-05-19", "2025-08-11", "Website"),
+	    new RegularMember(8, "Sushila Sharma", "Bhaktapur", "+977 9816712345", "test_member8@gmail.com", "Female", "2005-09-25", "2025-04-05", "Online Ad"),
+	    new PremiumMember(9, "Anil Gurung", "Pokhara", "+977 9812345610", "test_member9@gmail.com", "Male", "1995-12-02", "2025-11-30", "Google Search"),
+	    new RegularMember(10, "Pooja Thapa", "Kathmandu", "+977 9801234789", "test_member10@gmail.com", "Female", "2000-08-14", "2025-02-18", "Friend"),
+
+	    new RegularMember(11, "Suman Baral", "Janakpur", "+977 9823456789", "test_member11@gmail.com", "Male", "1996-11-01", "2025-06-22", "Flyer"),
+	    new PremiumMember(12, "Rina Gurung", "Pokhara", "+977 9811122334", "test_member12@gmail.com", "Female", "2001-03-05", "2025-09-25", "Friend Referral"),
+	    new RegularMember(13, "Kiran Acharya", "Biratnagar", "+977 9812345679", "test_member13@gmail.com", "Male", "2002-12-12", "2025-10-10", "Instagram Ad"),
+	    new PremiumMember(14, "Asha Bista", "Lalitpur", "+977 9815678901", "test_member14@gmail.com", "Female", "2003-02-24", "2025-08-14", "Website"),
+	    new RegularMember(15, "Nirakar Khadka", "Bhaktapur", "+977 9812346701", "test_member15@gmail.com", "Male", "1997-07-29", "2025-04-30", "Flyer"),
+	};
+
 	
 	//constructor
 	public GymGUI() {
 		
-		// adding test objects to the arraylist
-		members.add(testPremiumMember);
-		members.add(testRegularMember);
+		for(GymMember member : testMembers) {
+			members.add(member);
+		}
 		
 		/*
 		 * MENU BAR SECTION
