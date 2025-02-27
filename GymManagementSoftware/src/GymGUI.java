@@ -6,7 +6,7 @@
  * #2E4057 (Gunmetal Blue)
  * #415A77 (Steel Blue)
  * #A3B7C8 (Pastel Blue)
- * #E0E1DD (Light Gray)
+ * #F4F4F4 (Light Gray)
  * 
  * Extra Colors:
  * 
@@ -68,7 +68,7 @@ public class GymGUI{
     private final Color GUNMETALBLUE = new Color(0x2E4057);
     private final Color STEELBLUE = new Color(0x415A77);
     private final Color PASTELBLUE = new Color(0xA3B7C8);
-    private final Color LIGHTGRAY = new Color(0xF5F5F5);
+    private final Color LIGHTGRAY = new Color(0xF4F4F4);
     
     //extra colors
     private final Color DARKGRAY = new Color(0xDDDEEE);
@@ -1165,8 +1165,13 @@ public class GymGUI{
 		tableWrapper_P.setBackground(LIGHTGRAY);
 		tableWrapper_P.setLayout(new BorderLayout());
 		
-		tableWrapper_P.add(table_P,BorderLayout.CENTER);
+		// styling table header panel
+		tableWrapper_P.add(tableHeader_P, BorderLayout.NORTH);
+		tableHeader_P.setPreferredSize(new Dimension(1,40));
+		tableHeader_P.setBackground(WHITE);
 		
+		// styling table panel
+		tableWrapper_P.add(table_P,BorderLayout.CENTER);
 		table_P.setLayout(new BorderLayout());
 
 		int newMarker;
@@ -1239,7 +1244,7 @@ public class GymGUI{
 	            
 	            header.setFont(TABLE_HEADING_FONT);
 	            header.setForeground(GUNMETALBLUE);
-	            header.setBackground(LIGHTGRAY);
+	            header.setBackground(DARKGRAY);
 	            header.setPreferredSize(new Dimension(header.getPreferredSize().width, 30));
 
 	            // Access the default header renderer and set alignment to LEFT
@@ -1873,9 +1878,10 @@ public class GymGUI{
 		            frame.repaint();    // redrawing the frame
 		            manageMemberButton.setEnabled(true);
    
+		            // updating table when dashboard button is pressed
 		            if(e.getSource()==menuButtons[0]) {
 		        		SwingUtilities.invokeLater(()->{
-		        			loadTableData.run(); // loading dashboard table initially			
+		        			loadTableData.run(); 			
 		        		});
 		            }
 		            // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
