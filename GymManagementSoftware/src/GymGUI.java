@@ -1202,6 +1202,11 @@ public class GymGUI{
 	                	splitMemberData[4], // location
 	                };
 	                
+			    	// adding spaces before each data String
+			    	for (int i = 0; i < actualData.length; i++) {
+			    		actualData[i] = "  " + actualData[i];
+			    	}
+	                
 	                model.addRow(actualData);
 	            }
 	            
@@ -1223,7 +1228,6 @@ public class GymGUI{
 	            
 	            // row styling
 	            table.setRowHeight(rowHeight);
-	            table.setIntercellSpacing(new Dimension(15,0)); // small left padding
 	            table.setFont(TABLE_DATA_FONT); // setting font
 	            table.setForeground(MIDNIGHTBLUE);
 	            
@@ -1869,10 +1873,13 @@ public class GymGUI{
 		            frame.repaint();    // redrawing the frame
 		            manageMemberButton.setEnabled(true);
    
-		            
-		         // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
-		            if (e.getSource() == menuButtons[2] && lastIndex != 2) {
-		            	
+		            if(e.getSource()==menuButtons[0]) {
+		        		SwingUtilities.invokeLater(()->{
+		        			loadTableData.run(); // loading dashboard table initially			
+		        		});
+		            }
+		            // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
+		            else if (e.getSource() == menuButtons[2] && lastIndex != 2) {
 			        	
 			        	// removing mouse listener of manageMemberButton to avoid one bug where no. of dialog boxes keep increasing
 			        	MouseListener[] listeners = manageMemberButton.getMouseListeners();
