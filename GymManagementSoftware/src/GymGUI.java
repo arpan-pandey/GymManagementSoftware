@@ -18,6 +18,7 @@
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -35,6 +36,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -43,10 +45,14 @@ import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
 public class GymGUI{
@@ -86,8 +92,9 @@ public class GymGUI{
     private final Font PARAGRAPH_FONT = new Font("Century Gothic", Font.PLAIN, 16);
     
     // dashboard fonts
-    
     private final Font DASHBOARD_CONTROL_HEADING = new Font("Century Gothic", Font.BOLD, 13);
+    private final Font TABLE_HEADING_FONT = new Font("Century Gothic", Font.BOLD, 11);
+    private final Font TABLE_DATA_FONT = new Font("Century Gothic", Font.PLAIN, 12);
     
     // form font
     private final Font INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 15);
@@ -247,7 +254,7 @@ public class GymGUI{
 				private JPanel tableWrapper_P = new JPanel();
 					
 					// header above the actual table 
-					private JPanel tableHeader_P;
+					private JPanel tableHeader_P = new JPanel();
 					
 						private JPanel tableHeaderTitle_P;
 							private JLabel tableHeaderTitle_L;
@@ -257,7 +264,7 @@ public class GymGUI{
 							private JComboBox<String> columnSelector_C;
 					
 					// panel which has the table
-					private JPanel table_P;
+					private JPanel table_P = new JPanel();
 					
 						private JTable table;
 						private DefaultTableModel model;
@@ -265,7 +272,7 @@ public class GymGUI{
 						
 							// general fields
 							private String[] allMembersColumns = {
-									"ID", "NAME", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
+									"ID", "NAME", "GENDER", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
 									"START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
 								};
 						
@@ -988,8 +995,6 @@ public class GymGUI{
 								};
 
 			 */
-			
-		int marker;
 		
 		// addding import button to the dashboard title
 		dashboardTitle_P.add(importButton_P,BorderLayout.EAST); // adding button to the title panel
@@ -1142,14 +1147,126 @@ public class GymGUI{
 		// styling the table wrapper
 		dashboardContentWrapper_P.add(tableWrapper_P,BorderLayout.CENTER);
 		tableWrapper_P.setBackground(LIGHTGRAY);
+		tableWrapper_P.setLayout(new BorderLayout());
+		
+		tableWrapper_P.add(table_P,BorderLayout.CENTER);
+		
+		table_P.setLayout(new BorderLayout());
 
+		int newMarker;
+		
+		// runnable to update/load table
 		loadTableData = new Runnable() {
+		    @Override
+		    public void run() {
+		    	
+		    	// adding a space before each column
+		    	for (int i = 0; i < allMembersColumns.length; i++) {
+		    	    allMembersColumns[i] = " " + allMembersColumns[i];
+		    	}
+		    	
+	            // initializing the table model
+	            model = new DefaultTableModel(allMembersColumns, 0);
+	            
+	            // populating the model with data
+	            for (GymMember member : members) {
+	                String[] splitMemberData = member.display().split("~");
+	                
+	                String[] actualData = {
+	                	splitMemberData[1], // id
+	                	splitMemberData[0], // name
+	                	splitMemberData[10], // gender
+	                	splitMemberData[2], // status
+	                	splitMemberData[8], // attendance
+	                	splitMemberData[9], // loyalty points
+	                	splitMemberData[3], // start date
+	                	splitMemberData[6], // email
+	                	splitMemberData[5], // phone number
+	                	splitMemberData[7], // DOB
+	                	splitMemberData[4], // location
+	                };
+	                
+	                model.addRow(actualData);
+	            }
+	            
+	            // initializing table and applying settings
+	            table = new JTable(model);
+	            table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+	            table.setDefaultEditor(Object.class, null); // making the rows non editable
+	            table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // making user able to select one row at a time
+	            
+	            // styling scroll panel
+	            scrollPane = new JScrollPane(table); // initializing scroll panel
+	            scrollPane.getViewport().setBackground(LIGHTGRAY); // setting table background
+	            
+	            /*
+	             * ROW AND TABLE STYLING
+	             */
+	            
+	            int rowHeight = 30; // putting row height in a variable
+	            
+	            // row styling
+	            table.setRowHeight(rowHeight);
+	            table.setIntercellSpacing(new Dimension(15,0)); // small left padding
+	            table.setFont(TABLE_DATA_FONT); // setting font
+	            table.setForeground(MIDNIGHTBLUE);
+	            
+	            // Styling header row
+	            JTableHeader header = table.getTableHeader();
+	            
+	            header.setReorderingAllowed(false); // disabling column dragging
+	            header.setResizingAllowed(false); // disabling column resizing
+	            
+	            header.setFont(TABLE_HEADING_FONT);
+	            header.setForeground(GUNMETALBLUE);
+	            header.setBackground(LIGHTGRAY);
+	            header.setPreferredSize(new Dimension(header.getPreferredSize().width, 30));
 
-			@Override
-			public void run() {
-				
-			}
+	            // Access the default header renderer and set alignment to LEFT
+	            DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer(); // getting the header's default renderer
+	            headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Align text to the left
+	            
+	            
+	            /*
+	             * DYNAMIC COLUMN WIDTH
+	             */
+	            
+	            for(int colIndex = 0; colIndex < table.getColumnCount(); colIndex++) {
+	            	int padding = 25;
+	            	
+	                TableColumn column = table.getColumnModel().getColumn(colIndex); // getting each column
+	                int titleWidth = table.getFontMetrics(table.getFont()).stringWidth(allMembersColumns[colIndex]); // width of column name
+	                
+	                // setting finalCellWidth to whatever is larger among titleWidth (with some padding) and 50 (placeholder value)
+	                int finalCellWidth = Math.max(50, titleWidth + padding); 
+	                
+	                for(int rowIndex = 0; rowIndex < table.getRowCount(); rowIndex++) {
+	                	
+	                	Object value = table.getValueAt(rowIndex, colIndex); // getting data from each cell of given column
+	                	
+	                	// getting width of current cell
+	                    int cellWidth = table.getFontMetrics(table.getFont()).stringWidth(value.toString());
+	                    
+	                    // setting finalCellWidth to whatever is larger between 50, titleWidth (with padding) or cellWidth (with padding)
+	                    finalCellWidth = Math.max(finalCellWidth, cellWidth + padding); 
+	                }
+	                
+	                column.setPreferredWidth(finalCellWidth);
+	            }
+
+	            // Add scroll pane to the panel
+	            table_P.removeAll(); // Clear previous content if reloading
+	            table_P.add(scrollPane, BorderLayout.CENTER);
+	            table_P.revalidate();
+	            table_P.repaint();
+		    }
 		};
+
+		
+		// invoke later since UI components updating on threads other than the EDT might cause issues
+		SwingUtilities.invokeLater(()->{
+			loadTableData.run(); // loading dashboard table initially			
+		});
 		
 		/*
 		 * ADD A MEMBER SECTION
@@ -1630,9 +1747,6 @@ public class GymGUI{
 		menuButtons[activeIndex].setFont(BUTTON_FONT_ACTIVE);
 		menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
 		frame.add(bodyContent[activeIndex], BorderLayout.CENTER); // initially showing dashboard
-		
-		loadTableData.run(); // loading dashboard table initially
-		
 
 		/*
 		 * BUTTON FUNCTIONALITIES
@@ -2195,7 +2309,9 @@ public class GymGUI{
 		                };
 		                
 		                // calling the run function initalized above, initially
-		                memberCardUpdate.run();
+                    	SwingUtilities.invokeLater(()->{
+	                    	memberCardUpdate.run();
+                    	});
 		                
 		                // adding an action listener to the button (when it's re-added to the panel)
 		                manageMemberButton.addMouseListener(new MouseAdapter() {
