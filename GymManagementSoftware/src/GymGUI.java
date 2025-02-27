@@ -71,9 +71,13 @@ public class GymGUI{
     private final Color LIGHTGRAY = new Color(0xF4F4F4);
     
     //extra colors
-    private final Color DARKGRAY = new Color(0xDDDEEE);
+    private final Color DARKGRAY = new Color(0xDADADA);
     private final Color WHITE = new Color(0xFFFFFF);
     private final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
+    
+    private final Color RED = new Color(0xCB0000);
+    private final Color GREEN = new Color(0x009400);
+
 
     
     
@@ -93,7 +97,8 @@ public class GymGUI{
     
     // dashboard fonts
     private final Font DASHBOARD_CONTROL_HEADING = new Font("Century Gothic", Font.BOLD, 13);
-    private final Font TABLE_HEADING_FONT = new Font("Century Gothic", Font.BOLD, 11);
+    private final Font TABLE_HEADING_FONT = new Font("Century Gothic", Font.BOLD, 14);
+    private final Font COLUMN_HEADING_FONT = new Font("Century Gothic", Font.BOLD, 11);
     private final Font TABLE_DATA_FONT = new Font("Century Gothic", Font.PLAIN, 12);
     
     // form font
@@ -256,12 +261,13 @@ public class GymGUI{
 					// header above the actual table 
 					private JPanel tableHeader_P = new JPanel();
 					
-						private JPanel tableHeaderTitle_P;
-							private JLabel tableHeaderTitle_L;
+						private JPanel tableHeaderTitle_P = new JPanel();
+							private JLabel tableHeaderTitle_L = new JLabel("Member Overview");
 							
-						private JPanel columnSelector_P;
-							private JLabel columnSelectorHeading_L;
-							private JComboBox<String> columnSelector_C;
+						private JPanel columnSelector_P = new JPanel();
+							private JLabel columnSelectorHeading_L = new JLabel("Show:");
+							private String[] columnTypes = {"All Columns","Limited Columns"};
+							private JComboBox<String> columnSelector_C = new JComboBox<String>(columnTypes);
 					
 					// panel which has the table
 					private JPanel table_P = new JPanel();
@@ -937,81 +943,6 @@ public class GymGUI{
 		 * DASHBOARD SECTION
 		 */
 		
-			/*
-			 *     private JPanel dashboardContent;
-	
-		private JPanel dashboardTitle_P;
-			private JLabel dashboardTitle_L;
-			private JButton loadFromFileButton;
-	
-		private JPanel dashboardContentWrapper_P;
-		
-			// control panel at the top
-			private JPanel dashboardTableControls_P = new JPanel();
-			
-				private JPanel tableControlSearch_P = new JPanel();
-					private JLabel tableControlSearch_L = new JLabel("Who are you looking for?");
-					private JTextField tableControlSearch_F;
-					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
-					
-				private JPanel tableControlComboBox_P = new JPanel();
-				
-					private JPanel controlMemberType_P = new JPanel();
-						private JLabel controlMemberType_L = new JLabel("Member Type:");
-						private String[] memberTypes = {"All","Premium","Regular"};
-						private JComboBox<String> controlMemberType_C = new JComboBox<String>(memberTypes);
-				
-					private JPanel controlActiveStatus_P = new JPanel();
-						private JLabel controlActiveStatus_L = new JLabel("Status:");
-						private String[] statuses = {"Active","Inactive"};
-						private JComboBox<String> controlActiveStatus_C = new JComboBox<String>(statuses);
-						
-				private JPanel tableControlearchButton_P = new JPanel();
-					private JButton searchButton;
-						
-			    // table wrapper panel
-				private JPanel tableWrapper_P;
-					
-					// header above the actual table 
-					private JPanel tableHeader_P;
-					
-						private JPanel tableHeaderTitle_P;
-							private JLabel tableHeaderTitle_L;
-							
-						private JPanel columnSelector_P;
-							private JLabel columnSelectorHeading_L;
-							private JComboBox<String> columnSelector_C;
-							
-						private JPanel exportButton_P;
-							private JButton exportToFileButton;
-					
-					// panel which has the table
-					private JPanel table_P;
-					
-						private JTable table;
-						private DefaultTableModel model;
-						private JScrollPane scrollPane;
-						
-							// general fields
-							private String[] allMembersColumns = {
-									"ID", "NAME", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
-									"START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
-								};
-						
-							// fields for premium members
-							private String[] limitedPremiumColumns = {
-									"ID", "NAME", "STATUS", "ATTENDANCE", "PAID AMOUNT",
-									"FULL PAYMENT?", "DISCOUNT AMOUNT", "TRAINER"
-								};
-
-							// fields for regular members
-							private String[] limitedRegularColumns = {
-									"ID", "NAME", "STATUS", "ATTENDANCE", "CURRENT PLAN",
-									"CAN UPGRADE?", "REFERRAL SOURCE", "REMOVAL REASON"
-								};
-
-			 */
-		
 		// addding import button to the dashboard title
 		dashboardTitle_P.add(importButton_P,BorderLayout.EAST); // adding button to the title panel
 		importButton_P.setLayout(new BorderLayout());
@@ -1158,17 +1089,40 @@ public class GymGUI{
 		exportButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,25)); // overriding layout
 		exportButton_P.add(exportFileButton);
 		
-//		searchButton.setHorizontalAlignment(SwingConstants.CENTER);
-		
 		// styling the table wrapper
 		dashboardContentWrapper_P.add(tableWrapper_P,BorderLayout.CENTER);
 		tableWrapper_P.setBackground(LIGHTGRAY);
 		tableWrapper_P.setLayout(new BorderLayout());
 		
+		/*
+		 * 					// header above the actual table 
+					private JPanel tableHeader_P = new JPanel();
+					
+						private JPanel tableHeaderTitle_P;
+							private JLabel tableHeaderTitle_L;
+							
+						private JPanel columnSelector_P;
+							private JLabel columnSelectorHeading_L;
+							private String[] columnTypes = {"All Columns","Limited Columns"};
+							private JComboBox<String> columnSelector_C = new JComboBox<String>(columnTypes);
+		 */
+		
 		// styling table header panel
 		tableWrapper_P.add(tableHeader_P, BorderLayout.NORTH);
 		tableHeader_P.setPreferredSize(new Dimension(1,40));
 		tableHeader_P.setBackground(WHITE);
+		tableHeader_P.setLayout(new BorderLayout());		
+		
+		// styling table title panel
+		tableHeader_P.add(tableHeaderTitle_P,BorderLayout.WEST);
+		tableHeaderTitle_P.setBackground(WHITE);
+		tableHeaderTitle_P.setPreferredSize(new Dimension(150,1));
+		tableHeaderTitle_P.setLayout(new FlowLayout(FlowLayout.CENTER,0,10));
+			
+		// styling table title label
+		tableHeaderTitle_P.add(tableHeaderTitle_L);
+		tableHeaderTitle_L.setFont(TABLE_HEADING_FONT);
+		tableHeaderTitle_L.setForeground(GUNMETALBLUE);
 		
 		// styling table panel
 		tableWrapper_P.add(table_P,BorderLayout.CENTER);
@@ -1234,7 +1188,44 @@ public class GymGUI{
 	            // row styling
 	            table.setRowHeight(rowHeight);
 	            table.setFont(TABLE_DATA_FONT); // setting font
-	            table.setForeground(MIDNIGHTBLUE);
+	            
+	            // setting alternate rows to have different background color using a custom cell renderer
+	            table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+	            	// overriding default rendering method
+	                @Override
+	                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+	                    
+	                	// calling parent class method to get default rendered cell 
+	                	Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+	                	/*
+	                	 * ALTERNATE COLORED ROWS
+	                	 */
+	                    if (!isSelected) { // ensuring selection highlight is visible
+	                        if (row % 2 == 1) {
+	                            c.setBackground(LIGHTGRAY);
+	                        } else {
+	                            c.setBackground(WHITE);
+	                        }
+	                    }
+	                    
+	                    /*
+	                     * ACTIVE/INACTIVE COLORS
+	                     */
+	                    if (column == 3) {
+	                        String cellText = value.toString().trim();
+
+	                        c.setForeground(cellText.equalsIgnoreCase("Active")? GREEN : RED);
+	                    }
+	                    else {
+	                    	// setting other cells to default color since the default cell renderer will make all cells inherit the color above
+	                    	c.setForeground(MIDNIGHTBLUE);
+	                    }
+	                    
+	                    return c; // returning the modified component (row), which the table paints on the screen
+	                }
+	            });
+
 	            
 	            // Styling header row
 	            JTableHeader header = table.getTableHeader();
@@ -1242,7 +1233,7 @@ public class GymGUI{
 	            header.setReorderingAllowed(false); // disabling column dragging
 	            header.setResizingAllowed(false); // disabling column resizing
 	            
-	            header.setFont(TABLE_HEADING_FONT);
+	            header.setFont(COLUMN_HEADING_FONT);
 	            header.setForeground(GUNMETALBLUE);
 	            header.setBackground(DARKGRAY);
 	            header.setPreferredSize(new Dimension(header.getPreferredSize().width, 30));
