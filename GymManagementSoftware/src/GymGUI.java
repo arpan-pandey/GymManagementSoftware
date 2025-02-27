@@ -1645,12 +1645,6 @@ public class GymGUI{
 		        @Override
 		        public void mousePressed(MouseEvent e) {
 		        	
-		        	// removing mouse listener of manageMemberButton to avoid one bug where no. of dialog boxes keep increasing
-		        	MouseListener[] listeners = manageMemberButton.getMouseListeners();
-		        	for (MouseListener listener : listeners) {
-		        		manageMemberButton.removeMouseListener(listener);
-		        	}
-		        	
 	                // looping through the buttons to find the clicked button and change attributes
 		            for (int i = 0; i < menuButtons.length; i++) {
 
@@ -1748,6 +1742,13 @@ public class GymGUI{
 		            
 		         // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
 		            if (e.getSource() == menuButtons[2] && lastIndex != 2) {
+		            	
+			        	
+			        	// removing mouse listener of manageMemberButton to avoid one bug where no. of dialog boxes keep increasing
+			        	MouseListener[] listeners = manageMemberButton.getMouseListeners();
+			        	for (MouseListener listener : listeners) {
+			        		manageMemberButton.removeMouseListener(listener);
+			        	}
 		            	
 		            	showDialog=true;
 
