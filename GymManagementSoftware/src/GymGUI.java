@@ -273,7 +273,7 @@ public class GymGUI{
 							// general fields
 							private String[] allMembersColumns = {
 									"ID", "NAME", "GENDER", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
-									"START DATE", "EMAIL", "PHONE NO.", "DOB", "LOCATION"
+									"START DATE", "EMAIL", "PHONE NO.", "DATE OF BIRTH", "LOCATION"
 								};
 						
 							// fields for premium members
@@ -1160,7 +1160,7 @@ public class GymGUI{
 		    @Override
 		    public void run() {
 		    	
-		    	// adding a space before each column
+		    	// adding spaces before each column title
 		    	for (int i = 0; i < allMembersColumns.length; i++) {
 		    	    allMembersColumns[i] = " " + allMembersColumns[i];
 		    	}
