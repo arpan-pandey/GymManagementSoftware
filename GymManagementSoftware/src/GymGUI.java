@@ -12,8 +12,11 @@
  * 
  * #FFFFFF (White)
  * #DDDEEE (Dark Gray)
- * #696969 (Gray (for placeholder))   
+ * #EAEAEA (Gray)
+ * #696969 (Placeholder Gray)   
  * 
+ * #CB0000 (Red)
+ * #009400 (Green)
  */
 
 import java.awt.BorderLayout;
@@ -72,6 +75,7 @@ public class GymGUI{
     
     //extra colors
     private final Color DARKGRAY = new Color(0xDADADA);
+    private final Color GRAY = new Color(0xEAEAEA);
     private final Color WHITE = new Color(0xFFFFFF);
     private final Color PLACEHOLDERGRAY = new Color(0x696969); // input field placeholder color
     
@@ -1700,7 +1704,7 @@ public class GymGUI{
 		cardCommonAttributes_P.setLayout(new GridLayout(0,2));
 		
 		// second card panel styling
-		cardUniqueAttributes_P.setBackground(DARKGRAY);
+		cardUniqueAttributes_P.setBackground(GRAY);
 		cardUniqueAttributes_P.setLayout(new GridLayout(0,1));
 		
 		// individual member management buttons panel styling 
@@ -2209,7 +2213,7 @@ public class GymGUI{
 		                                        	    if (i == 11 || i == 12) {
 		                                        	        // using switch to set colors based on plan type
 		                                        	        switch (splitMemberDetails[11]) {
-		                                        	            case "Basic": customDetailAttribute = bold + "color: #3A9CAC"; break;  // Dark cyan
+		                                        	            case "Basic": customDetailAttribute = bold + "color: #3AACAC"; break;  // Dark cyan
 		                                        	            case "Standard": customDetailAttribute = bold + "color: #9B59B6"; break; // Dark pastel purple
 		                                        	            case "Deluxe": customDetailAttribute = bold + "color: #BD9934"; break; // Dark gold
 		                                        	            default: break;
