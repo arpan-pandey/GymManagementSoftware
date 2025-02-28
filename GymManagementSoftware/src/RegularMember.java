@@ -2,7 +2,7 @@
 public class RegularMember extends GymMember{
 	
 	//unique instance variable declaration and initialization of default values for Regular members
-	private final int attendanceLimit = 30;
+	private final int attendanceLimit = 1;
 	private String referralSource, plan = "Basic", removalReason="";
 	private boolean isEligibleForUpgrade = false;
 	private double price = 6500d;
@@ -29,6 +29,9 @@ public class RegularMember extends GymMember{
 	public void markAttendance() {
 		attendance++; //increasing attendance by 1
 		loyaltyPoints+=5; //increasing legacy points by 5
+		
+		// updating isEligibleForUpgrade to true if (attendance of member >= attendance limit)
+		this.isEligibleForUpgrade = super.getAttendance()>=this.attendanceLimit? true : false;
 	}
 	
 	//method that returns plan price
@@ -51,9 +54,6 @@ public class RegularMember extends GymMember{
 	
 	// method to upgrade a member's plan
 	public String upgradePlan(String plan) {
-		
-		// updating isEligibleForUpgrade to true if (attendance of member >= attendance limit)
-		this.isEligibleForUpgrade = super.getAttendance()>=this.attendanceLimit? true : false;
 		 
 		// to return error message when the member is not eligible to upgrade
 		if(!this.isEligibleForUpgrade) {
@@ -61,24 +61,27 @@ public class RegularMember extends GymMember{
 		}
 		
 		// to check if selected plan is the same as current plan [ equalsIgnoreCase() method is used for consistency ]
-		if(this.plan.equalsIgnoreCase(plan)) {
+		else if(this.plan.equalsIgnoreCase(plan)) {
 			return "Already subscribed to the same plan.";
 		}
 		
-		// to get price of new plan [ stored in a local variable ]
-		double price = getPlanPrice(plan);
-		 
-		// to check the validity of selected plan
-		if(price == -1d) {
-			return "Invalid plan selected!";
+		// when member is eligible and valid plan is selected
+		else {
+			// to get price of new plan [ stored in a local variable ]
+			double price = this.getPlanPrice(plan);
+			
+			// to check the validity of selected plan
+			if(price == -1d) {
+				return "Invalid plan selected!";
+			}
+			 
+			// updating the plan and price if selected plan is valid, and the member is eligible for upgrade
+			this.plan = plan;
+			this.price = price;
+			
+			// success message
+			return String.format("Your plan has been upgraded to %s for Rs.%.2f.",this.plan,this.price);
 		}
-		 
-		// updating the plan and price if selected plan is valid, and the member is eligible for upgrade
-		this.plan = plan;
-		this.price = price;
-		
-		// success message
-		return String.format("Your plan has been upgraded to %s for Rs.%.2f.",this.plan,this.price);
 	}
 
 	// method to revert member back to regularMember, and reset all data
