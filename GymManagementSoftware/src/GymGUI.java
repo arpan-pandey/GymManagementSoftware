@@ -1985,9 +1985,6 @@ public class GymGUI{
 		                                            	memberDetailsString = regularMember.display();
 		                                            	
 		                                            	splitMemberDetails = memberDetailsString.split("~");
-		                                            	
-		                                            	// manually setting eligible? to yes or no based on given logic
-		                                            	splitMemberDetails[13]=regularMember.getAttendance()>=regularMember.getAttendanceLimit() ? "Yes" : "No";
 		                                            }
 		                                            
 		                                            
