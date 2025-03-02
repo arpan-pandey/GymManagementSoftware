@@ -1336,11 +1336,8 @@ public class GymGUI{
 		    }
 		};
 
-		
-		// invoke later since UI components updating on threads other than the EDT might cause issues
-		SwingUtilities.invokeLater(()->{
-			loadTableData.run(); // loading dashboard table initially			
-		});
+		loadTableData.run(); // loading dashboard table initially			
+
 		
 		/*
 		 * ADD A MEMBER SECTION
@@ -2360,9 +2357,7 @@ public class GymGUI{
    
 		            // updating table when dashboard button is pressed
 		            if(e.getSource()==menuButtons[0]) {
-		        		SwingUtilities.invokeLater(()->{
 		        			loadTableData.run(); 			
-		        		});
 		            }
 		            // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
 		            else if (e.getSource() == menuButtons[2] && lastIndex != 2) {
@@ -2383,9 +2378,7 @@ public class GymGUI{
 		                bodyContent[2].remove(individualMemberManagement_P);
 		                
 		                // calling updateInidividualMemberPanel runnable declared above
-                    	SwingUtilities.invokeLater(()->{
-                    		updateInidividualMemberPanel.run();
-                    	});
+                    	updateInidividualMemberPanel.run();
 		                
 		                // adding an action listener to the button (when it's re-added to the panel)
 		                manageMemberButton.addMouseListener(new MouseAdapter() {
@@ -2394,9 +2387,7 @@ public class GymGUI{
 		                    	manageMemberButton.setForeground(MIDNIGHTBLUE);
 
 		                    	// triggering the same dialog input handling (run() function) when the button is clicked
-		                    	SwingUtilities.invokeLater(()->{
-			                    	updateInidividualMemberPanel.run();
-		                    	});
+			                    updateInidividualMemberPanel.run();
 		                    }
 		                    @Override
 		    		        public void mouseEntered(MouseEvent e) {
@@ -2692,21 +2683,19 @@ public class GymGUI{
                     memberManagementContent.revalidate();
                     memberManagementContent.repaint();
                     
-                    SwingUtilities.invokeLater(() -> {
-                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
-                    	showDialog = true; // reverting to true after text update is finished
-                    	
-                    	// success dialog
-                    	JOptionPane.showOptionDialog(
-                    			frame,
-                    			member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!",
-                    			wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!",
-                    			JOptionPane.DEFAULT_OPTION,
-                    			JOptionPane.INFORMATION_MESSAGE,
-                    			null,
-                    			null,
-                    			0);
-                    });                 
+                	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
+                	showDialog = true; // reverting to true after text update is finished
+                	
+                	// success dialog
+                	JOptionPane.showOptionDialog(
+                			frame,
+                			member.getName()+"'s membership has been successfully "+wishKeyword.toLowerCase()+"d!",
+                			wishKeyword.substring(0,wishKeyword.length()-1)+"ion Successful!",
+                			JOptionPane.DEFAULT_OPTION,
+                			JOptionPane.INFORMATION_MESSAGE,
+                			null,
+                			null,
+                			0); 
                 } 
                 
             	// since the JOptionPane is a modal dialog (meaning it blocks the EDT until it is closed), it can make the button state be stuck
@@ -2742,20 +2731,18 @@ public class GymGUI{
 			    	if(markWish==0) {
 			    		member.markAttendance();
 			    		
-	                    SwingUtilities.invokeLater(() -> {
-	                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
-	                    	showDialog = true; // reverting to true after text update is finished
-	                    	
-	                    	// success dialog
-	                    	JOptionPane.showOptionDialog(
-	                    			frame,
-	                    			member.getName()+"'s attendance has been successfully marked.", "Attendance Successful!",
-	                    			JOptionPane.DEFAULT_OPTION,
-	                    			JOptionPane.INFORMATION_MESSAGE,
-	                    			null,
-	                    			null,
-	                    			0);
-	                    });
+                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
+                    	showDialog = true; // reverting to true after text update is finished
+                    	
+                    	// success dialog
+                    	JOptionPane.showOptionDialog(
+                    			frame,
+                    			member.getName()+"'s attendance has been successfully marked.", "Attendance Successful!",
+                    			JOptionPane.DEFAULT_OPTION,
+                    			JOptionPane.INFORMATION_MESSAGE,
+                    			null,
+                    			null,
+                    			0);
 			    	}
 		    	}
 		    	else {
@@ -2828,21 +2815,19 @@ public class GymGUI{
 		    		}
 		    		
 		    		if(proceedUpdate) {
-	                    SwingUtilities.invokeLater(() -> {
-	                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
-	                    	showDialog = true; // reverting to true after text update is finished
-	                    	
-	                    	// success dialog
-	                    	JOptionPane.showOptionDialog(
-	                    			frame,
-	                    			member.getName()+"'s data has been successfully reset.",
-	                    			"Reset Successful!",
-	                    			JOptionPane.DEFAULT_OPTION,
-	                    			JOptionPane.INFORMATION_MESSAGE,
-	                    			null,
-	                    			null,
-	                    			0);
-	                    });
+                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
+                    	showDialog = true; // reverting to true after text update is finished
+                    	
+                    	// success dialog
+                    	JOptionPane.showOptionDialog(
+                    			frame,
+                    			member.getName()+"'s data has been successfully reset.",
+                    			"Reset Successful!",
+                    			JOptionPane.DEFAULT_OPTION,
+                    			JOptionPane.INFORMATION_MESSAGE,
+                    			null,
+                    			null,
+                    			0);
 		    		}
 		    	}
             }
@@ -2953,10 +2938,8 @@ public class GymGUI{
 		    		}
 			    	
 		    		if(proceedUpdate) {
-	                    SwingUtilities.invokeLater(() -> {
-	                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
-	                    	showDialog = true; // reverting to true after text update is finished
-	                    });
+                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
+                    	showDialog = true; // reverting to true after text update is finished
 		    		}
 		    	}
 		    	else {
@@ -3096,10 +3079,8 @@ public class GymGUI{
 			    	JOptionPane.showOptionDialog(frame, message, title, JOptionPane.DEFAULT_OPTION, messageType, null, null, 0);
 		    		
 		    		if(proceedUpdate) {
-	                    SwingUtilities.invokeLater(() -> {
-	                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
-	                    	showDialog = true; // reverting to true after text update is finished
-	                    });
+                    	updateInidividualMemberPanel.run(); // executing the card text getting/setting runnable  
+                    	showDialog = true; // reverting to true after text update is finished
 		    		}
 		    	}
 		    	else {
