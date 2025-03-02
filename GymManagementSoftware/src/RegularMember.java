@@ -2,7 +2,7 @@
 public class RegularMember extends GymMember{
 	
 	//unique instance variable declaration and initialization of default values for Regular members
-	private final int attendanceLimit = 1;
+	private final int attendanceLimit = 30;
 	private String referralSource, plan = "Basic", removalReason="";
 	private boolean isEligibleForUpgrade = false;
 	private double price = 6500d;
