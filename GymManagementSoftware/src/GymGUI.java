@@ -1063,7 +1063,7 @@ public class GymGUI{
 					public void mousePressed(MouseEvent e1) {
 						tableControlSearch_F.setFocusable(false);
 						
-						// adding placeholder if nothing is input
+						// adding placeholder if input is null
 						if(tableControlSearch_F.getText().trim().equals("")) {
 							tableControlSearch_F.setText(searchPlaceholder);
 							tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
@@ -1236,6 +1236,17 @@ public class GymGUI{
 	            table.addMouseListener(new MouseAdapter() {
 	            	@Override
 	            	public void mouseClicked(MouseEvent e) {
+	            		
+	            		/*
+	            		 * readding the search placeholder if input is null
+	            		 */
+	            		
+						// adding placeholder if nothing is input
+						if(tableControlSearch_F.getText().trim().equals("")) {
+							tableControlSearch_F.setText(searchPlaceholder);
+							tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+						}
+	            		
 	            		// checking for double click
 	            		if(e.getClickCount()==2) {
 	                        int row = table.getSelectedRow(); // getting selected row index
