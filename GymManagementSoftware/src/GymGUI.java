@@ -1872,7 +1872,10 @@ public class GymGUI{
                                 memberManagementContent.repaint();
                             	
                                 // updating the title
-                                memberManagementTitle_L.setText(memberInstanceOf + " Member | " + cardLabels[0].getText() + " (ID: " + memberId + ")");
+                                String[] memberNameParts = cardLabels[0].getText().split(":", 2);
+                                String memberName = memberNameParts[1].trim();
+                                
+                                memberManagementTitle_L.setText(memberInstanceOf + " Member | " + memberName + " (ID: " + memberId + ")");
                                 memberManagementTitle_P.add(utilityButtons_P[1], BorderLayout.WEST);
                                 
                                 // removing previous content
@@ -2035,7 +2038,6 @@ public class GymGUI{
                             		
                             		// setting the text of the label to only contain the heading and a colon
                             		cardLabels[i].setText(splitMemberData[0]+": ");
-                                	
                                 	
                                 	// initializing default values for prefix and custom attributes
                                 	String prefix = "";
