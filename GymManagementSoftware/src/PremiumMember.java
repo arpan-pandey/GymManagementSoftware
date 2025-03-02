@@ -26,7 +26,7 @@ public class PremiumMember extends GymMember{
 	@Override
 	public void markAttendance() {
 		attendance++; //increasing attendance by 1
-		loyaltyPoints+=5; //increasing legacy points by 5
+		loyaltyPoints+=10; //increasing legacy points by 10
 	}
 		
 	// method to update due amount
