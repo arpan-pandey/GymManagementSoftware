@@ -3152,7 +3152,7 @@ public class GymGUI{
 		});
 	}
 
-	// main metchod that calls constructor of this class
+	// main method that calls constructor of this class
 	public static void main(String[] args) {
 		new GymGUI();
 	}
