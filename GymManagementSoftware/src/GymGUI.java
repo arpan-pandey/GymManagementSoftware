@@ -1915,9 +1915,7 @@ public class GymGUI{
                         			
                         			// adding empty panel to regular member button wrapper and resetting form field
                         			else if(memberInstanceOf.equals("Regular")) {
-                        				
-                    					individualMemberFields[0].setText(""); // setting text for unfcusable input field to reset everytime this runnable is called
-                        				
+                        				                       				
                     					// adding empty panels
                     					if (i==1 || i==3) {
                             				JPanel emptyPanel = new JPanel();
@@ -2096,11 +2094,14 @@ public class GymGUI{
                                 	    	
                                 	    	String wineRed = "#800020"; // putting a CSS color in a variable
                                 	    	
+                                	    	
                                 	    	// Rs. prefix when actual price is shown
                                 	        prefix = !(value.equals("Ineligible") || value.equals("Uncalculated"))?"Rs.":"";
                                 	        
                                 	        // green for discount amount, maroon for text
                                 	        customDetailAttribute = (value.equals("Uncalculated") || value.equals("Ineligible")) ? bold + "color: "+wineRed: bold + "color: green";
+                                	        
+                                	        individualMemberFields[0].setText(prefix+value); // setting text of uneditable field to corresponding text/value
                                 	    }
                                 	}
 
