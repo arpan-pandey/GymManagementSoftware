@@ -188,6 +188,8 @@ public class GymGUI{
 		backSymbol = "◄",	
 		searchSymbol = "⌕",
 	};
+	
+	private boolean isAccessedFromTable=false; // for dashboard table row mouse listener
     
     
 	/*
@@ -214,6 +216,8 @@ public class GymGUI{
 				new JButton("Add a Member"),
 				new JButton("Member Management")
 		};
+    
+    private Runnable menuButtonHighlight;
 	
     private int activeIndex; // variable to store index of active content
     private int lastIndex; // variable to store index of last body content
@@ -691,22 +695,22 @@ public class GymGUI{
 	
 	// initializing test objects    
 	private GymMember[] testMembers = {
-	    new PremiumMember(1, "Ram Sapkota", "Kathmandu", "+977 9812345678", "test_member1@gmail.com", "Male", "2004-12-12", "2025-02-03", "Alex Smith"),
-	    new RegularMember(2, "Sita Phuyal", "Pokhara", "+977 9876543210", "test_member2@gmail.com", "Female", "2002-04-29", "2025-01-13", "Instagram Ad"),
-	    new PremiumMember(3, "Pradeep Sharma", "Chitwan", "+977 9876541234", "test_member3@gmail.com", "Male", "1999-03-15", "2025-05-22", "Referral"),
-	    new RegularMember(4, "Maya Tamang", "Lalitpur", "+977 9812349087", "test_member4@gmail.com", "Female", "1998-06-10", "2025-03-30", "Social Media"),
-	    new PremiumMember(5, "Nabin KC", "Butwal", "+977 9836729145", "test_member5@gmail.com", "Male", "2000-01-02", "2025-07-17", "Friend Referral"),
-	    new RegularMember(6, "Anjali Rai", "Dhulikhel", "+977 9845613247", "test_member6@gmail.com", "Female", "2003-11-23", "2025-02-08", "Flyer"),
-	    new PremiumMember(7, "Bishal Ghimire", "Biratnagar", "+977 9865432109", "test_member7@gmail.com", "Male", "1997-05-19", "2025-08-11", "Website"),
-	    new RegularMember(8, "Sushila Sharma", "Bhaktapur", "+977 9816712345", "test_member8@gmail.com", "Female", "2005-09-25", "2025-04-05", "Online Ad"),
-	    new PremiumMember(9, "Anil Gurung", "Pokhara", "+977 9812345610", "test_member9@gmail.com", "Male", "1995-12-02", "2025-11-30", "Google Search"),
-	    new RegularMember(10, "Pooja Thapa", "Kathmandu", "+977 9801234789", "test_member10@gmail.com", "Female", "2000-08-14", "2025-02-18", "Friend"),
+		    new PremiumMember(1, "Ram Sapkota", "Kathmandu", "+977 9812345678", "test_member1@gmail.com", "Male", "2004-12-12", "2025-02-03", "Alex Smith"),
+		    new RegularMember(2, "Sita Phuyal", "Pokhara", "+977 9876543210", "test_member2@gmail.com", "Female", "2002-04-29", "2025-01-13", "Instagram Ad"),
+		    new PremiumMember(3, "Pradeep Sharma", "Chitwan", "+977 9876541234", "test_member3@gmail.com", "Male", "1999-03-15", "2025-05-22", "Michael Johnson"),
+		    new RegularMember(4, "Maya Tamang", "Lalitpur", "+977 9812349087", "test_member4@gmail.com", "Female", "1998-06-10", "2025-03-30", "Social Media"),
+		    new PremiumMember(5, "Nabin KC", "Butwal", "+977 9836729145", "test_member5@gmail.com", "Male", "2000-01-02", "2025-07-17", "Sophia Williams"),
+		    new RegularMember(6, "Anjali Rai", "Dhulikhel", "+977 9845613247", "test_member6@gmail.com", "Female", "2003-11-23", "2025-02-08", "Flyer"),
+		    new PremiumMember(7, "Bishal Ghimire", "Biratnagar", "+977 9865432109", "test_member7@gmail.com", "Male", "1997-05-19", "2025-08-11", "David Brown"),
+		    new RegularMember(8, "Sushila Sharma", "Bhaktapur", "+977 9816712345", "test_member8@gmail.com", "Female", "2005-09-25", "2025-04-05", "Online Ad"),
+		    new PremiumMember(9, "Anil Gurung", "Pokhara", "+977 9812345610", "test_member9@gmail.com", "Male", "1995-12-02", "2025-11-30", "Jessica Adams"),
+		    new RegularMember(10, "Pooja Thapa", "Kathmandu", "+977 9801234789", "test_member10@gmail.com", "Female", "2000-08-14", "2025-02-18", "Friend"),
+		    new RegularMember(11, "Suman Baral", "Janakpur", "+977 9823456789", "test_member11@gmail.com", "Male", "1996-11-01", "2025-06-22", "Flyer"),
+		    new PremiumMember(12, "Rina Gurung", "Pokhara", "+977 9811122334", "test_member12@gmail.com", "Female", "2001-03-05", "2025-09-25", "Chris Evans"),
+		    new RegularMember(13, "Kiran Acharya", "Biratnagar", "+977 9812345679", "test_member13@gmail.com", "Male", "2002-12-12", "2025-10-10", "Instagram Ad"),
+		    new PremiumMember(14, "Asha Bista", "Lalitpur", "+977 9815678901", "test_member14@gmail.com", "Female", "2003-02-24", "2025-08-14", "Emma Watson"),
+		    new RegularMember(15, "Nirakar Khadka", "Bhaktapur", "+977 9812346701", "test_member15@gmail.com", "Male", "1997-07-29", "2025-04-30", "Flyer"),
 
-	    new RegularMember(11, "Suman Baral", "Janakpur", "+977 9823456789", "test_member11@gmail.com", "Male", "1996-11-01", "2025-06-22", "Flyer"),
-	    new PremiumMember(12, "Rina Gurung", "Pokhara", "+977 9811122334", "test_member12@gmail.com", "Female", "2001-03-05", "2025-09-25", "Friend Referral"),
-	    new RegularMember(13, "Kiran Acharya", "Biratnagar", "+977 9812345679", "test_member13@gmail.com", "Male", "2002-12-12", "2025-10-10", "Instagram Ad"),
-	    new PremiumMember(14, "Asha Bista", "Lalitpur", "+977 9815678901", "test_member14@gmail.com", "Female", "2003-02-24", "2025-08-14", "Website"),
-	    new RegularMember(15, "Nirakar Khadka", "Bhaktapur", "+977 9812346701", "test_member15@gmail.com", "Male", "1997-07-29", "2025-04-30", "Flyer"),
 	};
 
 	
@@ -831,6 +835,18 @@ public class GymGUI{
 		menuBar.setLayout(new FlowLayout(FlowLayout.CENTER,0,40));	
 		menuBar.add(menuTitle); //adding the menu title
 		menuBar.add(menuButtonPanel); //adding the button panel
+		
+		// runnable to update menuButton highlight
+		menuButtonHighlight = new Runnable() {
+			@Override
+			public void run() {
+                menuButtons[lastIndex].setFont(BUTTON_FONT);
+                menuButtons[lastIndex].setBorder(DEFAULT_BUTTON_BORDER);
+
+                menuButtons[activeIndex].setFont(BUTTON_FONT_ACTIVE);
+                menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
+			}
+		};
 		
 		
 		/*
@@ -1090,7 +1106,7 @@ public class GymGUI{
 		dashboardTableControls_P.add(exportButton_P,BorderLayout.EAST);
 		exportButton_P.setPreferredSize(new Dimension(245,1));
 		exportButton_P.setBackground(WHITE);
-		exportButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,25)); // overriding layout
+		exportButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,22)); // overriding layout
 		exportButton_P.add(exportFileButton);
 		
 		// styling the table wrapper
@@ -1136,20 +1152,19 @@ public class GymGUI{
 	            
 	            // populating the model with data
 	            for (GymMember member : members) {
-	                String[] splitMemberData = member.display().split("~");
 	                
 	                String[] actualData = {
-	                	splitMemberData[1], // id
-	                	splitMemberData[0], // name
-	                	splitMemberData[10], // gender
-	                	splitMemberData[2], // status
-	                	splitMemberData[8], // attendance
-	                	splitMemberData[9], // loyalty points
-	                	splitMemberData[3], // start date
-	                	splitMemberData[6], // email
-	                	splitMemberData[5], // phone number
-	                	splitMemberData[7], // DOB
-	                	splitMemberData[4], // location
+	                	Integer.toString(member.getId()), // id
+	                	member.getName(), // name
+	                	member.getGender(), // gender
+	                	member.isActiveStatus()?"Active":"Inactive", // status (set to "Active"|"Inactive" based on value)
+	                	Integer.toString(member.getAttendance()), // attendance (converting int to String)
+	                	Double.toString(member.getLoyaltyPoints()), // loyalty points (converting double to String)
+	                	member.getMembershipStartDate(), // start date
+	                	member.getEmail(), // email
+	                	member.getPhone(), // phone number
+	                	member.getDOB(), // DOB
+	                	member.getLocation(), // location
 	                };
 	                
 			    	// adding spaces before each data String
@@ -1228,7 +1243,33 @@ public class GymGUI{
 	                        // ensuring a valid row is selected
 	                        if (row != -1) { 
 	                            String selectedMemberID = table.getValueAt(row, 0).toString().trim(); // getting id of selected row, and casting from Object to String, and trimming any spaces
-	                        }
+	                        
+	                            showDialog=false; // so that dialog doesnt appear
+	                            lastMemberID = selectedMemberID; // passing selected member id to runnable
+	                            
+	                            updateInidividualMemberPanel.run(); // running runnable
+	                            
+	                            showDialog=true; // reverting the boolean
+	                            
+	                            // removing and adding contetnt
+	                            frame.remove(dashboardContent);
+	                            frame.add(memberManagementContent,BorderLayout.CENTER);
+	                            memberManagementContent.add(individualMemberManagement_P,BorderLayout.CENTER);
+	                            
+	                            
+	                            /*
+	                             * UPDATING INDEXES AND BUTTON HIGHLIGHTS
+	                             */
+			                    lastIndex = 0; // updating last index
+			                    activeIndex = 2; // updating active index
+			                    
+			                    menuButtonHighlight.run(); // updating menu button highlight
+			                    
+			                    isAccessedFromTable = true;
+	                            
+	                            frame.revalidate();
+	                            frame.repaint();
+	                       }
 	                    }
 	            	}
 	            });
@@ -2004,7 +2045,7 @@ public class GymGUI{
                                 	}
                                 	// handling boolean values (isFullPayment && isEligibleForUpgrade)
                                 	else if (i == 13) {
-                                	    customDetailAttribute = splitMemberDetails[i].equals("Yes") ? bold + "color: green" : bold + "color: maroon";
+                                	    customDetailAttribute = splitMemberDetails[i].equals("Yes") ? bold + "color: green" : bold + "color: red";
                                 	}
                                 	
                                 	// Regular Member specific logic
@@ -2030,6 +2071,9 @@ public class GymGUI{
                                 	}
                                 	// Premium Member specific logic
                                 	else if (memberInstanceOf.equals("Premium")) {
+                                		
+                                		String darkred = "#8B0000"; // local CSS color
+                                		
                                 	    // Handle Paid Amount
                                 	    if (i == 11) {
                                 	        prefix = "Rs.";
@@ -2038,7 +2082,7 @@ public class GymGUI{
                                 	    // handling Remaining Amount
                                 	    else if (i == 12) {
                                 	        prefix = "Rs.";
-                                	        customDetailAttribute = "color: red";
+                                	        customDetailAttribute = "color: "+darkred;
                                 	    }
                                 	    // handling Discount Amount
                                 	    else if (i == 14) {
@@ -2047,7 +2091,7 @@ public class GymGUI{
                                 	        prefix = !(splitMemberDetails[i].equals("Ineligible") || splitMemberDetails[i].equals("Uncalculated"))?"Rs.":"";
                                 	        
                                 	        // green for discount amount, maroon for text
-                                	        customDetailAttribute = (splitMemberDetails[i].equals("Uncalculated") || splitMemberDetails[i].equals("Ineligible")) ? bold + "color: maroon": bold + "color: green";
+                                	        customDetailAttribute = (splitMemberDetails[i].equals("Uncalculated") || splitMemberDetails[i].equals("Ineligible")) ? bold + "color: "+darkred: bold + "color: green";
                                 	    }
                                 	}
 
@@ -2285,12 +2329,8 @@ public class GymGUI{
 		                    // updating active menu button styling and switch content
 		                    lastIndex = activeIndex;
 		                    activeIndex = i;
-
-		                    menuButtons[lastIndex].setFont(BUTTON_FONT);
-		                    menuButtons[lastIndex].setBorder(DEFAULT_BUTTON_BORDER);
-
-		                    menuButtons[activeIndex].setFont(BUTTON_FONT_ACTIVE);
-		                    menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
+		                    
+		                    menuButtonHighlight.run(); // updating menu button highlight
 
 		                    frame.remove(bodyContent[lastIndex]);
 		                    frame.add(bodyContent[i]);
@@ -2557,18 +2597,39 @@ public class GymGUI{
 						// member management back button
 						else if (sourceLabel == utilityButtons_L[1]) {
 							
-							manageMemberButton.setBackground(MIDNIGHTBLUE);
-							manageMemberButton.setForeground(LIGHTGRAY);
-							
-							// removing individual member management panel and adding default central panel that lets you enter id when button is clicked
-							memberManagementContent.remove(individualMemberManagement_P);
-							memberManagementContent.add(memberManagementButton_P, BorderLayout.CENTER);							
-							
-							// removing back button from title
-							memberManagementTitle_P.remove(utilityButtons_P[1]);
-							
-							// reverting title
-			                memberManagementTitle_L.setText("Member Management");
+							// when accessing from table
+							if(isAccessedFromTable) {
+								 
+								frame.remove(memberManagementContent); // removing content
+								
+								loadTableData.run(); // loading table data
+								frame.add(dashboardContent); // adding dashboard content
+								
+								lastIndex = 2;
+								activeIndex = 0;
+								
+								menuButtonHighlight.run(); // updating menu button highlight
+								
+								frame.revalidate();
+								frame.repaint();
+								
+								isAccessedFromTable = false;
+							}
+							// when directly accessing individual member management
+							else {
+								manageMemberButton.setBackground(MIDNIGHTBLUE);
+								manageMemberButton.setForeground(LIGHTGRAY);
+								
+								// removing individual member management panel and adding default central panel that lets you enter id when button is clicked
+								memberManagementContent.remove(individualMemberManagement_P);
+								memberManagementContent.add(memberManagementButton_P, BorderLayout.CENTER);							
+								
+								// removing back button from title
+								memberManagementTitle_P.remove(utilityButtons_P[1]);
+								
+								// reverting title
+				                memberManagementTitle_L.setText("Member Management");
+							}
 						}
 						
 						
