@@ -189,6 +189,8 @@ public class GymGUI{
 		searchSymbol = "⌕",
 	};
 	
+	private String planColor=""; // storing the member card plan color in a global variable
+	
 	private boolean isAccessedFromTable=false; // for dashboard table row mouse listener
     
     
@@ -521,36 +523,30 @@ public class GymGUI{
 					cardUniqueAttributes_P
 				};
 				
-				public JLabel[]
-					// card keyword labels
-					cardLabels = {
-							
-						new JLabel("Name : "),
-						new JLabel("ID : "),
-						new JLabel("Active Status : "),
-						new JLabel("Start Date : "),
-						new JLabel("Location : "),
-						new JLabel("Phone no. : "),
-						new JLabel("Email : "),
-						new JLabel("DOB : "),
-						new JLabel("Attendance : "),
-						new JLabel("Loyalty Points : "),
-							
-						// premium member unique attributes
-						new JLabel("Paid Amount : "),
-						new JLabel("Remaining Amount : "),
-						new JLabel("Full Payment? : "),
-						new JLabel("Discount Amount : "),
-						new JLabel("Trainer Name : "),
-							
-						// regular member unique attributes
-						new JLabel("Current Plan : "),
-						new JLabel("Plan Price : "),
-						new JLabel("Can Upgrade? : "),
-						new JLabel("Referral Source : "),
-						new JLabel("Removal Reason : ")
+				// public and static so that the subclasses can access and modify these JLabels
+				public static JLabel[] 
+					    // card keyword labels
+					    cardLabels = {
+					    	// common attributes
+					        new JLabel(""), // Name
+					        new JLabel(""), // ID
+					        new JLabel(""), // Active Status
+					        new JLabel(""), // Start Date
+					        new JLabel(""), // Location
+					        new JLabel(""), // Phone no.
+					        new JLabel(""), // Email
+					        new JLabel(""), // DOB
+					        new JLabel(""), // Attendance
+					        new JLabel(""), // Loyalty Points
 
-				};
+					        // unique attributes
+					        new JLabel(""), // Paid Amount || Current Plan
+					        new JLabel(""), // Remaining Amount || Plan Price
+					        new JLabel(""), // Full Payment? || Can Upgrade?
+					        new JLabel(""), // Discount Amount || Referral Source
+					        new JLabel(""), // Trainer Name || Removal Reason
+					    };
+
 				
 				private JPanel individualMemberButtonsWrapper_P = new JPanel();
 			
@@ -1787,9 +1783,7 @@ public class GymGUI{
                         if (memberId != 0x696969) {
                         	
                             boolean isExistingId = false; // checking if ID exists
-                            
-                            String memberDetailsString = "";
-                            String[] splitMemberDetails = {};
+                            String[] splitMemberData = new String[15]; // array to store split data from display method
 
                             // checking if the ID exists using a for loop of GymMember objects
                             for (int i = 0; i<members.size(); i++) {
@@ -1806,18 +1800,16 @@ public class GymGUI{
                                     	
                                     	PremiumMember premiumMember = (PremiumMember) member; // downcasting to access child methods
                                     	
-                                    	memberDetailsString = premiumMember.display();
-                                    	
-                                    	splitMemberDetails = memberDetailsString.split("~");
+                                    	premiumMember.display();
                                     	
                                     	// when the discount amount isn't calculated
                                     	if(premiumMember.isFullPayment() && premiumMember.getDiscountAmount()==0.0d) {
-                                    		splitMemberDetails[14]="Uncalculated";
+//                                    		splitMemberDetails[14]="Uncalculated";
                                     	}
                                     	
                                     	
                                         // setting text of 1st non-editable field (Rs. as prefix for amount)
-                    					individualMemberFields[0].setText((!(splitMemberDetails[14].equals("Uncalculated") || splitMemberDetails[14].equals("Ineligible"))?"Rs.":"")+splitMemberDetails[14]);	
+//                    					individualMemberFields[0].setText((!(splitMemberDetails[14].equals("Uncalculated") || splitMemberDetails[14].equals("Ineligible"))?"Rs.":"")+splitMemberDetails[14]);	
                     					// setting text of editable field
                     					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? fullyPaidText : "");
                     					
@@ -1834,9 +1826,7 @@ public class GymGUI{
                                     	
                                     	RegularMember regularMember = (RegularMember) member; // downcasting to access child methods
                                     	
-                                    	memberDetailsString = regularMember.display();
-                                    	
-                                    	splitMemberDetails = memberDetailsString.split("~");
+                                    	regularMember.display();
                                     }
                                     
                                     
@@ -1882,7 +1872,7 @@ public class GymGUI{
                                 memberManagementContent.repaint();
                             	
                                 // updating the title
-                                memberManagementTitle_L.setText(memberInstanceOf + " Member | " + splitMemberDetails[0] + " (ID: " + memberId + ")");
+                                memberManagementTitle_L.setText(memberInstanceOf + " Member | " + cardLabels[0].getText() + " (ID: " + memberId + ")");
                                 memberManagementTitle_P.add(utilityButtons_P[1], BorderLayout.WEST);
                                 
                                 // removing previous content
@@ -2035,11 +2025,17 @@ public class GymGUI{
                                 }
                                 
                                 // looping through the split member details and creating new labels dynamically  
-                                for (int i = 0; i < splitMemberDetails.length ; i++) {
+                                for (int i = 0; i < cardLabels.length; i++) {
+
+                                	// splitting title and value into two seperate variables, in an array
+                            		splitMemberData = cardLabels[i].getText().split(":",2);          
+                            		
+                            		// taking the attribute value into a variable
+                            		String value = splitMemberData[1].trim();
+                            		
+                            		// setting the text of the label to only contain the heading and a colon
+                            		cardLabels[i].setText(splitMemberData[0]+": ");
                                 	
-                                	if(i==10) {
-                                		continue; // skipping gender
-                                	}
                                 	
                                 	// initializing default values for prefix and custom attributes
                                 	String prefix = "";
@@ -2049,67 +2045,71 @@ public class GymGUI{
                                 	// determining active status style
                                 	if (i == 2) {
                                 	    prefix = "⦿ ";
-                                	    customDetailAttribute = splitMemberDetails[2].equals("Active") ? "color: green" : "color: red"; // green for active, red for inactive
+                                	    customDetailAttribute = value.equals("Active") ? "color: green" : "color: red"; // green for active, red for inactive
                                 	}
                                 	// handling boolean values (isFullPayment && isEligibleForUpgrade)
-                                	else if (i == 13) {
-                                	    customDetailAttribute = splitMemberDetails[i].equals("Yes") ? bold + "color: green" : bold + "color: red";
+                                	else if (i == 12) {
+                                	    customDetailAttribute = value.equals("Yes") ? bold + "color: green" : bold + "color: red";
                                 	}
                                 	
                                 	// Regular Member specific logic
                                 	else if (memberInstanceOf.equals("Regular")) {
-                                	    // handle plan name/price with different colors
-                                	    if (i == 11 || i == 12) {
+                                		
+                                		if(i==10) {
+                                			
                                 	        // using switch to set colors based on plan type
-                                	        switch (splitMemberDetails[11]) {
-                                	            case "Basic": customDetailAttribute = bold + "color: #3AACAC"; break;  // Dark cyan
-                                	            case "Standard": customDetailAttribute = bold + "color: #9B59B6"; break; // Dark pastel purple
-                                	            case "Deluxe": customDetailAttribute = bold + "color: #BD9934"; break; // Dark gold
+                                	        switch (value) {
+                                	            case "Basic": planColor = bold + "color: #3AACAC"; break;  // Dark cyan
+                                	            case "Standard": planColor = bold + "color: #9B59B6"; break; // Dark pastel purple
+                                	            case "Deluxe": planColor = bold + "color: #BD9934"; break; // Dark gold
                                 	            default: break;
                                 	        }
-
-                                	        if (i == 12) {
-                                	            prefix = "Rs."; // for price, setting prefix to Rs.
-                                	        }
+                                	        
+                                	        customDetailAttribute = planColor;
+                                		}
+                                		
+                                	    // handle plan price with different colors and prefix
+                                		else if (i == 11) {
+                                			
+                                	    	customDetailAttribute = planColor;
+                                	        prefix = "Rs."; // for price, setting prefix to Rs.
                                 	    }
                                 	    // handling removal reason
-                                	    else if (i == 15 && !splitMemberDetails[i].equals("N/A")) {
+                                	    else if (i == 14 && !value.equals("N/A")) {
                                 	        customDetailAttribute = "color: red";
                                 	    }
                                 	}
                                 	// Premium Member specific logic
                                 	else if (memberInstanceOf.equals("Premium")) {
                                 		
-                                		String darkred = "#8B0000"; // local CSS color
-                                		
-                                	    // Handle Paid Amount
-                                	    if (i == 11) {
+                                	    // handling Paid Amount and Remaining Amount
+                                	    if (i == 10 || i == 11) {
+                                	    	
                                 	        prefix = "Rs.";
                                 	        customDetailAttribute = "color: green";
-                                	    }
-                                	    // handling Remaining Amount
-                                	    else if (i == 12) {
-                                	        prefix = "Rs.";
-                                	        customDetailAttribute = "color: "+darkred;
+                                	        customDetailAttribute = i==10? "color: green" : "color: red";
                                 	    }
                                 	    // handling Discount Amount
-                                	    else if (i == 14) {
+                                	    else if (i == 13) {
+                                	    	
+                                	    	String wineRed = "#800020"; // putting a CSS color in a variable
                                 	    	
                                 	    	// Rs. prefix when actual price is shown
-                                	        prefix = !(splitMemberDetails[i].equals("Ineligible") || splitMemberDetails[i].equals("Uncalculated"))?"Rs.":"";
+                                	        prefix = !(value.equals("Ineligible") || value.equals("Uncalculated"))?"Rs.":"";
                                 	        
                                 	        // green for discount amount, maroon for text
-                                	        customDetailAttribute = (splitMemberDetails[i].equals("Uncalculated") || splitMemberDetails[i].equals("Ineligible")) ? bold + "color: "+darkred: bold + "color: green";
+                                	        customDetailAttribute = (value.equals("Uncalculated") || value.equals("Ineligible")) ? bold + "color: "+wineRed: bold + "color: green";
                                 	    }
                                 	}
 
                                     
-                                    // using corresponding card titles according to member type
-                                    String detailTitle = (i<10) ? cardLabels[i].getText() : cardLabels[i-1+(memberInstanceOf.equals("Premium")? 0 : 5)].getText();
-                                    
-                                    // to add unique labels to second panel
-                                    JPanel cardPanel = (i<10) ? cardCommonAttributes_P : cardUniqueAttributes_P;
-                                    
+                                    // puttin the card title into a variable for readability
+                                    String detailTitle = cardLabels[i].getText();
+                                	
+                                	
+                                    // to add unique labels to another panel
+                                    JPanel cardPanel = (i<10) ?  cardCommonAttributes_P :  cardUniqueAttributes_P;
+                                                                        
                                     JLabel label = new JLabel(String.format(
                                             "<html>"
                                                 + "<p style=\"font-size: 11px; color: %s\">"
@@ -2126,7 +2126,7 @@ public class GymGUI{
                                             detailTitle,
                                             customDetailAttribute,
                                             prefix,
-                                            splitMemberDetails[i] 
+                                            value
                                         ));  
                                         
                                         // adding margin for unique labels and odd common labels using nested ternary operator
