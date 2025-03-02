@@ -96,22 +96,18 @@ public class RegularMember extends GymMember{
 	}
 	
 	
-	// overridden method to display all the details of a regular member
 	@Override
-	public String display() {
-	    // calling the superclass's display method and storing the returned string
-	    String baseDetails = super.display();
+	public void display() {
+	    super.display(); // Call the base class display() to update common details
 
-	    // constructing the final string with the same delimiter '|'
-	    return String.join("~",
-	        baseDetails,
-	        this.plan,
-	        String.format("%.2f", this.price),
-	        this.isEligibleForUpgrade()?"Yes":"No",
-	        this.getReferralSource(),
-	        (!this.removalReason.isEmpty() ? this.removalReason : "") // showing nothing if removal reason is empty
-	    );
+	    // Updating regular member-specific labels
+	    GymGUI.cardLabels[10].setText("Current Plan: " + this.plan);
+	    GymGUI.cardLabels[11].setText("Plan Price: " + String.format("%.2f", this.price));
+	    GymGUI.cardLabels[12].setText("Can Upgrade? : " + (this.isEligibleForUpgrade() ? "Yes" : "No"));
+	    GymGUI.cardLabels[13].setText("Referral Source: " + this.getReferralSource());
+	    GymGUI.cardLabels[14].setText("Removal Reason: " + (!this.removalReason.isEmpty() ? this.removalReason : "N/A"));
 	}
+
 
 }
 	

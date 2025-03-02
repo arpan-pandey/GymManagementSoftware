@@ -54,24 +54,21 @@ public abstract class GymMember {
 		this.loyaltyPoints = 0.0d;
 	}
 	
-	// method to display all details of a member
-	public String display() {
-	    String activeStatus = this.activeStatus ? "Active" : "Inactive"; // simplification of boolean value for user readability
+	public void display() {
+	    String activeStatus = this.activeStatus ? "Active" : "Inactive"; // Convert boolean to string
 	    
-	    // constructing a single string with '|' as the delimiter
-	    return String.join("~",
-		    this.name,
-	    	String.valueOf(this.id), // int to String
-	        activeStatus,
-	        this.membershipStartDate,
-	        this.location,
-	        this.phone,
-	        this.email,
-	        this.DOB,
-	        String.valueOf(this.attendance),
-	        String.format("%.1f", this.loyaltyPoints),
-	        this.gender
-	    );
+	    // Updating only relevant JLabels
+	    GymGUI.cardLabels[0].setText("Name: " + this.name);
+	    GymGUI.cardLabels[1].setText("ID: " + this.id);
+	    GymGUI.cardLabels[2].setText("Active Status: " + activeStatus);
+	    GymGUI.cardLabels[3].setText("Start Date: " + this.membershipStartDate);
+	    GymGUI.cardLabels[4].setText("Location: " + this.location);
+	    GymGUI.cardLabels[5].setText("Phone no.: " + this.phone);
+	    GymGUI.cardLabels[6].setText("Email: " + this.email);
+	    GymGUI.cardLabels[7].setText("DOB: " + this.DOB);
+	    GymGUI.cardLabels[8].setText("Attendance: " + this.attendance);
+	    GymGUI.cardLabels[9].setText("Loyalty Points: " + String.format("%.1f", this.loyaltyPoints));
 	}
+
 
 }

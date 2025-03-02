@@ -3,7 +3,7 @@ public class PremiumMember extends GymMember{
 	
 	//unique instance variable declaration and initialization of default values for Premium members
 	final double premiumCharge=50000d;
-	double paidAmount=0d, discountAmount=0d;
+	double paidAmount=0.0d, discountAmount=0.0d;
 	boolean isFullPayment=false;
 	String personalTrainer;
 	
@@ -83,26 +83,21 @@ public class PremiumMember extends GymMember{
 		this.paidAmount = this.discountAmount = 0d;
 	}
 	
-	// overridden method to display all the details of a premium member
 	@Override
-	public String display() {
-	    // calling the superclass's display method and storing the returned string
-	    String baseDetails = super.display();
+	public void display() {
+	    super.display(); // Call the base class display() to update common details
 
-	    // calculation of remaining amount
 	    double remainingAmount = this.premiumCharge - this.paidAmount;
-	    
-	    // converting boolean to a readable format
 	    String isFullPayment = this.isFullPayment ? "Yes" : "No";
+	    String discountDisplay = this.isFullPayment ? (this.getDiscountAmount()==0.0d? "Uncalculated" : String.format("%.2f", this.discountAmount)) : "Ineligible";
+	    String trainerDisplay = !this.personalTrainer.isEmpty() ? this.personalTrainer : "N/A";
 
-	    // constructing the final string with the same delimiter '|'
-	    return String.join("~",
-	        baseDetails,
-	        String.format("%.2f", this.paidAmount),
-	        String.format("%.2f", remainingAmount),
-	        isFullPayment,
-	        (this.isFullPayment ? String.format("%.2f", this.discountAmount) : "Ineligible"), // showing corresponding data (for better readability)
-	        (!this.personalTrainer.isEmpty()?this.personalTrainer:"N/A") // showing N/A when personal trainer is empty
-	    );
-	}		
+	    // Updating premium member-specific labels
+	    GymGUI.cardLabels[10].setText("Paid Amount: " + String.format("%.2f", this.paidAmount));
+	    GymGUI.cardLabels[11].setText("Remaining Amount: " + String.format("%.2f", remainingAmount));
+	    GymGUI.cardLabels[12].setText("Full Payment? : " + isFullPayment);
+	    GymGUI.cardLabels[13].setText("Discount Amount: " + discountDisplay);
+	    GymGUI.cardLabels[14].setText("Trainer Name: " + trainerDisplay);
+	}
+		
 }
