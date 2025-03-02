@@ -521,7 +521,7 @@ public class GymGUI{
 					cardUniqueAttributes_P
 				};
 				
-				private JLabel[]
+				public JLabel[]
 					// card keyword labels
 					cardLabels = {
 							
