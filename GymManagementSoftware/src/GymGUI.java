@@ -30,10 +30,13 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -49,6 +52,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowFilter;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
@@ -246,7 +250,8 @@ public class GymGUI{
 					private JLabel tableControlSearch_L = new JLabel("Who are you looking for?");
 					private String searchPlaceholder = icons[1] + " Enter id, name, etc";
 					private JTextField tableControlSearch_F = new JTextField();
-					private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
+						private TableRowSorter<DefaultTableModel> rowSorter; // for sorting
+						private Runnable filter;
 					
 				private JPanel tableControlComboBox_P = new JPanel();
 				
@@ -1295,6 +1300,69 @@ public class GymGUI{
 	            // Access the default header renderer and set alignment to LEFT
 	            DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer(); // getting the header's default renderer
 	            headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Align text to the left
+	            
+	            // adding row sorter to the table (for search field functionality)
+	            rowSorter = new TableRowSorter<DefaultTableModel>(model);
+	            table.setRowSorter(rowSorter); // setting sorter
+
+	            // runnable to filter table based on searchText
+	            filter = new Runnable() {
+	            	@Override
+	            	public void run() {
+	            		
+	            		String searchText = tableControlSearch_F.getText().trim();
+	            		String selectedStatus = (String) controlActiveStatus_C.getSelectedItem(); // casting to String from Object
+	            		
+	                    // List to hold our filters
+	                    List<RowFilter<Object, Object>> filters = new ArrayList<>();
+
+	                    // Search filter for text (for the columns where you want to search)
+	                    if (!searchText.isEmpty() && !searchText.equals(searchPlaceholder)) {
+	                        RowFilter<Object, Object> searchFilter = RowFilter.regexFilter("(?i)" + searchText); // Assuming search is for column 1
+	                        filters.add(searchFilter);
+	                    }
+
+	                    // Filter by Active/Inactive (status filter)
+	                    if ("Active".equalsIgnoreCase(selectedStatus)) {
+	                        
+	                    	RowFilter<Object, Object> statusFilter = RowFilter.regexFilter("Active", 3); // Column 3 is the status
+	                        filters.add(statusFilter);
+	                    } 
+	                    else if ("Inactive".equalsIgnoreCase(selectedStatus)) {
+	                        
+	                    	RowFilter<Object, Object> statusFilter = RowFilter.regexFilter("Inactive", 3); // Column 3 is the status
+	                        filters.add(statusFilter);
+	                    }
+
+	                    // Combine all filters using AND if there are any
+	                    if (filters.isEmpty()) {
+	                        rowSorter.setRowFilter(null); // Show all rows if no filters are applied
+	                    } else {
+	                        // Combine the filters using AND logic
+	                        RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
+	                        rowSorter.setRowFilter(combinedFilter); // Apply combined filter
+	                    }
+	            	}
+	            };
+	            
+	            // adding key listener to search field
+	            tableControlSearch_F.addKeyListener(new KeyAdapter() {
+	            	@Override
+	            	public void keyReleased(KeyEvent e) { filter.run(); }
+	            });
+	            
+	            // adding item state change listener to Status comboBox
+	            controlActiveStatus_C.addItemListener(new ItemListener() {
+					@Override
+					public void itemStateChanged(ItemEvent e) {
+						
+						tableControlSearch_F.setFocusable(false);
+						
+						// checking if an option was selected
+				        if (e.getStateChange() == ItemEvent.SELECTED) { filter.run(); }
+					}
+	            });
+	            
 	            
 	            
 	            /*
@@ -2360,7 +2428,7 @@ public class GymGUI{
    
 		            // updating table when dashboard button is pressed
 		            if(e.getSource()==menuButtons[0]) {
-		        			loadTableData.run(); 			
+		        			loadTableData.run(); 	
 		            }
 		            // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
 		            else if (e.getSource() == menuButtons[2] && lastIndex != 2) {
@@ -2615,6 +2683,7 @@ public class GymGUI{
 								activeIndex = 0;
 								
 								menuButtonHighlight.run(); // updating menu button highlight
+			        			filter.run();
 								
 								frame.revalidate();
 								frame.repaint();
