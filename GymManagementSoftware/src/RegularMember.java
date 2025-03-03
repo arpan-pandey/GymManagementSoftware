@@ -98,9 +98,9 @@ public class RegularMember extends GymMember{
 	
 	@Override
 	public void display() {
-	    super.display(); // Call the base class display() to update common details
+	    super.display(); // calling parent class's display method to update common attributes
 
-	    // Updating regular member-specific labels
+	    // updating regular member-specific attributes in remaining labels
 	    GymGUI.cardLabels[10].setText("Current Plan: " + this.plan);
 	    GymGUI.cardLabels[11].setText("Plan Price: " + String.format("%.2f", this.price));
 	    GymGUI.cardLabels[12].setText("Can Upgrade? : " + (this.isEligibleForUpgrade() ? "Yes" : "No"));

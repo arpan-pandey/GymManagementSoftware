@@ -85,14 +85,14 @@ public class PremiumMember extends GymMember{
 	
 	@Override
 	public void display() {
-	    super.display(); // Call the base class display() to update common details
+	    super.display(); // calling parent class's display method to update common attributes
 
 	    double remainingAmount = this.premiumCharge - this.paidAmount;
 	    String isFullPayment = this.isFullPayment ? "Yes" : "No";
 	    String discountDisplay = this.isFullPayment ? (this.getDiscountAmount()==0.0d? "Uncalculated" : String.format("%.2f", this.discountAmount)) : "Ineligible";
 	    String trainerDisplay = !this.personalTrainer.isEmpty() ? this.personalTrainer : "N/A";
 
-	    // Updating premium member-specific labels
+	    // updating premium member-specific attributes in remaining labels
 	    GymGUI.cardLabels[10].setText("Paid Amount: " + String.format("%.2f", this.paidAmount));
 	    GymGUI.cardLabels[11].setText("Remaining Amount: " + String.format("%.2f", remainingAmount));
 	    GymGUI.cardLabels[12].setText("Full Payment? : " + isFullPayment);

@@ -55,9 +55,9 @@ public abstract class GymMember {
 	}
 	
 	public void display() {
-	    String activeStatus = this.activeStatus ? "Active" : "Inactive"; // Convert boolean to string
+	    String activeStatus = this.activeStatus ? "Active" : "Inactive"; // converting boolean to string
 	    
-	    // Updating only relevant JLabels
+	    // updating only relevant JLabels
 	    GymGUI.cardLabels[0].setText("Name: " + this.name);
 	    GymGUI.cardLabels[1].setText("ID: " + this.id);
 	    GymGUI.cardLabels[2].setText("Active Status: " + activeStatus);
