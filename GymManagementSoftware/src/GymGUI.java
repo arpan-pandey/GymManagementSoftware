@@ -2372,6 +2372,7 @@ public class GymGUI{
 			        	}
 		            	
 		            	showDialog=true;
+		            	isAccessedFromTable=false; // since back button should not fo to dashboard when accessed from menu button
 
 		                memberManagementTitle_L.setText("Member Management"); // reverting to original title
 		                memberManagementTitle_P.remove(utilityButtons_P[1]); // removing back button
