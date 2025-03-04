@@ -693,7 +693,7 @@ public class GymGUI{
 	 */
 	
 	 // array list of GymMember objects
-	private ArrayList<GymMember> members = new ArrayList<GymMember>(); // private for data hiding 
+	private ArrayList<GymMember> members = new ArrayList<>(); // private for data hiding 
 	
 	// initializing test objects    
 	private GymMember[] testMembers = {
