@@ -37,6 +37,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -1311,14 +1312,25 @@ public class GymGUI{
 	            	public void run() {
 	            		
 	            		String searchText = tableControlSearch_F.getText().trim();
-	            		String selectedStatus = (String) controlActiveStatus_C.getSelectedItem(); // casting to String from Object
+	            		String selectedStatus = (String) controlActiveStatus_C.getSelectedItem(); // casting to String from Object)
+	            		String safeSearchText = Pattern.quote(searchText); // excaping all special regex characters to treat them as normal characters
 	            		
 	                    // List to hold our filters
 	                    List<RowFilter<Object, Object>> filters = new ArrayList<>();
 
 	                    // Search filter for text (for the columns where you want to search)
-	                    if (!searchText.isEmpty() && !searchText.equals(searchPlaceholder)) {
-	                        RowFilter<Object, Object> searchFilter = RowFilter.regexFilter("(?i)" + searchText); // Assuming search is for column 1
+	                    if (!safeSearchText.isEmpty() && !safeSearchText.equals(searchPlaceholder)) {
+	                    	RowFilter<Object, Object> searchFilter; // declaring a filter outside the if block below
+	                    	
+	                    	// when searching male
+	                    	if(safeSearchText.equals("Male")) {
+	                            searchFilter = RowFilter.regexFilter("Male",2); // manual filter for males
+	                    	}
+	                    	// for other searchTexts
+	                    	else {
+	                            searchFilter = RowFilter.regexFilter("(?i)" + safeSearchText); // Assuming search is for column 1
+	                 	       
+	                    	}
 	                        filters.add(searchFilter);
 	                    }
 
