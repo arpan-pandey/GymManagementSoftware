@@ -1311,16 +1311,16 @@ public class GymGUI{
 	            	@Override
 	            	public void run() {
 	            		
-	            		String searchText = tableControlSearch_F.getText().trim();
+	            		String fieldText = tableControlSearch_F.getText().trim();
 	            		String selectedStatus = (String) controlActiveStatus_C.getSelectedItem(); // casting to String from Object)
-	            		String safeSearchText = Pattern.quote(searchText); // excaping all special regex characters to treat them as normal characters
+	            		String safeSearchText = Pattern.quote(fieldText); // excaping all special regex characters to treat them as normal characters
 	            		
-	                    // List to hold our filters
-	                    List<RowFilter<Object, Object>> filters = new ArrayList<>();
+	                    // list to hold the filters
+	                    List<RowFilter<DefaultTableModel, Integer>> filters = new ArrayList<>();
 
-	                    // Search filter for text (for the columns where you want to search)
-	                    if (!safeSearchText.isEmpty() && !safeSearchText.equals(searchPlaceholder)) {
-	                    	RowFilter<Object, Object> searchFilter; // declaring a filter outside the if block below
+	                    // search filter for text (TextField)
+	                    if (!fieldText.isEmpty() && !fieldText.equals(searchPlaceholder)) {
+	                    	RowFilter<DefaultTableModel, Integer> searchFilter; // declaring a filter outside the if block below
 	                    	
 	                    	// when searching male
 	                    	if(safeSearchText.equals("Male")) {
@@ -1328,31 +1328,32 @@ public class GymGUI{
 	                    	}
 	                    	// for other searchTexts
 	                    	else {
-	                            searchFilter = RowFilter.regexFilter("(?i)" + safeSearchText); // Assuming search is for column 1
-	                 	       
+	                            searchFilter = RowFilter.regexFilter("(?i)" + safeSearchText); // case-insensitive search
 	                    	}
-	                        filters.add(searchFilter);
+	                    	
+	                        filters.add(searchFilter); // adding filter to list
 	                    }
 
-	                    // Filter by Active/Inactive (status filter)
-	                    if ("Active".equalsIgnoreCase(selectedStatus)) {
+	                    // filter for status (ComboBox)
+	                    if (selectedStatus.equalsIgnoreCase("Active")) {
 	                        
-	                    	RowFilter<Object, Object> statusFilter = RowFilter.regexFilter("Active", 3); // Column 3 is the status
-	                        filters.add(statusFilter);
+	                    	RowFilter<DefaultTableModel, Integer> statusFilter = RowFilter.regexFilter("Active", 3); // searching for "Active" in status column
+	                        filters.add(statusFilter); // adding to filter list
 	                    } 
-	                    else if ("Inactive".equalsIgnoreCase(selectedStatus)) {
+	                    else if (selectedStatus.equalsIgnoreCase("Inactive")) {
 	                        
-	                    	RowFilter<Object, Object> statusFilter = RowFilter.regexFilter("Inactive", 3); // Column 3 is the status
-	                        filters.add(statusFilter);
+	                    	RowFilter<DefaultTableModel, Integer> statusFilter = RowFilter.regexFilter("Inactive", 3); // searching for "Inactive" in status column
+	                        filters.add(statusFilter); // adding to filter list
 	                    }
 
-	                    // Combine all filters using AND if there are any
+	                    // applygin filters if there are any
 	                    if (filters.isEmpty()) {
-	                        rowSorter.setRowFilter(null); // Show all rows if no filters are applied
-	                    } else {
-	                        // Combine the filters using AND logic
-	                        RowFilter<Object, Object> combinedFilter = RowFilter.andFilter(filters);
-	                        rowSorter.setRowFilter(combinedFilter); // Apply combined filter
+	                        rowSorter.setRowFilter(null); // showing all rows if no filters are applied
+	                    }
+	                    else {
+	                        // combining the filters using AND logic
+	                        RowFilter<DefaultTableModel, Integer> combinedFilter = RowFilter.andFilter(filters);
+	                        rowSorter.setRowFilter(combinedFilter); // applying combined filter
 	                    }
 	            	}
 	            };
