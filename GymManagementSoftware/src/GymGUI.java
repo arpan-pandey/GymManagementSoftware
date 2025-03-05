@@ -1193,6 +1193,21 @@ public class GymGUI{
 	            scrollPane = new JScrollPane(table); // initializing scroll panel
 	            scrollPane.getViewport().setBackground(LIGHTGRAY); // setting table background
 	            
+	            scrollPane.addMouseListener(new MouseAdapter() {
+	            	@Override
+	            	public void mousePressed(MouseEvent e) {
+	            		
+	            		tableControlSearch_F.setFocusable(false); // removing caret
+	            		
+						// adding placeholder if nothing is input
+						if(tableControlSearch_F.getText().trim().equals("")) {
+							tableControlSearch_F.setText(searchPlaceholder);
+							tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+						}
+						
+	            	}
+	            });
+	            
 	            /*
 	             * ROW AND TABLE STYLING
 	             */
