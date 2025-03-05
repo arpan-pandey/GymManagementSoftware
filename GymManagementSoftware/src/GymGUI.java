@@ -5,6 +5,7 @@
  * #1B263B (Midnight Blue)
  * #2E4057 (Gunmetal Blue)
  * #415A77 (Steel Blue)
+ * #6D89A0 (Dusty Blue)
  * #A3B7C8 (Pastel Blue)
  * #F4F4F4 (Light Gray)
  * 
@@ -76,6 +77,7 @@ public class GymGUI{
     private final Color MIDNIGHTBLUE = new Color(0x1B263B);
     private final Color GUNMETALBLUE = new Color(0x2E4057);
     private final Color STEELBLUE = new Color(0x415A77);
+    private final Color DUSTYBLUE = new Color(0x6D89A0);
     private final Color PASTELBLUE = new Color(0xA3B7C8);
     private final Color LIGHTGRAY = new Color(0xF4F4F4);
     
@@ -1161,7 +1163,7 @@ public class GymGUI{
 			int panelWidth = isTableTitlePanel ? 140 : 322;
 			JLabel tableHeaderLabel = isTableTitlePanel ? tableHeaderLabels[0] : tableHeaderLabels[1];
 			Font headerLabelFont = isTableTitlePanel ? CENTURY_GOTHIC_BOLD_14 : CENTURY_GOTHIC_12;
-			Color headerLabelColor = isTableTitlePanel ? GUNMETALBLUE : PASTELBLUE;
+			Color headerLabelColor = isTableTitlePanel ? GUNMETALBLUE : DUSTYBLUE;
 			
 			/*
 			 *  setting attributes
