@@ -95,30 +95,50 @@ public class GymGUI{
 	 * font variables
 	 */
     
-    // button fonts
-    private final Font BUTTON_FONT = new Font("Century Gothic", Font.PLAIN, 14);
-    private final Font BUTTON_FONT_ACTIVE = new Font("Century Gothic", Font.BOLD, 14);
+//    // button fonts
+//    private final Font CENTURY_GOTHIC_14 = new Font("Century Gothic", Font.PLAIN, 14);
+//    private final Font CENTURY_GOTHIC_BOLD_14 = new Font("Century Gothic", Font.BOLD, 14);
+//    
+//    // body fonts
+//    private final Font CENTURY_GOTHIC_BOLD_20 = new Font("Century Gothic", Font.BOLD, 20);
+//    private final Font CENTURY_GOTHIC_20 = new Font("Century Gothic", Font.PLAIN, 20);
+//    private final Font CENTURY_GOTHIC_BOLD_18 = new Font("Century Gothic", Font.BOLD, 18);
+//    private final Font CENTURY_GOTHIC_16 = new Font("Century Gothic", Font.PLAIN, 16);
+//    
+//    // dashboard fonts
+//    private final Font CENTURY_GOTHIC_BOLD_13 = new Font("Century Gothic", Font.BOLD, 13);
+//    private final Font CENTURY_GOTHIC_BOLD_14 = new Font("Century Gothic", Font.BOLD, 14);
+//    private final Font CENTURY_GOTHIC_12 = new Font("Century Gothic",Font.PLAIN,12);
+//    private final Font CENTURY_GOTHIC_BOLD_11 = new Font("Century Gothic", Font.BOLD, 11);
+//    private final Font CENTURY_GOTHIC_12 = new Font("Century Gothic", Font.PLAIN, 12);
+//    
+//    // form font
+//    private final Font CENTURY_GOTHIC_BOLD_15 = new Font("Century Gothic", Font.BOLD, 15);
+//    private final Font HELVETICA_14 = new Font("Helvetica", Font.PLAIN, 14);
+//    private final Font CENTURY_GOTHIC_BOLD_14 = new Font("Century Gothic", Font.BOLD, 14);
+//    
+//    // memberManagement input font
+//    private final Font HELVETICA_BOLD_14 = new Font("Helvetica", Font.BOLD, 14);
     
-    // body fonts
-    private final Font CONTENT_TITLE_FONT = new Font("Century Gothic", Font.BOLD, 20);
-    private final Font TITLE_SYMBOL_FONT = new Font("Century Gothic", Font.PLAIN, 20);
-    private final Font HEADING1_FONT = new Font("Century Gothic", Font.BOLD, 18);
-    private final Font PARAGRAPH_FONT = new Font("Century Gothic", Font.PLAIN, 16);
     
-    // dashboard fonts
-    private final Font DASHBOARD_CONTROL_HEADING = new Font("Century Gothic", Font.BOLD, 13);
-    private final Font TABLE_HEADING_FONT = new Font("Century Gothic", Font.BOLD, 14);
-    private final Font COLUMN_HEADING_FONT = new Font("Century Gothic", Font.BOLD, 11);
-    private final Font TABLE_DATA_FONT = new Font("Century Gothic", Font.PLAIN, 12);
-    
-    // form font
-    private final Font INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 15);
-    private final Font INPUT_FONT = new Font("Helvetica", Font.PLAIN, 14);
-    private final Font RADIO_FONT = new Font("Century Gothic", Font.BOLD, 14);
-    
-    // memberManagement input font
-    private final Font NON_EDITABLE_FIELD_FONT = new Font("Helvetica", Font.BOLD, 14);
-    
+    // button fonts  
+    private final Font CENTURY_GOTHIC_14 = new Font("Century Gothic", Font.PLAIN, 14);  
+    private final Font CENTURY_GOTHIC_BOLD_14 = new Font("Century Gothic", Font.BOLD, 14);  
+
+    // general fonts  
+    private final Font CENTURY_GOTHIC_20 = new Font("Century Gothic", Font.PLAIN, 20);  
+    private final Font CENTURY_GOTHIC_BOLD_20 = new Font("Century Gothic", Font.BOLD, 20);  
+    private final Font CENTURY_GOTHIC_BOLD_18 = new Font("Century Gothic", Font.BOLD, 18);  
+    private final Font CENTURY_GOTHIC_16 = new Font("Century Gothic", Font.PLAIN, 16);
+    private final Font CENTURY_GOTHIC_BOLD_13 = new Font("Century Gothic", Font.BOLD, 13); 
+    private final Font CENTURY_GOTHIC_12 = new Font("Century Gothic", Font.PLAIN, 12);  
+    private final Font CENTURY_GOTHIC_BOLD_11 = new Font("Century Gothic", Font.BOLD, 11);  
+
+    // form fonts  
+    private final Font CENTURY_GOTHIC_BOLD_15 = new Font("Century Gothic", Font.BOLD, 15);  
+    private final Font HELVETICA_14 = new Font("Helvetica", Font.PLAIN, 14);  
+    private final Font HELVETICA_BOLD_14 = new Font("Helvetica", Font.BOLD, 14);  
+
     
     
     /*
@@ -279,9 +299,19 @@ public class GymGUI{
 					
 					// header above the actual table 
 					private JPanel tableHeader_P = new JPanel();
-					
-						private JPanel tableHeaderTitle_P = new JPanel();
-							private JLabel tableHeaderTitle_L = new JLabel("Member Overview");
+							
+						// array of header panels
+						JPanel[] tableHeaderPanels = {
+									new JPanel(), // title panel
+									new JPanel()  // info panel
+							};
+						
+						// array of labels for panels above
+						JLabel[] tableHeaderLabels = {
+								new JLabel("Member Overview"), // title panel
+								new JLabel("(Double-click a member to display or manage details)")  // info panel
+						};
+							
 					
 					// panel which has the table
 					private JPanel table_P = new JPanel();
@@ -727,7 +757,7 @@ public class GymGUI{
 		    button.setBackground(DARKNAVY);
 		    button.setFocusable(false);
 		    button.setForeground(LIGHTGRAY);
-		    button.setFont(BUTTON_FONT);
+		    button.setFont(CENTURY_GOTHIC_14);
 		    button.setHorizontalAlignment(SwingConstants.LEADING);
 		    button.setBorder(DEFAULT_BUTTON_BORDER);
 		    
@@ -771,7 +801,7 @@ public class GymGUI{
 		    button.setBorder(DEFAULT_BUTTON_BORDER);
 		    button.setHorizontalAlignment(SwingConstants.CENTER);
 			button.setPreferredSize(new Dimension(200,50));
-			button.setFont(PARAGRAPH_FONT);
+			button.setFont(CENTURY_GOTHIC_16);
 			button.setBackground(MIDNIGHTBLUE);
 			
 		    //use of an anonymous class MouseAdapter to customize the behavior of the mouse on these buttons 
@@ -830,10 +860,10 @@ public class GymGUI{
 		menuButtonHighlight = new Runnable() {
 			@Override
 			public void run() {
-                menuButtons[lastIndex].setFont(BUTTON_FONT);
+                menuButtons[lastIndex].setFont(CENTURY_GOTHIC_14);
                 menuButtons[lastIndex].setBorder(DEFAULT_BUTTON_BORDER);
 
-                menuButtons[activeIndex].setFont(BUTTON_FONT_ACTIVE);
+                menuButtons[activeIndex].setFont(CENTURY_GOTHIC_BOLD_14);
                 menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
 			}
 		};
@@ -846,7 +876,7 @@ public class GymGUI{
 		// setting title attributes using a for each loop
 		for(JLabel titles : contentTitles) {
 			titles.setForeground(DARKNAVY);
-			titles.setFont(CONTENT_TITLE_FONT);
+			titles.setFont(CENTURY_GOTHIC_BOLD_20);
 		}
 
 		// setting title panel attributes using a for loop
@@ -879,7 +909,7 @@ public class GymGUI{
 			
 			if(i!=0) { 
 			// styling the central panel titles
-			centralPanelTitles[i-1].setFont(HEADING1_FONT);
+			centralPanelTitles[i-1].setFont(CENTURY_GOTHIC_BOLD_18);
 			centralPanelTitles[i-1].setForeground(MIDNIGHTBLUE);
 			centralPanelTitles[i-1].setPreferredSize(new Dimension(600,150));
 			centralPanelTitles[i-1].setBorder(CONTENT_MARGIN); // setting margin
@@ -905,7 +935,7 @@ public class GymGUI{
 		// setting attributes of utilityButton (back button) text using a for each loop
 		for(JLabel utilityButton_L : utilityButtons_L) {
 			utilityButton_L.setForeground(DARKNAVY);
-			utilityButton_L.setFont(TITLE_SYMBOL_FONT);
+			utilityButton_L.setFont(CENTURY_GOTHIC_20);
 			utilityButton_L.setHorizontalAlignment(SwingConstants.CENTER);
 			
 			// overriding the methods of anonymous class MouseAdapter(), to change behaviour of mouse when interacting with this button
@@ -1032,7 +1062,7 @@ public class GymGUI{
 		for(int i = 0; i<controlHeadings.length ; i++) {
 			JLabel heading = controlHeadings[i];
 
-			heading.setFont(DASHBOARD_CONTROL_HEADING);
+			heading.setFont(CENTURY_GOTHIC_BOLD_13);
 			heading.setForeground(MIDNIGHTBLUE);
 			heading.setPreferredSize(new Dimension(800,30));
 			
@@ -1046,7 +1076,7 @@ public class GymGUI{
 		tableControlSearch_P.add(tableControlSearch_F);
 		tableControlSearch_F.setBorder(DEFAULT_INPUT_BORDER);
 		tableControlSearch_F.setPreferredSize(new Dimension(218,26));
-		tableControlSearch_F.setFont(INPUT_FONT);
+		tableControlSearch_F.setFont(HELVETICA_14);
 		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
 		tableControlSearch_F.setText(searchPlaceholder);
 		tableControlSearch_F.setFocusable(false);
@@ -1121,19 +1151,34 @@ public class GymGUI{
 		tableWrapper_P.add(tableHeader_P, BorderLayout.NORTH);
 		tableHeader_P.setPreferredSize(new Dimension(1,40));
 		tableHeader_P.setBackground(WHITE);
-		tableHeader_P.setLayout(new BorderLayout());		
+		tableHeader_P.setLayout(new BorderLayout());	
 		
-		// styling table title panel
-		tableHeader_P.add(tableHeaderTitle_P,BorderLayout.WEST);
-		tableHeaderTitle_P.setPreferredSize(new Dimension(140,1));
-		tableHeaderTitle_P.setBackground(WHITE);
-		tableHeaderTitle_P.setLayout(new BorderLayout());
+		// setting attributes of table header panels and labels using a for each loop
+		for(JPanel tableHeaderPanel : tableHeaderPanels) {
+			boolean isTableTitlePanel = tableHeaderPanel == tableHeaderPanels[0]; // if the panel is table title panel
 			
-		// styling table title label
-		tableHeaderTitle_P.add(tableHeaderTitle_L);
-		tableHeaderTitle_L.setFont(TABLE_HEADING_FONT);
-		tableHeaderTitle_L.setForeground(GUNMETALBLUE);
-		tableHeaderTitle_L.setHorizontalAlignment(SwingConstants.CENTER); // centering horizontally
+			String panelPosition = isTableTitlePanel ? BorderLayout.WEST : BorderLayout.EAST;
+			int panelWidth = isTableTitlePanel ? 140 : 322;
+			JLabel tableHeaderLabel = isTableTitlePanel ? tableHeaderLabels[0] : tableHeaderLabels[1];
+			Font headerLabelFont = isTableTitlePanel ? CENTURY_GOTHIC_BOLD_14 : CENTURY_GOTHIC_12;
+			Color headerLabelColor = isTableTitlePanel ? GUNMETALBLUE : PASTELBLUE;
+			
+			/*
+			 *  setting attributes
+			 */
+			
+			// styling table title panel
+			tableHeader_P.add(tableHeaderPanel, panelPosition);
+			tableHeaderPanel.setPreferredSize(new Dimension(panelWidth, 1));
+			tableHeaderPanel.setBackground(WHITE);
+			tableHeaderPanel.setLayout(new BorderLayout());
+				
+			// styling table title label
+			tableHeaderPanel.add(tableHeaderLabel);
+			tableHeaderLabel.setFont(headerLabelFont);
+			tableHeaderLabel.setForeground(headerLabelColor);
+			tableHeaderLabel.setHorizontalAlignment(SwingConstants.CENTER); // centering horizontally
+		}
 		
 		// styling table panel
 		tableWrapper_P.add(table_P,BorderLayout.CENTER);
@@ -1211,7 +1256,7 @@ public class GymGUI{
 	            
 	            // row styling
 	            table.setRowHeight(rowHeight);
-	            table.setFont(TABLE_DATA_FONT); // setting font
+	            table.setFont(CENTURY_GOTHIC_12); // setting font
 	            
 	            // setting alternate rows to have different background color using a custom cell renderer
 	            table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
@@ -1309,7 +1354,7 @@ public class GymGUI{
 	            header.setReorderingAllowed(false); // disabling column dragging
 	            header.setResizingAllowed(false); // disabling column resizing
 	            
-	            header.setFont(COLUMN_HEADING_FONT);
+	            header.setFont(CENTURY_GOTHIC_BOLD_11);
 	            header.setForeground(GUNMETALBLUE);
 	            header.setBackground(DARKGRAY);
 	            header.setPreferredSize(new Dimension(header.getPreferredSize().width, 30));
@@ -1521,7 +1566,7 @@ public class GymGUI{
 				    	int l = j < 8 ? j : j+formIndex;
 				    	
 				        inputLabels[l].setForeground(MIDNIGHTBLUE);
-				        inputLabels[l].setFont(INPUT_HEADING);
+				        inputLabels[l].setFont(CENTURY_GOTHIC_BOLD_15);
 
 				        
 				        // initializing panels
@@ -1549,7 +1594,7 @@ public class GymGUI{
 				                GENDER.add(genderRadio);
 				                genderRadio.setForeground(MIDNIGHTBLUE);
 				                genderRadio.setBackground(LIGHTGRAY);
-				                genderRadio.setFont(RADIO_FONT);
+				                genderRadio.setFont(CENTURY_GOTHIC_BOLD_14);
 				                genderRadio.setFocusable(false);
 				                genderRadio.setPreferredSize(new Dimension(80, 60));
 				                
@@ -1600,7 +1645,7 @@ public class GymGUI{
 				            //styling the text fields
 				            inputField.setPreferredSize(new Dimension(1,35));
 				            inputField.setBorder(DEFAULT_INPUT_BORDER); // setting default border initially
-				            inputField.setFont(INPUT_FONT);
+				            inputField.setFont(HELVETICA_14);
 				            inputField.setForeground(PLACEHOLDERGRAY);
 				            inputField.setBackground(LIGHTGRAY);
 				            
@@ -1981,7 +2026,7 @@ public class GymGUI{
                     					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? fullyPaidText : "");
                     					
                     					if(premiumMember.isFullPayment()) {
-                    						individualMemberFields[1].setFont(NON_EDITABLE_FIELD_FONT);
+                    						individualMemberFields[1].setFont(HELVETICA_BOLD_14);
                     						individualMemberFields[1].setForeground(STEELBLUE);
                     					}
                     					
@@ -2153,7 +2198,7 @@ public class GymGUI{
                         				        plan_C.setBackground(LIGHTGRAY);
                         				        plan_C.setPreferredSize(new Dimension(1,29));
                         				        plan_C.setForeground(MIDNIGHTBLUE);
-                        				        plan_C.setFont(INPUT_FONT);
+                        				        plan_C.setFont(HELVETICA_14);
                         				        plan_C.setFocusable(false); // to make it so that the annoying highlight doesn't appear
                         					}
                         					else {
@@ -2391,7 +2436,7 @@ public class GymGUI{
 		for(JTextField inputField : individualMemberFields) {
             inputField.setPreferredSize(new Dimension(1,30));
             inputField.setBorder(DEFAULT_INPUT_BORDER); // setting default border initially
-            inputField.setFont(INPUT_FONT);
+            inputField.setFont(HELVETICA_14);
             inputField.setForeground(MIDNIGHTBLUE);
             inputField.setBackground(LIGHTGRAY);
             inputField.setFocusable(false);
@@ -2400,7 +2445,7 @@ public class GymGUI{
     	// setting font for non-editable fields
     	for(int i = 0; i < individualMemberFields.length ; i+=2) { 
     		individualMemberFields[i].setForeground(GUNMETALBLUE);
-    		individualMemberFields[i].setFont(NON_EDITABLE_FIELD_FONT); // setting font of non focusable field
+    		individualMemberFields[i].setFont(HELVETICA_BOLD_14); // setting font of non focusable field
     	}
 		
 		
@@ -2420,7 +2465,7 @@ public class GymGUI{
 		
 		activeIndex = 0; // setting the lastContent to addMemberContent, initially
 		lastIndex = activeIndex;
-		menuButtons[activeIndex].setFont(BUTTON_FONT_ACTIVE);
+		menuButtons[activeIndex].setFont(CENTURY_GOTHIC_BOLD_14);
 		menuButtons[activeIndex].setBorder(ACTIVE_BUTTON_BORDER);
 		frame.add(bodyContent[activeIndex], BorderLayout.CENTER); // initially showing dashboard
 
