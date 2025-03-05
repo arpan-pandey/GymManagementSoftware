@@ -117,7 +117,6 @@ public class GymGUI{
     private final Font RADIO_FONT = new Font("Century Gothic", Font.BOLD, 14);
     
     // memberManagement input font
-    private final Font MANAGEMENT_INPUT_HEADING = new Font("Century Gothic", Font.BOLD, 13);
     private final Font NON_EDITABLE_FIELD_FONT = new Font("Helvetica", Font.BOLD, 14);
     
     
@@ -145,13 +144,12 @@ public class GymGUI{
 
     // borders for button states
     private final Border DEFAULT_BUTTON_OUTLINE = BorderFactory.createLineBorder(DARKNAVY, 1);
-    
     private final Border ACTIVATE$DEACTIVATE_BUTTON_OUTLINE = BorderFactory.createLineBorder(STEELBLUE, 1);
-    
     private final Border ACTIVE_BUTTON_HIGHLIGHT = BorderFactory.createMatteBorder(0, 2, 0, 0, LIGHTGRAY);
     
     // border for dashboard content
     
+    private final Border FILE_BUTTONS_MARGIN = BorderFactory.createEmptyBorder(0,5,0,5);
     private final Border DASHBOARD_CONTENT_MARGIN = BorderFactory.createEmptyBorder(dashboardMarginVertical, 0, dashboardMarginVertical, 0);
     
     // borders for input field
@@ -188,11 +186,10 @@ public class GymGUI{
      * Extra variables
      */
     
-	private String backSymbol, searchSymbol; // symbols
 	// array of String icons
 	private String[] icons = {
-		backSymbol = "◄",	
-		searchSymbol = "⌕",
+		"◄", // back arrow
+		"⌕"  // search symbol
 	};
 	
 	private String planColor=""; // storing the member card plan color in a global variable
@@ -240,8 +237,13 @@ public class GymGUI{
 		private JPanel dashboardTitle_P;
 			private JLabel dashboardTitle_L;
 			
-			private JPanel importButton_P = new JPanel();
-			private JButton importFileButton;
+			JPanel fileSystemButtons_P = new JPanel();
+			
+				private JPanel importButton_P = new JPanel();
+					private JButton importFileButton;
+				
+				private JPanel exportButton_P = new JPanel();
+					private JButton exportFileButton;
 	
 		private JPanel dashboardContentWrapper_P = new JPanel();
 		
@@ -280,9 +282,6 @@ public class GymGUI{
 					
 						private JPanel tableHeaderTitle_P = new JPanel();
 							private JLabel tableHeaderTitle_L = new JLabel("Member Overview");
-							
-						private JPanel exportButton_P = new JPanel();
-							private JButton exportFileButton;
 					
 					// panel which has the table
 					private JPanel table_P = new JPanel();
@@ -298,9 +297,13 @@ public class GymGUI{
 								};
 				
 		JPanel[] controlPanels = {
-				tableControlSearch_P,
-				controlMemberType_P,
-				controlActiveStatus_P,
+					tableControlSearch_P,
+					controlMemberType_P,
+					controlActiveStatus_P,
+			},
+				fileSystemButtonPanels = {
+					importButton_P,
+					exportButton_P	
 			};
 		
 		JLabel[] controlHeadings = {
@@ -335,19 +338,6 @@ public class GymGUI{
 								),
 						
 						
-				clearFilterButton = 
-						new JButton(
-								"<html>"
-									+ "<span style=\"font-family: Tahoma; font-size: 14px; font-weight: 100\">"
-										+ "⊗ "
-									+"</span>"
-									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
-										+ "Clear Filters"
-									+"</span>"
-								+ "</html>" 
-								),
-	
-
 				exportFileButton = 
 						new JButton(
 								"<html>"
@@ -356,6 +346,18 @@ public class GymGUI{
 									+"</span>"
 									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
 										+ "Export File"
+									+"</span>"
+								+ "</html>" 
+								),
+						
+				clearFilterButton = 
+						new JButton(
+								"<html>"
+									+ "<span style=\"font-family: Tahoma; font-size: 14px; font-weight: 100\">"
+										+ "⨯ "
+									+"</span>"
+									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
+										+ "Clear Filters"
 									+"</span>"
 								+ "</html>" 
 								)
@@ -371,7 +373,6 @@ public class GymGUI{
 			private JLabel addMemberTitle_L;
 
 		private JPanel memberTypeSelect_P;
-			private JLabel memberTypeSelect_L;
 				private JButton[]
 					memberTypeButtons = {
 						new JButton("Premium Member"),
@@ -387,72 +388,55 @@ public class GymGUI{
 				private JPanel[]
 				//array of form panels
 				formPanels = {
-					prem_form_P = new JPanel(),
-					regular_form_P = new JPanel()
-				};
-				
-				// member form panels
-				private JPanel prem_form_P = new JPanel();
-				private JPanel regular_form_P = new JPanel();
-				
-				// input panels
-				private JPanel input_id_P, input_name_P, input_location_P, input_phone_P, input_email_P, input_gender_P, input_DOB_P, input_membershipStartDate_P, input_personalTrainer_P, input_referralSource_P;
-					
-				// input labels
-				private JLabel input_id_L, input_name_L, input_location_L, input_phone_L, input_email_L, input_gender_L, input_DOB_L, input_membershipStartDate_L, input_personalTrainer_L, input_referralSource_L; 
-				
-				// input fields
-				private JTextField input_id_F, input_name_F, input_location_F, input_phone_F, input_email_F, input_DOB_F, input_membershipStartDate_F, input_personalTrainer_F, input_referralSource_F;
-				
-				// radio buttons
-				private JRadioButton input_genderMale, input_genderFemale;
-				
+					new JPanel(),
+					new JPanel()
+				};				
 						
 				/*
 				 * FORM ARRAYS
 				 */
-					
-				//array of form panels + initialization
+
+				// array of form panels + initialization
 				private JPanel[] inputPanels = {
-						input_id_P = new JPanel(),
-						input_name_P = new JPanel(),
-						input_location_P = new JPanel(),
-						input_phone_P = new JPanel(),
-						input_email_P = new JPanel(),
-						input_gender_P = new JPanel(),
-						input_DOB_P = new JPanel(),
-						input_membershipStartDate_P = new JPanel(),
-						input_personalTrainer_P = new JPanel(),	
-						input_referralSource_P = new JPanel(),
-				};	
-						
-						
+				    new JPanel(), // id
+				    new JPanel(), // name
+				    new JPanel(), // location
+				    new JPanel(), // phone
+				    new JPanel(), // email
+				    new JPanel(), // gender
+				    new JPanel(), // DOB
+				    new JPanel(), // start date
+				    new JPanel(), // personal trainer
+				    new JPanel(), // referral source
+				};
+
 				// array of input labels + initialization
 				private JLabel[] inputLabels = {
-						input_id_L = new JLabel("ID:"),
-						input_name_L = new JLabel("Name:"),
-						input_location_L = new JLabel("Location:"),
-						input_phone_L = new JLabel("Phone:"),
-						input_email_L = new JLabel("Email:"),
-						input_gender_L = new JLabel("Gender:"),
-						input_DOB_L = new JLabel("Date of Birth:"),
-						input_membershipStartDate_L = new JLabel("Start Date:"),
-						input_personalTrainer_L = new JLabel("Trainer Name:"),
-						input_referralSource_L = new JLabel("Referral Source:")
+				    new JLabel("ID:"), // id
+				    new JLabel("Name:"), // name
+				    new JLabel("Location:"), // location
+				    new JLabel("Phone:"), // phone
+				    new JLabel("Email:"), // email
+				    new JLabel("Gender:"), // gender
+				    new JLabel("Date of Birth:"), // DOB
+				    new JLabel("Start Date:"), // start date
+				    new JLabel("Trainer Name:"), // personal trainer
+				    new JLabel("Referral Source:"), // referral source
 				};
-				
+
 				// array of input fields + initialization
 				private JTextField[] inputFields = {
-						input_id_F = new JTextField(),
-						input_name_F = new JTextField(),
-						input_location_F = new JTextField(),
-						input_phone_F = new JTextField(),
-						input_email_F = new JTextField(),
-						input_DOB_F = new JTextField(),
-						input_membershipStartDate_F = new JTextField(),
-						input_personalTrainer_F = new JTextField(),	
-						input_referralSource_F = new JTextField()	
+				    new JTextField(), // id
+				    new JTextField(), // name
+				    new JTextField(), // location
+				    new JTextField(), // phone
+				    new JTextField(), // email
+				    new JTextField(), // DOB
+				    new JTextField(), // start date
+				    new JTextField(), // personal trainer
+				    new JTextField()  // referral source
 				};
+
 				
 				private final ButtonGroup GENDER = new ButtonGroup(); // button group for gender radio buttons
 				private boolean isGenderSelected = false;
@@ -460,8 +444,8 @@ public class GymGUI{
 				
 				// array of gender radio buttons + initialization
 				private JRadioButton[] genderRadioButtons = {
-						input_genderMale = new JRadioButton("Male"),
-						input_genderFemale = new JRadioButton("Female")
+						new JRadioButton("Male"), // male radio button
+						new JRadioButton("Female") // female radio button
 				};
 				
 				private String[]
@@ -514,7 +498,6 @@ public class GymGUI{
 			private JLabel memberManagementTitle_L;
 				
 			private JPanel memberManagementButton_P;
-				private JLabel memberManagementButton_L;
 				private JButton manageMemberButton = new JButton("Enter member ID");
 				
 			private JPanel individualMemberManagement_P = new JPanel();
@@ -632,8 +615,8 @@ public class GymGUI{
 		},
 		// array of central body panel titles
 		centralPanelTitles = {
-			memberTypeSelect_L = new JLabel("Choose a type of member to add:"),
-			memberManagementButton_L = new JLabel("Click to re-open the member ID entry dialog:")
+			new JLabel("Choose a type of member to add:"),
+			new JLabel("Click to re-open the member ID entry dialog:")
 		};
 	
 	
@@ -669,6 +652,7 @@ public class GymGUI{
 				menuButtons[0],
 						dashboardButtons[0],
 						dashboardButtons[1],
+						dashboardButtons[2],
 				menuButtons[1],
 						formButtons[0],
 						formButtons[1],
@@ -923,7 +907,6 @@ public class GymGUI{
 			utilityButton_L.setForeground(DARKNAVY);
 			utilityButton_L.setFont(TITLE_SYMBOL_FONT);
 			utilityButton_L.setHorizontalAlignment(SwingConstants.CENTER);
-			clearFilterButton.setVerticalAlignment(SwingConstants.BOTTOM);
 			
 			// overriding the methods of anonymous class MouseAdapter(), to change behaviour of mouse when interacting with this button
 			utilityButton_L.addMouseListener(new MouseAdapter() {
@@ -971,16 +954,29 @@ public class GymGUI{
 		 */
 		
 		// addding import button to the dashboard title
-		dashboardTitle_P.add(importButton_P,BorderLayout.EAST); // adding button to the title panel
-		importButton_P.setLayout(new BorderLayout());
-		importButton_P.add(importFileButton,BorderLayout.CENTER);
+		dashboardTitle_P.add(fileSystemButtons_P,BorderLayout.EAST); // adding button to the title panel
+		
+		fileSystemButtons_P.setPreferredSize(new Dimension(270,1));
+		fileSystemButtons_P.setLayout(new GridLayout(1,0));
+		fileSystemButtons_P.add(importButton_P);
+		fileSystemButtons_P.add(exportButton_P);
+		
+		// setting attributes for the file system buttons
+		for(JPanel fileSystemButtonPanel : fileSystemButtonPanels) {
+			
+			JButton fileSystemButton = fileSystemButtonPanel == importButton_P ? importFileButton : exportFileButton;
+			
+			fileSystemButtonPanel.setLayout(new BorderLayout());
+			fileSystemButtonPanel.setPreferredSize(new Dimension(125,1));
+			fileSystemButtonPanel.setBorder(FILE_BUTTONS_MARGIN);
+			fileSystemButtonPanel.add(fileSystemButton,BorderLayout.CENTER);
+		}
 		
 		// styling buttons of dashboard
 		for(JButton button : dashboardButtons) {
-			button.setPreferredSize(new Dimension(135,40));
+			button.setPreferredSize(new Dimension(130,40));
 			
-			// changing import/export button colors and mouse effects
-			
+			// changing dashboard button colors and mouse effects
 			button.setBackground(MIDNIGHTBLUE);
 		    button.addMouseListener(new MouseAdapter() {
 		        @Override
@@ -1113,7 +1109,7 @@ public class GymGUI{
 		dashboardTableControls_P.add(clearFilterButton_P,BorderLayout.EAST);
 		clearFilterButton_P.setPreferredSize(new Dimension(245,1));
 		clearFilterButton_P.setBackground(WHITE);
-		clearFilterButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,22)); // overriding layout
+		clearFilterButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,26)); // overriding layout
 		clearFilterButton_P.add(clearFilterButton);
 		
 		// styling the table wrapper
@@ -1129,21 +1125,20 @@ public class GymGUI{
 		
 		// styling table title panel
 		tableHeader_P.add(tableHeaderTitle_P,BorderLayout.WEST);
+		tableHeaderTitle_P.setPreferredSize(new Dimension(140,1));
 		tableHeaderTitle_P.setBackground(WHITE);
-		tableHeaderTitle_P.setPreferredSize(new Dimension(150,1));
-		tableHeaderTitle_P.setLayout(new FlowLayout(FlowLayout.CENTER,0,10));
+		tableHeaderTitle_P.setLayout(new BorderLayout());
 			
 		// styling table title label
 		tableHeaderTitle_P.add(tableHeaderTitle_L);
 		tableHeaderTitle_L.setFont(TABLE_HEADING_FONT);
 		tableHeaderTitle_L.setForeground(GUNMETALBLUE);
+		tableHeaderTitle_L.setHorizontalAlignment(SwingConstants.CENTER); // centering horizontally
 		
 		// styling table panel
 		tableWrapper_P.add(table_P,BorderLayout.CENTER);
 		table_P.setLayout(new BorderLayout());
 
-		int newMarker;
-		
 		// runnable to update/load table
 		loadTableData = new Runnable() {
 		    @Override
@@ -1451,7 +1446,7 @@ public class GymGUI{
 		            		tableControlSearch_F.setFocusable(false);
 		            		
 		            		// resetting the combo boxes
-		            		for(JComboBox controlComboBox : controlComboBoxes) {
+		            		for(JComboBox<String> controlComboBox : controlComboBoxes) {
 		            			controlComboBox.setSelectedIndex(0);
 		            		}
 		            		
@@ -1461,7 +1456,7 @@ public class GymGUI{
 		            		JOptionPane.showMessageDialog(
 		            						null,
 		            						"All filters cleared successfully.",
-		            						"Filters Cleared",
+		            						"Filters Cleared!",
 		            						JOptionPane.INFORMATION_MESSAGE
 		            					);
 	            		}
@@ -2546,6 +2541,7 @@ public class GymGUI{
 		            	
 		            	showDialog=true;
 		            	isAccessedFromTable=false; // since back button should not fo to dashboard when accessed from menu button
+		            	lastMemberID = "0x696969"; // since last member id isn't needed
 
 		                memberManagementTitle_L.setText("Member Management"); // reverting to original title
 		                memberManagementTitle_P.remove(utilityButtons_P[1]); // removing back button
