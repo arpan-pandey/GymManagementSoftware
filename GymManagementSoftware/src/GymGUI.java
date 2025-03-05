@@ -1323,7 +1323,7 @@ public class GymGUI{
 	                    	RowFilter<DefaultTableModel, Integer> searchFilter; // declaring a filter outside the if block below
 	                    	
 	                    	// when searching male
-	                    	if(safeSearchText.equals("Male")) {
+	                    	if(fieldText.equalsIgnoreCase("Male")) {
 	                            searchFilter = RowFilter.regexFilter("Male",2); // manual filter for males
 	                    	}
 	                    	// for other searchTexts
