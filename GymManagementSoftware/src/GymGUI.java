@@ -36,6 +36,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -43,7 +44,6 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -54,8 +54,9 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -266,8 +267,8 @@ public class GymGUI{
 						private String[] statuses = {"All","Active","Inactive"};
 						private JComboBox<String> controlActiveStatus_C = new JComboBox<String>(statuses);
 						
-						private JPanel exportButton_P = new JPanel();
-						private JButton exportFileButton;
+						private JPanel clearFilterButton_P = new JPanel();
+						private JButton clearFilterButton;
 				
 				Runnable loadTableData; // runnable to load table data
 					
@@ -280,10 +281,8 @@ public class GymGUI{
 						private JPanel tableHeaderTitle_P = new JPanel();
 							private JLabel tableHeaderTitle_L = new JLabel("Member Overview");
 							
-						private JPanel columnSelector_P = new JPanel();
-							private JLabel columnSelectorHeading_L = new JLabel("Show:");
-							private String[] columnTypes = {"All Columns","Limited Columns"};
-							private JComboBox<String> columnSelector_C = new JComboBox<String>(columnTypes);
+						private JPanel exportButton_P = new JPanel();
+							private JButton exportFileButton;
 					
 					// panel which has the table
 					private JPanel table_P = new JPanel();
@@ -294,20 +293,8 @@ public class GymGUI{
 						
 							// general fields
 							private String[] allMembersColumns = {
-									"ID", "NAME", "GENDER", "STATUS", "ATTENDANCE", "LOYALTY POINTS",
-									"START DATE", "EMAIL", "PHONE NO.", "DATE OF BIRTH", "LOCATION"
-								};
-						
-							// fields for premium members
-							private String[] limitedPremiumColumns = {
-									"ID", "NAME", "STATUS", "ATTENDANCE", "PAID AMOUNT",
-									"FULL PAYMENT?", "DISCOUNT AMOUNT", "TRAINER"
-								};
-
-							// fields for regular members
-							private String[] limitedRegularColumns = {
-									"ID", "NAME", "STATUS", "ATTENDANCE", "CURRENT PLAN",
-									"CAN UPGRADE?", "REFERRAL SOURCE", "REMOVAL REASON"
+									"ID", "NAME", "GENDER", "STATUS", "MEMBER TYPE", "ATTENDANCE", "LOYALTY POINTS",
+									"START DATE", "EMAIL", "PHONE NO.", "DATE OF BIRTH", "LOCATION",
 								};
 				
 		JPanel[] controlPanels = {
@@ -346,6 +333,20 @@ public class GymGUI{
 									+"</span>"
 								+ "</html>" 
 								),
+						
+						
+				clearFilterButton = 
+						new JButton(
+								"<html>"
+									+ "<span style=\"font-family: Tahoma; font-size: 14px; font-weight: 100\">"
+										+ "⊗ "
+									+"</span>"
+									+ "<span style=\"font-family: Century Gothic; font-size: 11px\">"
+										+ "Clear Filters"
+									+"</span>"
+								+ "</html>" 
+								),
+	
 
 				exportFileButton = 
 						new JButton(
@@ -695,25 +696,28 @@ public class GymGUI{
 	 // array list of GymMember objects
 	private ArrayList<GymMember> members = new ArrayList<>(); // private for data hiding 
 	
-	// initializing test objects    
-	private GymMember[] testMembers = {
+	GymMember[] testMembers = {
 		    new PremiumMember(1, "Ram Sapkota", "Kathmandu", "+977 9812345678", "test_member1@gmail.com", "Male", "2004-12-12", "2025-02-03", "Alex Smith"),
 		    new RegularMember(2, "Sita Phuyal", "Pokhara", "+977 9876543210", "test_member2@gmail.com", "Female", "2002-04-29", "2025-01-13", "Instagram Ad"),
-		    new PremiumMember(3, "Pradeep Sharma", "Chitwan", "+977 9876541234", "test_member3@gmail.com", "Male", "1999-03-15", "2025-05-22", "Michael Johnson"),
-		    new RegularMember(4, "Maya Tamang", "Lalitpur", "+977 9812349087", "test_member4@gmail.com", "Female", "1998-06-10", "2025-03-30", "Social Media"),
-		    new PremiumMember(5, "Nabin KC", "Butwal", "+977 9836729145", "test_member5@gmail.com", "Male", "2000-01-02", "2025-07-17", "Sophia Williams"),
-		    new RegularMember(6, "Anjali Rai", "Dhulikhel", "+977 9845613247", "test_member6@gmail.com", "Female", "2003-11-23", "2025-02-08", "Flyer"),
-		    new PremiumMember(7, "Bishal Ghimire", "Biratnagar", "+977 9865432109", "test_member7@gmail.com", "Male", "1997-05-19", "2025-08-11", "David Brown"),
-		    new RegularMember(8, "Sushila Sharma", "Bhaktapur", "+977 9816712345", "test_member8@gmail.com", "Female", "2005-09-25", "2025-04-05", "Online Ad"),
-		    new PremiumMember(9, "Anil Gurung", "Pokhara", "+977 9812345610", "test_member9@gmail.com", "Male", "1995-12-02", "2025-11-30", "Jessica Adams"),
-		    new RegularMember(10, "Pooja Thapa", "Kathmandu", "+977 9801234789", "test_member10@gmail.com", "Female", "2000-08-14", "2025-02-18", "Friend"),
+		    new RegularMember(3, "Deepak Maharjan", "Hetauda", "+977 9823456780", "test_member3@gmail.com", "Male", "1994-07-18", "2025-07-20", "Billboard Ad"),
+		    new PremiumMember(4, "Pradeep Sharma", "Chitwan", "+977 9876541234", "test_member4@gmail.com", "Male", "1999-03-15", "2025-05-22", "Michael Johnson"),
+		    new RegularMember(5, "Pooja Thapa", "Kathmandu", "+977 9801234789", "test_member5@gmail.com", "Female", "2000-08-14", "2025-02-18", "Friend"),
+		    new PremiumMember(6, "Anjali Rai", "Dhulikhel", "+977 9845613247", "test_member6@gmail.com", "Female", "2003-11-23", "2025-02-08", "Flyer"),
+		    new RegularMember(7, "Nirakar Khadka", "Bhaktapur", "+977 9812346701", "test_member7@gmail.com", "Male", "1997-07-29", "2025-04-30", "Flyer"),
+		    new PremiumMember(8, "Nabin KC", "Butwal", "+977 9836729145", "test_member8@gmail.com", "Male", "2000-01-02", "2025-07-17", "Sophia Williams"),
+		    new RegularMember(9, "Sandesh Thapa", "Pokhara", "+977 9845671234", "test_member9@gmail.com", "Male", "2003-04-09", "2025-05-25", "Friend Referral"),
+		    new PremiumMember(10, "Asha Bista", "Lalitpur", "+977 9815678901", "test_member10@gmail.com", "Female", "2003-02-24", "2025-08-14", "Emma Watson"),
 		    new RegularMember(11, "Suman Baral", "Janakpur", "+977 9823456789", "test_member11@gmail.com", "Male", "1996-11-01", "2025-06-22", "Flyer"),
-		    new PremiumMember(12, "Rina Gurung", "Pokhara", "+977 9811122334", "test_member12@gmail.com", "Female", "2001-03-05", "2025-09-25", "Chris Evans"),
-		    new RegularMember(13, "Kiran Acharya", "Biratnagar", "+977 9812345679", "test_member13@gmail.com", "Male", "2002-12-12", "2025-10-10", "Instagram Ad"),
-		    new PremiumMember(14, "Asha Bista", "Lalitpur", "+977 9815678901", "test_member14@gmail.com", "Female", "2003-02-24", "2025-08-14", "Emma Watson"),
-		    new RegularMember(15, "Nirakar Khadka", "Bhaktapur", "+977 9812346701", "test_member15@gmail.com", "Male", "1997-07-29", "2025-04-30", "Flyer"),
-
-	};
+		    new PremiumMember(12, "Bishal Ghimire", "Biratnagar", "+977 9865432109", "test_member12@gmail.com", "Male", "1997-05-19", "2025-08-11", "David Brown"),
+		    new RegularMember(13, "Rina Gurung", "Pokhara", "+977 9811122334", "test_member13@gmail.com", "Female", "2001-03-05", "2025-09-25", "Chris Evans"),
+		    new PremiumMember(14, "Anil Gurung", "Pokhara", "+977 9812345610", "test_member14@gmail.com", "Male", "1995-12-02", "2025-11-30", "Jessica Adams"),
+		    new RegularMember(15, "Kiran Acharya", "Biratnagar", "+977 9812345679", "test_member15@gmail.com", "Male", "2002-12-12", "2025-10-10", "Instagram Ad"),
+		    new PremiumMember(16, "Maya Tamang", "Lalitpur", "+977 9812349087", "test_member16@gmail.com", "Female", "1998-06-10", "2025-03-30", "Social Media"),
+		    new RegularMember(17, "Meera Shrestha", "Dharan", "+977 9804567890", "test_member17@gmail.com", "Female", "1998-10-05", "2025-06-10", "Google Ad"),
+		    new PremiumMember(18, "Sushila Sharma", "Bhaktapur", "+977 9816712345", "test_member18@gmail.com", "Female", "2005-09-25", "2025-04-05", "Online Ad"),
+		    new RegularMember(19, "Kusum Karki", "Butwal", "+977 9812349987", "test_member19@gmail.com", "Female", "2001-01-29", "2025-03-15", "Newspaper Ad"),
+		    new RegularMember(20, "Manisha Kharel", "Lalitpur", "+977 9812345672", "test_member20@gmail.com", "Female", "1999-06-21", "2025-09-30", "Flyer"),
+		};
 
 	
 	//constructor
@@ -919,6 +923,7 @@ public class GymGUI{
 			utilityButton_L.setForeground(DARKNAVY);
 			utilityButton_L.setFont(TITLE_SYMBOL_FONT);
 			utilityButton_L.setHorizontalAlignment(SwingConstants.CENTER);
+			clearFilterButton.setVerticalAlignment(SwingConstants.BOTTOM);
 			
 			// overriding the methods of anonymous class MouseAdapter(), to change behaviour of mouse when interacting with this button
 			utilityButton_L.addMouseListener(new MouseAdapter() {
@@ -972,7 +977,7 @@ public class GymGUI{
 		
 		// styling buttons of dashboard
 		for(JButton button : dashboardButtons) {
-			button.setPreferredSize(new Dimension(130,40));
+			button.setPreferredSize(new Dimension(135,40));
 			
 			// changing import/export button colors and mouse effects
 			
@@ -1105,11 +1110,11 @@ public class GymGUI{
 		}
 
 		// styling the search button panel
-		dashboardTableControls_P.add(exportButton_P,BorderLayout.EAST);
-		exportButton_P.setPreferredSize(new Dimension(245,1));
-		exportButton_P.setBackground(WHITE);
-		exportButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,22)); // overriding layout
-		exportButton_P.add(exportFileButton);
+		dashboardTableControls_P.add(clearFilterButton_P,BorderLayout.EAST);
+		clearFilterButton_P.setPreferredSize(new Dimension(245,1));
+		clearFilterButton_P.setBackground(WHITE);
+		clearFilterButton_P.setLayout(new FlowLayout(FlowLayout.TRAILING,15,22)); // overriding layout
+		clearFilterButton_P.add(clearFilterButton);
 		
 		// styling the table wrapper
 		dashboardContentWrapper_P.add(tableWrapper_P,BorderLayout.CENTER);
@@ -1160,6 +1165,7 @@ public class GymGUI{
 	                	member.getName(), // name
 	                	member.getGender(), // gender
 	                	member.isActiveStatus()?"Active":"Inactive", // status (set to "Active"|"Inactive" based on value)
+	                	member instanceof PremiumMember ? "Premium" : "Regular", // type of member
 	                	Integer.toString(member.getAttendance()), // attendance (converting int to String)
 	                	Double.toString(member.getLoyaltyPoints()), // loyalty points (converting double to String)
 	                	member.getMembershipStartDate(), // start date
@@ -1302,23 +1308,31 @@ public class GymGUI{
 	            DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer(); // getting the header's default renderer
 	            headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Align text to the left
 	            
-	            // adding row sorter to the table (for search field functionality)
+	            // adding a row sorter to the table to sort by ascending id
 	            rowSorter = new TableRowSorter<DefaultTableModel>(model);
+	            
+	            // setting comparator of rowSorter to compare the ids of members and sort in ascending order (usage of lambda expression)
+	            rowSorter.setComparator(0, (id1, id2) -> Integer.compare(Integer.parseInt(id1.toString().trim()), Integer.parseInt(id2.toString().trim())));
+	            
 	            table.setRowSorter(rowSorter); // setting sorter
-
+	            rowSorter.setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING))); // Sort by ID (Column 0)
+	            
 	            // runnable to filter table based on searchText
 	            filter = new Runnable() {
 	            	@Override
 	            	public void run() {
 	            		
 	            		String fieldText = tableControlSearch_F.getText().trim();
-	            		String selectedStatus = (String) controlActiveStatus_C.getSelectedItem(); // casting to String from Object)
+	            		String selectedStatus = (String) controlActiveStatus_C.getSelectedItem(); // casting to String from Object
+	            		String selectedType = (String) controlMemberType_C.getSelectedItem(); // casting to String from Object
 	            		String safeSearchText = Pattern.quote(fieldText); // excaping all special regex characters to treat them as normal characters
 	            		
 	                    // list to hold the filters
 	                    List<RowFilter<DefaultTableModel, Integer>> filters = new ArrayList<>();
 
-	                    // search filter for text (TextField)
+	                    /*
+	                     *  search filter for text (TextField)
+	                     */
 	                    if (!fieldText.isEmpty() && !fieldText.equals(searchPlaceholder)) {
 	                    	RowFilter<DefaultTableModel, Integer> searchFilter; // declaring a filter outside the if block below
 	                    	
@@ -1334,7 +1348,9 @@ public class GymGUI{
 	                        filters.add(searchFilter); // adding filter to list
 	                    }
 
-	                    // filter for status (ComboBox)
+	                    /*
+	                     *  filter for status (ComboBox)
+	                     */
 	                    if (selectedStatus.equalsIgnoreCase("Active")) {
 	                        
 	                    	RowFilter<DefaultTableModel, Integer> statusFilter = RowFilter.regexFilter("Active", 3); // searching for "Active" in status column
@@ -1345,8 +1361,24 @@ public class GymGUI{
 	                    	RowFilter<DefaultTableModel, Integer> statusFilter = RowFilter.regexFilter("Inactive", 3); // searching for "Inactive" in status column
 	                        filters.add(statusFilter); // adding to filter list
 	                    }
+	                    
+	                    /*
+	                     *  filter for member type (ComboBox)
+	                     */
+	                    if (selectedType.equalsIgnoreCase("Premium")) {
+	                        
+	                    	RowFilter<DefaultTableModel, Integer> typeFilter = RowFilter.regexFilter("Premium", 4); // searching for "Active" in status column
+	                        filters.add(typeFilter); // adding to filter list
+	                    } 
+	                    else if (selectedType.equalsIgnoreCase("Regular")) {
+	                        
+	                    	RowFilter<DefaultTableModel, Integer> typeFilter = RowFilter.regexFilter("Regular", 4); // searching for "Inactive" in status column
+	                        filters.add(typeFilter); // adding to filter list
+	                    }
 
-	                    // applygin filters if there are any
+	                    /*
+	                     *  applying filters if there are any
+	                     */
 	                    if (filters.isEmpty()) {
 	                        rowSorter.setRowFilter(null); // showing all rows if no filters are applied
 	                    }
@@ -1376,6 +1408,50 @@ public class GymGUI{
 					}
 	            });
 	            
+	            // adding item state change listener to Status comboBox
+	            controlMemberType_C.addItemListener(new ItemListener() {
+					@Override
+					public void itemStateChanged(ItemEvent e) {
+						
+						tableControlSearch_F.setFocusable(false);
+						
+						// checking if an option was selected
+				        if (e.getStateChange() == ItemEvent.SELECTED) { filter.run(); }
+					}
+				});
+	            
+	            clearFilterButton.addMouseListener(new MouseAdapter() {
+	            	@Override
+	            	public void mousePressed(MouseEvent e) {
+	            		
+	            		boolean isSearching = !(tableControlSearch_F.getText().isEmpty() || tableControlSearch_F.getText().equals(searchPlaceholder));
+	            		boolean hasSelectedStatus = controlActiveStatus_C.getSelectedIndex()!=0;
+	            		boolean hasSelectedType = controlMemberType_C.getSelectedIndex()!=0;
+	            		
+	            		if( isSearching || hasSelectedStatus || hasSelectedType) {
+	            			
+		            		// resetting the field
+		            		tableControlSearch_F.setText(searchPlaceholder);
+		            		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+		            		tableControlSearch_F.setFocusable(false);
+		            		
+		            		// resetting the combo boxes
+		            		for(JComboBox controlComboBox : controlComboBoxes) {
+		            			controlComboBox.setSelectedIndex(0);
+		            		}
+		            		
+		            		filter.run(); // running the filter once everything is reset
+		            		
+		            		// success message
+		            		JOptionPane.showMessageDialog(
+		            						null,
+		            						"All filters cleared successfully.",
+		            						"Filters Cleared",
+		            						JOptionPane.INFORMATION_MESSAGE
+		            					);
+	            		}
+	            	}
+	            });
 	            
 	            
 	            /*
@@ -1841,7 +1917,7 @@ public class GymGUI{
                         // dialog to input member ID
                          input = JOptionPane.showInputDialog(frame,
                         		 "Enter a member ID:",
-                        		 "Manage membership",
+                        		 "Manage Membership",
                         		 JOptionPane.INFORMATION_MESSAGE);
                          
                         // handling the case where no input was provided or dialog was closed
@@ -2441,7 +2517,8 @@ public class GymGUI{
    
 		            // updating table when dashboard button is pressed
 		            if(e.getSource()==menuButtons[0]) {
-		        			loadTableData.run(); 	
+		        			loadTableData.run();
+		        			filter.run();
 		            }
 		            // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
 		            else if (e.getSource() == menuButtons[2] && lastIndex != 2) {
