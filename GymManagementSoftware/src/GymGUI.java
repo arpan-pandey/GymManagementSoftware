@@ -95,33 +95,7 @@ public class GymGUI{
     
     /*
 	 * font variables
-	 */
-    
-//    // button fonts
-//    private final Font CENTURY_GOTHIC_14 = new Font("Century Gothic", Font.PLAIN, 14);
-//    private final Font CENTURY_GOTHIC_BOLD_14 = new Font("Century Gothic", Font.BOLD, 14);
-//    
-//    // body fonts
-//    private final Font CENTURY_GOTHIC_BOLD_20 = new Font("Century Gothic", Font.BOLD, 20);
-//    private final Font CENTURY_GOTHIC_20 = new Font("Century Gothic", Font.PLAIN, 20);
-//    private final Font CENTURY_GOTHIC_BOLD_18 = new Font("Century Gothic", Font.BOLD, 18);
-//    private final Font CENTURY_GOTHIC_16 = new Font("Century Gothic", Font.PLAIN, 16);
-//    
-//    // dashboard fonts
-//    private final Font CENTURY_GOTHIC_BOLD_13 = new Font("Century Gothic", Font.BOLD, 13);
-//    private final Font CENTURY_GOTHIC_BOLD_14 = new Font("Century Gothic", Font.BOLD, 14);
-//    private final Font CENTURY_GOTHIC_12 = new Font("Century Gothic",Font.PLAIN,12);
-//    private final Font CENTURY_GOTHIC_BOLD_11 = new Font("Century Gothic", Font.BOLD, 11);
-//    private final Font CENTURY_GOTHIC_12 = new Font("Century Gothic", Font.PLAIN, 12);
-//    
-//    // form font
-//    private final Font CENTURY_GOTHIC_BOLD_15 = new Font("Century Gothic", Font.BOLD, 15);
-//    private final Font HELVETICA_14 = new Font("Helvetica", Font.PLAIN, 14);
-//    private final Font CENTURY_GOTHIC_BOLD_14 = new Font("Century Gothic", Font.BOLD, 14);
-//    
-//    // memberManagement input font
-//    private final Font HELVETICA_BOLD_14 = new Font("Helvetica", Font.BOLD, 14);
-    
+	 */  
     
     // button fonts  
     private final Font CENTURY_GOTHIC_14 = new Font("Century Gothic", Font.PLAIN, 14);  
@@ -2027,15 +2001,7 @@ public class GymGUI{
                                     	
                                     	premiumMember.display();
                                     	
-                                    	// when the discount amount isn't calculated
-                                    	if(premiumMember.isFullPayment() && premiumMember.getDiscountAmount()==0.0d) {
-//                                    		splitMemberDetails[14]="Uncalculated";
-                                    	}
-                                    	
-                                    	
-                                        // setting text of 1st non-editable field (Rs. as prefix for amount)
-//                    					individualMemberFields[0].setText((!(splitMemberDetails[14].equals("Uncalculated") || splitMemberDetails[14].equals("Ineligible"))?"Rs.":"")+splitMemberDetails[14]);	
-                    					// setting text of editable field
+                                        // setting text of 1st non-editable field (Rs. as prefix for amount)                  		
                     					individualMemberFields[1].setText(premiumMember.isFullPayment() == true ? fullyPaidText : "");
                     					
                     					if(premiumMember.isFullPayment()) {
