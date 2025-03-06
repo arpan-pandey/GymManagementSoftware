@@ -1351,19 +1351,33 @@ public class GymGUI{
 	            });
 	            
 	            // Styling header row
-	            JTableHeader header = table.getTableHeader();
+	            JTableHeader columnHeader = table.getTableHeader();
 	            
-	            header.setReorderingAllowed(false); // disabling column dragging
-	            header.setResizingAllowed(false); // disabling column resizing
+	            columnHeader.setReorderingAllowed(false); // disabling column dragging
+	            columnHeader.setResizingAllowed(false); // disabling column resizing
 	            
-	            header.setFont(CENTURY_GOTHIC_BOLD_11);
-	            header.setForeground(GUNMETALBLUE);
-	            header.setBackground(DARKGRAY);
-	            header.setPreferredSize(new Dimension(header.getPreferredSize().width, 30));
+	            columnHeader.setFont(CENTURY_GOTHIC_BOLD_11);
+	            columnHeader.setForeground(GUNMETALBLUE);
+	            columnHeader.setBackground(DARKGRAY);
+	            columnHeader.setPreferredSize(new Dimension(columnHeader.getPreferredSize().width, 30));
 
-	            // Access the default header renderer and set alignment to LEFT
-	            DefaultTableCellRenderer headerRenderer = (DefaultTableCellRenderer) header.getDefaultRenderer(); // getting the header's default renderer
-	            headerRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Align text to the left
+	            // Access the default columnHeader renderer and set alignment to LEFT
+	            DefaultTableCellRenderer columnHeaderRenderer = (DefaultTableCellRenderer) columnHeader.getDefaultRenderer(); // getting the columnHeader's default renderer
+	            columnHeaderRenderer.setHorizontalAlignment(SwingConstants.LEFT); // Align text to the left
+	            
+	            columnHeader.addMouseListener(new MouseAdapter() {
+	            	@Override
+	            	public void mousePressed(MouseEvent e) {
+	            		
+	            		tableControlSearch_F.setFocusable(false); // removing caret
+	            		
+						// adding placeholder if nothing is input
+						if(tableControlSearch_F.getText().trim().equals("")) {
+							tableControlSearch_F.setText(searchPlaceholder);
+							tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+						}
+	            	}
+	            });
 	            
 	            // adding a row sorter to the table to sort by ascending id
 	            rowSorter = new TableRowSorter<DefaultTableModel>(model);
@@ -1485,12 +1499,12 @@ public class GymGUI{
 	            		boolean hasSelectedStatus = controlActiveStatus_C.getSelectedIndex()!=0;
 	            		boolean hasSelectedType = controlMemberType_C.getSelectedIndex()!=0;
 	            		
+	            		// resetting the field
+	            		tableControlSearch_F.setText(searchPlaceholder);
+	            		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+	            		tableControlSearch_F.setFocusable(false);
+	            		
 	            		if( isSearching || hasSelectedStatus || hasSelectedType) {
-	            			
-		            		// resetting the field
-		            		tableControlSearch_F.setText(searchPlaceholder);
-		            		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
-		            		tableControlSearch_F.setFocusable(false);
 		            		
 		            		// resetting the combo boxes
 		            		for(JComboBox<String> controlComboBox : controlComboBoxes) {
