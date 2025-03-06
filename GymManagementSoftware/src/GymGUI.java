@@ -592,7 +592,7 @@ public class GymGUI{
 					
         // last member id and type of member
 		private int currentMemberIndex = 0;
-		private String lastMemberID = "-1";
+		private String lastMemberID = "-1"; // resetting lastMemberID
 		private String memberInstanceOf = "";
 		
 		private Runnable updateInidividualMemberPanel; // declaring a runnable
@@ -2565,7 +2565,7 @@ public class GymGUI{
 		            	
 		            	showDialog=true;
 		            	isAccessedFromTable=false; // since back button should not fo to dashboard when accessed from menu button
-		            	lastMemberID = "0x696969"; // since last member id isn't needed
+		            	lastMemberID = "-1"; // since last member id isn't needed (resetting it to default placeholder value)
 
 		                memberManagementTitle_L.setText("Member Management"); // reverting to original title
 		                memberManagementTitle_P.remove(utilityButtons_P[1]); // removing back button
