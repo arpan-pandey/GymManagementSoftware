@@ -1981,7 +1981,7 @@ public class GymGUI{
                         memberId = Integer.parseInt(input);
                         if (memberId != 0x696969) {
                         	
-                            boolean isExistingId = false; // checking if ID exists
+                            boolean isExistingId = false; // to check if ID exists
                             String[] splitMemberData = new String[15]; // array to store split data from display method
 
                             // checking if the ID exists using a for loop of GymMember objects
