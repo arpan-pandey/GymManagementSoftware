@@ -1913,10 +1913,7 @@ public class GymGUI{
 						    			"Invalid ID! Please enter a valid number.",
 						    			"Invalid input",
 						    			JOptionPane.ERROR_MESSAGE);
-						    	
 						    }	
-
-
 						}
 					}
 				}
@@ -2573,7 +2570,7 @@ public class GymGUI{
 		            manageMemberButton.setEnabled(true);
    
 		            // updating table when dashboard button is pressed
-		            if(e.getSource()==menuButtons[0]) {
+		            if(e.getSource()==menuButtons[0] && lastIndex!=0) {
 		        			loadTableData.run();
 		        			filter.run();
 		            }
