@@ -48,7 +48,7 @@ public class PremiumMember extends GymMember{
 			this.paidAmount= this.premiumCharge; // updating the paid amount
 			this.isFullPayment= true; // since full payment is paid amount is equal to premium charge
 			
-			return String.format("Rs.%.2f has been accepted to settle the full payment. Excess amount Rs.%.2f has not been used.",this.premiumCharge, excessAmount);
+			return String.format("Rs.%.2f has been accepted to settle the full payment. Excess amount Rs.%.2f has not been used.",paidAmount-excessAmount, excessAmount);
 		}
 		// to check if full payment is complete
 		else if(this.paidAmount==this.premiumCharge) {
