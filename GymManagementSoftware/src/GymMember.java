@@ -1,23 +1,28 @@
 public abstract class GymMember {
 	
-	//instance variable declaration and initialization of default values for all Gym members
-	protected int id, attendance= 0;
-	protected String name, location, phone, email, gender, DOB, membershipStartDate;
-	protected double loyaltyPoints= 0.0d;
-	protected boolean activeStatus= false;
-	
-	public GymMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate) {
-		//parent class constructor, to initialize the instance variables
-		
-		this.id = id;
-		this.name = name;
-		this.location = location;
-		this.phone = phone;
-		this.email = email;
-		this.gender = gender;
-		this.DOB = DOB;
-		this.membershipStartDate = membershipStartDate;
-	}
+    //instance variable declaration for all Gym members
+    protected int id, attendance;
+    protected String name, location, phone, email, gender, DOB, membershipStartDate;
+    protected double loyaltyPoints;
+    protected boolean activeStatus;
+    
+    public GymMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate) {
+        //parent class constructor, to initialize the instance variables
+        
+        this.id = id;
+        this.name = name;
+        this.location = location;
+        this.phone = phone;
+        this.email = email;
+        this.gender = gender;
+        this.DOB = DOB;
+        this.membershipStartDate = membershipStartDate;
+        
+        // setting default attributes
+        this.attendance = 0;
+        this.loyaltyPoints = 0.0d;
+        this.activeStatus = false;
+    }
 	
 	
 	//accessor methods for each attribute

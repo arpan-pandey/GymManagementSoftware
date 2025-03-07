@@ -1,18 +1,24 @@
 
 public class RegularMember extends GymMember{
 	
-	//unique instance variable declaration and initialization of default values for Regular members
-	private final int attendanceLimit = 30;
-	private String referralSource, plan = "Basic", removalReason="";
-	private boolean isEligibleForUpgrade = false;
-	private double price = 6500d;
-	
-	public RegularMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate, String referralSource) {
-		
-		super(id, name, location, phone, email, gender, DOB, membershipStartDate); //calling super class constructor with appropriate arguments
-		this.referralSource = referralSource; //initializing unique instance variable
-		
-	}
+    //unique instance variables declaration for Regular members
+    private final int attendanceLimit;
+    private String referralSource, plan, removalReason;
+    private boolean isEligibleForUpgrade;
+    private double price;
+    
+    public RegularMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate, String referralSource) {
+        
+        super(id, name, location, phone, email, gender, DOB, membershipStartDate); //calling super class constructor with appropriate arguments
+        this.referralSource = referralSource; //initializing unique instance variable
+        
+        // setting default attributes:
+        this.attendanceLimit = 30; // final
+        this.plan = "Basic";
+        this.removalReason = ""; // null
+        this.isEligibleForUpgrade = false;
+        this.price = 6500d;
+    }
 	
 	
 	//accessor methods for each unique attribute

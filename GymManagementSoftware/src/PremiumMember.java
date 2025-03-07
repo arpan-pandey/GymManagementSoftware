@@ -1,17 +1,23 @@
 
 public class PremiumMember extends GymMember{
 	
-	//unique instance variable declaration and initialization of default values for Premium members
-	final double premiumCharge=50000d;
-	double paidAmount=0.0d, discountAmount=0.0d;
-	boolean isFullPayment=false;
-	String personalTrainer;
-	
-	public PremiumMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate, String personalTrainer){
-		
-		super(id, name, location, phone, email, gender, DOB, membershipStartDate); //calling super class constructor with appropriate arguments
-		this.personalTrainer = personalTrainer; //initializing unique instance variable
-	}
+    //unique instance variable declaration for Premium members
+    final double premiumCharge;
+    double paidAmount, discountAmount;
+    boolean isFullPayment;
+    String personalTrainer;
+    
+    public PremiumMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate, String personalTrainer){
+        
+        super(id, name, location, phone, email, gender, DOB, membershipStartDate); //calling super class constructor with appropriate arguments
+        this.personalTrainer = personalTrainer; //initializing unique instance variable
+    
+        // setting default attributes:
+        premiumCharge = 50000d; // final
+        this.paidAmount = 0.0d;
+        this.discountAmount = 0.0d;
+        this.isFullPayment = false;
+    }
 	
 	
 	//accessor methods for each unique attribute
