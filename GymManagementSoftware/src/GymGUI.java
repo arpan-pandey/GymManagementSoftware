@@ -36,6 +36,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -1434,6 +1438,83 @@ public class GymGUI{
 	                    }
 	            	}
 	            };
+	            
+	            // import button functionality
+	            importFileButton.addMouseListener(new MouseAdapter() {
+	            	@Override
+	            	public void mousePressed(MouseEvent e) {
+	            		System.out.println("sigma");
+	            	}
+	            });
+	            
+	         // Export button functionality
+	            exportFileButton.addMouseListener(new MouseAdapter() {
+	                @Override
+	                public void mousePressed(MouseEvent e) {
+	                    
+	                    String filePath = "MemberDetails.txt"; // Save in the same directory as the Java file
+	                    
+	                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+
+	                        System.out.println("Saving file at: " + new File(filePath).getAbsolutePath());
+	                        
+	                        // Writing the header with 20 columns
+	                        String header = String.format(
+	                            "%-5s %-15s %-15s %-15s %-25s %-20s %-10s %-10s %-10s %-15s %-10s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s",
+	                            "ID", "Name", "Location", "Phone", "Email",
+	                            "Membership Start Date", "Attendance", "Loyalty Points", "Active Status",
+	                            "Plan", "Plan Price", "Upgrade Eligible", "Referral Source", "Removal Reason",
+	                            "Trainer Name", "Paid Amount", "Remaining Amount", "Full Payment", "Discount Amount", "Net Amount Paid"
+	                        );
+	                        writer.write(header);
+	                        writer.newLine(); // Keeps header and data on separate lines
+	                        writer.write("~".repeat(250)); // Use '~' as separator
+	                        writer.newLine();
+
+	                        // Writing member details
+	                        for (GymMember member : members) {
+	                            String memberData = "";
+
+	                            if (member instanceof RegularMember) {
+	                                RegularMember regular = (RegularMember) member;
+	                                memberData = String.format(
+	                                    "%-5d %-15s %-15s %-15s %-25s %-20s %-10d %-10.2f %-10s %-15s %-10.2f %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s",
+	                                    regular.getId(), regular.getName(), regular.getLocation(), regular.getPhone(),
+	                                    regular.getEmail(), regular.getMembershipStartDate(), regular.getAttendance(),
+	                                    regular.getLoyaltyPoints(), regular.isActiveStatus() ? "Active" : "Inactive",
+	                                    regular.getPlan(), regular.getPrice(), regular.isEligibleForUpgrade() ? "Yes" : "No",
+	                                    regular.getReferralSource(), regular.getRemovalReason(),
+	                                    "~", "~", "~", "~", "~", "~"
+	                                );
+
+	                            } else if (member instanceof PremiumMember) {
+	                                PremiumMember premium = (PremiumMember) member;
+	                                double remainingAmount = premium.isFullPayment() ? 0 : (premium.getPaidAmount() - premium.getDiscountAmount());
+
+	                                memberData = String.format(
+	                                    "%-5d %-15s %-15s %-15s %-25s %-20s %-10d %-10.2f %-10s %-15s %-10s %-15s %-15s %-15s %-15s %-15.2f %-15.2f %-15s %-15.2f %-15.2f",
+	                                    premium.getId(), premium.getName(), premium.getLocation(), premium.getPhone(),
+	                                    premium.getEmail(), premium.getMembershipStartDate(), premium.getAttendance(),
+	                                    premium.getLoyaltyPoints(), premium.isActiveStatus() ? "Active" : "Inactive",
+	                                    "Premium", "~", "~", "~", "~",
+	                                    premium.getPersonalTrainer(), premium.getPaidAmount(), remainingAmount,
+	                                    premium.isFullPayment() ? "Yes" : "No", premium.getDiscountAmount(), premium.getPaidAmount()
+	                                );
+	                            }
+
+	                            writer.write(memberData);
+	                            writer.newLine(); // Ensures each record stays on a single line
+	                        }
+
+	                        // Show confirmation message
+	                        JOptionPane.showMessageDialog(null, "Member data has been exported successfully.", "Save Successful", JOptionPane.INFORMATION_MESSAGE);
+	                    } 
+	                    catch (IOException e1) {
+	                        JOptionPane.showMessageDialog(null, "Error saving member data: " + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	                    }
+	                }
+	            });
+
 	            
 	            // adding key listener to search field
 	            tableControlSearch_F.addKeyListener(new KeyAdapter() {
