@@ -1531,7 +1531,7 @@ public class GymGUI{
 		        	                    regularMember.getLoyaltyPoints(),
 		        	                    regularMember.isActiveStatus() ? "Active" : "Inactive", // using active/inactive for better understanding
 		        	                    "Regular",
-		                                "~","~","~", "~", // setting premium member columns to have "~" as data (setting empty)
+		                                "~","~","~","~", // setting premium member columns to have "~" as data (setting empty)
 		        	                    regularMember.getPlan(),
 		        	                    regularMember.getPlanPrice(regularMember.getPlan()),
 		        	                    regularMember.isEligibleForUpgrade() ? "Yes" : "No", // using yes/no for better understanding
