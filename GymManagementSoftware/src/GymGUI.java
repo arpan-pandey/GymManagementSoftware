@@ -1482,7 +1482,7 @@ public class GymGUI{
 	                        writer.write("=".repeat(362)); // using '=' as separator
 	                        writer.newLine();
 
-	                        // Writing member details
+	                        // writing every members' details
 	                        for (GymMember member : members) {
 	                            String memberData = "";
 	                            
@@ -1502,13 +1502,13 @@ public class GymGUI{
 	                                    premiumMember.getMembershipStartDate(),
 	                                    premiumMember.getAttendance(),
 	                                    premiumMember.getLoyaltyPoints(),
-	                                    premiumMember.isActiveStatus() ? "Active" : "Inactive",
-	                                    "Premium",
+	                                    premiumMember.isActiveStatus() ? "Active" : "Inactive", // using active/inactive for better understanding
+	                                    "Premium", // member type
 	                                    premiumMember.getPersonalTrainer(),
 	                                    premiumMember.getPaidAmount(),
-	                                    premiumMember.isFullPayment() ? "Yes" : "No",
+	                                    premiumMember.isFullPayment() ? "Yes" : "No", // using yes/no for better understanding
 	                                    premiumMember.getDiscountAmount(),
-	                                    "~","~", "~", "~", "~"
+	                                    "~","~", "~", "~", "~" // setting the regular member columns to have "~" as data (setting empty)
 	                                );
 	                                
 	                            }
@@ -1529,29 +1529,33 @@ public class GymGUI{
 		        	                    regularMember.getMembershipStartDate(),
 		        	                    regularMember.getAttendance(),
 		        	                    regularMember.getLoyaltyPoints(),
-		        	                    regularMember.isActiveStatus() ? "Active" : "Inactive",
+		        	                    regularMember.isActiveStatus() ? "Active" : "Inactive", // using active/inactive for better understanding
 		        	                    "Regular",
-		                                "~","~","~", "~",
+		                                "~","~","~", "~", // setting premium member columns to have "~" as data (setting empty)
 		        	                    regularMember.getPlan(),
 		        	                    regularMember.getPlanPrice(regularMember.getPlan()),
-		        	                    regularMember.isEligibleForUpgrade() ? "Yes" : "No",
+		        	                    regularMember.isEligibleForUpgrade() ? "Yes" : "No", // using yes/no for better understanding
 		        	                    regularMember.getReferralSource(),
-		        	                    regularMember.getRemovalReason().isEmpty()? "N/A" : regularMember.getRemovalReason()
+		        	                    regularMember.getRemovalReason().isEmpty()? "N/A" : regularMember.getRemovalReason() // setting "N/A" if removalReason is null
 	                                );
 
 	                            }
 
 	                            writer.write(memberData);
-	                            writer.newLine(); // Ensures each record stays on a single line
+	                            writer.newLine(); // ensuring the next member's data prints on another line
 	                        }
 
-	                        // Show confirmation message
+	                        // showing confirmation message
 	                        JOptionPane.showMessageDialog(null, "All members' data has been successfully exported to this Java file's directory.", "Export Successful!", JOptionPane.INFORMATION_MESSAGE);
 	                    } 
 	                    catch (IOException e1) {
 	                        JOptionPane.showMessageDialog(null, "Error saving member data: " + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	                    }
 	                }
+	                
+	                /*
+	                 * adding mouse interaction effects again because mouseListeners of exportFileButton are removed every call of loadTableData.run()
+	                 */
 	                
                     @Override
     		        public void mouseEntered(MouseEvent e) {
