@@ -696,19 +696,19 @@ public class GymGUI{
 		    new RegularMember(3, "Deepak Maharjan", "Hetauda", "+977 9823456780", "test_member3@gmail.com", "Male", "1994-07-18", "2025-07-20", "Billboard Ad"),
 		    new PremiumMember(4, "Pradeep Sharma", "Chitwan", "+977 9876541234", "test_member4@gmail.com", "Male", "1999-03-15", "2025-05-22", "Michael Johnson"),
 		    new RegularMember(5, "Pooja Thapa", "Kathmandu", "+977 9801234789", "test_member5@gmail.com", "Female", "2000-08-14", "2025-02-18", "Friend"),
-		    new PremiumMember(6, "Anjali Rai", "Dhulikhel", "+977 9845613247", "test_member6@gmail.com", "Female", "2003-11-23", "2025-02-08", "Flyer"),
+		    new PremiumMember(6, "Anjali Rai", "Dhulikhel", "+977 9845613247", "test_member6@gmail.com", "Female", "2003-11-23", "2025-02-08", "John Doe"),
 		    new RegularMember(7, "Nirakar Khadka", "Bhaktapur", "+977 9812346701", "test_member7@gmail.com", "Male", "1997-07-29", "2025-04-30", "Flyer"),
 		    new PremiumMember(8, "Nabin KC", "Butwal", "+977 9836729145", "test_member8@gmail.com", "Male", "2000-01-02", "2025-07-17", "Sophia Williams"),
 		    new RegularMember(9, "Sandesh Thapa", "Pokhara", "+977 9845671234", "test_member9@gmail.com", "Male", "2003-04-09", "2025-05-25", "Friend Referral"),
 		    new PremiumMember(10, "Asha Bista", "Lalitpur", "+977 9815678901", "test_member10@gmail.com", "Female", "2003-02-24", "2025-08-14", "Emma Watson"),
 		    new RegularMember(11, "Suman Baral", "Janakpur", "+977 9823456789", "test_member11@gmail.com", "Male", "1996-11-01", "2025-06-22", "Flyer"),
 		    new PremiumMember(12, "Bishal Ghimire", "Biratnagar", "+977 9865432109", "test_member12@gmail.com", "Male", "1997-05-19", "2025-08-11", "David Brown"),
-		    new RegularMember(13, "Rina Gurung", "Pokhara", "+977 9811122334", "test_member13@gmail.com", "Female", "2001-03-05", "2025-09-25", "Chris Evans"),
+		    new RegularMember(13, "Rina Gurung", "Pokhara", "+977 9811122334", "test_member13@gmail.com", "Female", "2001-03-05", "2025-09-25", "Google Ad"),
 		    new PremiumMember(14, "Anil Gurung", "Pokhara", "+977 9812345610", "test_member14@gmail.com", "Male", "1995-12-02", "2025-11-30", "Jessica Adams"),
 		    new RegularMember(15, "Kiran Acharya", "Biratnagar", "+977 9812345679", "test_member15@gmail.com", "Male", "2002-12-12", "2025-10-10", "Instagram Ad"),
-		    new PremiumMember(16, "Maya Tamang", "Lalitpur", "+977 9812349087", "test_member16@gmail.com", "Female", "1998-06-10", "2025-03-30", "Social Media"),
+		    new PremiumMember(16, "Maya Tamang", "Lalitpur", "+977 9812349087", "test_member16@gmail.com", "Female", "1998-06-10", "2025-03-30", "Splinter Smith"),
 		    new RegularMember(17, "Meera Shrestha", "Dharan", "+977 9804567890", "test_member17@gmail.com", "Female", "1998-10-05", "2025-06-10", "Google Ad"),
-		    new PremiumMember(18, "Sushila Sharma", "Bhaktapur", "+977 9816712345", "test_member18@gmail.com", "Female", "2005-09-25", "2025-04-05", "Online Ad"),
+		    new PremiumMember(18, "Sushila Sharma", "Bhaktapur", "+977 9816712345", "test_member18@gmail.com", "Female", "2005-09-25", "2025-04-05", "Joseph Kirk"),
 		    new RegularMember(19, "Kusum Karki", "Butwal", "+977 9812349987", "test_member19@gmail.com", "Female", "2001-01-29", "2025-03-15", "Newspaper Ad"),
 		    new RegularMember(20, "Manisha Kharel", "Lalitpur", "+977 9812345672", "test_member20@gmail.com", "Female", "1999-06-21", "2025-09-30", "Flyer"),
 		};
@@ -1447,59 +1447,98 @@ public class GymGUI{
 	            	}
 	            });
 	            
-	         // Export button functionality
+	        	// removing mouse listener of exportFileButton to avoid a bug where no. of dialog boxes keep increasing
+	        	MouseListener[] listeners = exportFileButton.getMouseListeners();
+	        	for (MouseListener listener : listeners) {
+		            exportFileButton.removeMouseListener(listener);
+	        	}
+
+	            // export button functionality
 	            exportFileButton.addMouseListener(new MouseAdapter() {
 	                @Override
 	                public void mousePressed(MouseEvent e) {
 	                    
-	                    String filePath = "MemberDetails.txt"; // Save in the same directory as the Java file
+	                    String filePath = "MemberDetails.txt"; // saving in the same directory
 	                    
 	                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-
-	                        System.out.println("Saving file at: " + new File(filePath).getAbsolutePath());
 	                        
-	                        // Writing the header with 20 columns
+	                        // declaring header in a string format, with 19 columns
 	                        String header = String.format(
-	                            "%-5s %-15s %-15s %-15s %-25s %-20s %-10s %-10s %-10s %-15s %-10s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s",
-	                            "ID", "Name", "Location", "Phone", "Email",
-	                            "Membership Start Date", "Attendance", "Loyalty Points", "Active Status",
-	                            "Plan", "Plan Price", "Upgrade Eligible", "Referral Source", "Removal Reason",
-	                            "Trainer Name", "Paid Amount", "Remaining Amount", "Full Payment", "Discount Amount", "Net Amount Paid"
+	                            "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	                            + " %-20s %-15s %-15s %-20s" // premium
+	                            + " %-12s %-13s %-25s %-20s %-20s", // regular
+	                            
+	                            // common attributes
+	                            "ID", "Name", "Location", "Phone", "Email", "Membership Start Date", "Attendance", "Loyalty Points", "Active Status", "Member Type", 
+	                            
+	                            // premium member attributes
+	                            "Trainer Name", "Paid Amount", "Full Payment?", "Discount Amount",
+
+	                            // regular member attributes
+	                            "Plan", "Plan Price", "Eligible for Upgrade?", "Referral Source", "Removal Reason"
 	                        );
 	                        writer.write(header);
-	                        writer.newLine(); // Keeps header and data on separate lines
-	                        writer.write("~".repeat(250)); // Use '~' as separator
+	                        writer.newLine(); // to keep header and data on seperate lines
+	                        writer.write("=".repeat(362)); // using '=' as separator
 	                        writer.newLine();
 
 	                        // Writing member details
 	                        for (GymMember member : members) {
 	                            String memberData = "";
-
-	                            if (member instanceof RegularMember) {
-	                                RegularMember regular = (RegularMember) member;
-	                                memberData = String.format(
-	                                    "%-5d %-15s %-15s %-15s %-25s %-20s %-10d %-10.2f %-10s %-15s %-10.2f %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s %-15s",
-	                                    regular.getId(), regular.getName(), regular.getLocation(), regular.getPhone(),
-	                                    regular.getEmail(), regular.getMembershipStartDate(), regular.getAttendance(),
-	                                    regular.getLoyaltyPoints(), regular.isActiveStatus() ? "Active" : "Inactive",
-	                                    regular.getPlan(), regular.getPrice(), regular.isEligibleForUpgrade() ? "Yes" : "No",
-	                                    regular.getReferralSource(), regular.getRemovalReason(),
-	                                    "~", "~", "~", "~", "~", "~"
-	                                );
-
-	                            } else if (member instanceof PremiumMember) {
-	                                PremiumMember premium = (PremiumMember) member;
-	                                double remainingAmount = premium.isFullPayment() ? 0 : (premium.getPaidAmount() - premium.getDiscountAmount());
+	                            
+	                            if (member instanceof PremiumMember) {
+	                                PremiumMember premiumMember = (PremiumMember) member;
 
 	                                memberData = String.format(
-	                                    "%-5d %-15s %-15s %-15s %-25s %-20s %-10d %-10.2f %-10s %-15s %-10s %-15s %-15s %-15s %-15s %-15.2f %-15.2f %-15s %-15.2f %-15.2f",
-	                                    premium.getId(), premium.getName(), premium.getLocation(), premium.getPhone(),
-	                                    premium.getEmail(), premium.getMembershipStartDate(), premium.getAttendance(),
-	                                    premium.getLoyaltyPoints(), premium.isActiveStatus() ? "Active" : "Inactive",
-	                                    "Premium", "~", "~", "~", "~",
-	                                    premium.getPersonalTrainer(), premium.getPaidAmount(), remainingAmount,
-	                                    premium.isFullPayment() ? "Yes" : "No", premium.getDiscountAmount(), premium.getPaidAmount()
+	        	                        "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	                                	+ " %-20s %-15s %-15s %-20s" // premium
+	                                	+ " %-12s %-13s %-25s %-20s %-20s", // regular
+	        	                            
+	        	                        premiumMember.getId(),
+	        	                        premiumMember.getName(),
+	        	                        premiumMember.getLocation(),
+	        	                        premiumMember.getPhone(),
+	                                    premiumMember.getEmail(),
+	                                    premiumMember.getMembershipStartDate(),
+	                                    premiumMember.getAttendance(),
+	                                    premiumMember.getLoyaltyPoints(),
+	                                    premiumMember.isActiveStatus() ? "Active" : "Inactive",
+	                                    "Premium",
+	                                    premiumMember.getPersonalTrainer(),
+	                                    premiumMember.getPaidAmount(),
+	                                    premiumMember.isFullPayment() ? "Yes" : "No",
+	                                    premiumMember.getDiscountAmount(),
+	                                    "~","~", "~", "~", "~"
 	                                );
+	                                
+	                            }
+	                            
+
+	                            else if (member instanceof RegularMember) {
+	                                RegularMember regularMember = (RegularMember) member;
+	                                memberData = String.format(
+		        	                    "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	                                	+ " %-20s %-15s %-15s %-20s" // premium
+	        	                        + " %-12s %-13s %-25s %-20s %-20s", // regular
+		        	                        
+		        	                    regularMember.getId(),
+		        	                    regularMember.getName(),
+		        	                    regularMember.getLocation(),
+		        	                    regularMember.getPhone(),
+		        	                    regularMember.getEmail(),
+		        	                    regularMember.getMembershipStartDate(),
+		        	                    regularMember.getAttendance(),
+		        	                    regularMember.getLoyaltyPoints(),
+		        	                    regularMember.isActiveStatus() ? "Active" : "Inactive",
+		        	                    "Regular",
+		                                "~","~","~", "~",
+		        	                    regularMember.getPlan(),
+		        	                    regularMember.getPlanPrice(regularMember.getPlan()),
+		        	                    regularMember.isEligibleForUpgrade() ? "Yes" : "No",
+		        	                    regularMember.getReferralSource(),
+		        	                    regularMember.getRemovalReason().isEmpty()? "N/A" : regularMember.getRemovalReason()
+	                                );
+
 	                            }
 
 	                            writer.write(memberData);
@@ -1507,12 +1546,35 @@ public class GymGUI{
 	                        }
 
 	                        // Show confirmation message
-	                        JOptionPane.showMessageDialog(null, "Member data has been exported successfully.", "Save Successful", JOptionPane.INFORMATION_MESSAGE);
+	                        JOptionPane.showMessageDialog(null, "All members' data has been successfully exported to this Java file's directory.", "Export Successful!", JOptionPane.INFORMATION_MESSAGE);
 	                    } 
 	                    catch (IOException e1) {
 	                        JOptionPane.showMessageDialog(null, "Error saving member data: " + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 	                    }
 	                }
+	                
+                    @Override
+    		        public void mouseEntered(MouseEvent e) {
+    		            exportFileButton.setBackground(PASTELBLUE);
+    		            exportFileButton.setForeground(MIDNIGHTBLUE);
+    		        }
+
+    		        @Override
+    		        public void mouseExited(MouseEvent e) {
+    		            exportFileButton.setBackground(MIDNIGHTBLUE);
+    		            exportFileButton.setForeground(LIGHTGRAY);
+    		        }
+    		        
+    		        @Override
+    		        public void mouseClicked(MouseEvent e) {
+    		        	exportFileButton.setBackground(MIDNIGHTBLUE);
+    		        }
+    		        
+    		        @Override
+    		        public void mouseReleased(MouseEvent e) {
+    		        	exportFileButton.setForeground(LIGHTGRAY);
+    		        	exportFileButton.setBackground(MIDNIGHTBLUE);
+    		        }
 	            });
 
 	            
