@@ -1459,99 +1459,95 @@ public class GymGUI{
 	                public void mousePressed(MouseEvent e) {
 	                    
 	                    String filePath = "MemberDetails.txt"; // saving in the same directory
-	                    
-	                    try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-	                        
-	                        // declaring header in a string format, with 19 columns
+
+	                    try (FileWriter writer = new FileWriter(filePath)) {
+
+	                        // Header with 19 columns
 	                        String header = String.format(
 	                            "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
 	                            + " %-20s %-15s %-15s %-20s" // premium
 	                            + " %-12s %-13s %-25s %-20s %-20s", // regular
-	                            
+
 	                            // common attributes
 	                            "ID", "Name", "Location", "Phone", "Email", "Membership Start Date", "Attendance", "Loyalty Points", "Active Status", "Member Type", 
-	                            
+
 	                            // premium member attributes
 	                            "Trainer Name", "Paid Amount", "Full Payment?", "Discount Amount",
 
 	                            // regular member attributes
 	                            "Plan", "Plan Price", "Eligible for Upgrade?", "Referral Source", "Removal Reason"
 	                        );
-	                        writer.write(header);
-	                        writer.newLine(); // to keep header and data on seperate lines
-	                        writer.write("=".repeat(362)); // using '=' as separator
-	                        writer.newLine();
+	                        writer.write(header + "\n"); // using "\n" for new line
+	                        writer.write("=".repeat(362) + "\n"); // using '=' as header separator
 
-	                        // writing every members' details
+	                        // Writing each member's details
 	                        for (GymMember member : members) {
 	                            String memberData = "";
-	                            
+
 	                            if (member instanceof PremiumMember) {
 	                                PremiumMember premiumMember = (PremiumMember) member;
 
 	                                memberData = String.format(
-	        	                        "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-	                                	+ " %-20s %-15s %-15s %-20s" // premium
-	                                	+ " %-12s %-13s %-25s %-20s %-20s", // regular
-	        	                            
-	        	                        premiumMember.getId(),
-	        	                        premiumMember.getName(),
-	        	                        premiumMember.getLocation(),
-	        	                        premiumMember.getPhone(),
+	                                    "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	                                    + " %-20s %-15s %-15s %-20s" // premium
+	                                    + " %-12s %-13s %-25s %-20s %-20s", // regular
+
+	                                    premiumMember.getId(),
+	                                    premiumMember.getName(),
+	                                    premiumMember.getLocation(),
+	                                    premiumMember.getPhone(),
 	                                    premiumMember.getEmail(),
 	                                    premiumMember.getMembershipStartDate(),
 	                                    premiumMember.getAttendance(),
 	                                    premiumMember.getLoyaltyPoints(),
-	                                    premiumMember.isActiveStatus() ? "Active" : "Inactive", // using active/inactive for better understanding
-	                                    "Premium", // member type
+	                                    premiumMember.isActiveStatus() ? "Active" : "Inactive",
+	                                    "Premium", 
 	                                    premiumMember.getPersonalTrainer(),
 	                                    premiumMember.getPaidAmount(),
-	                                    premiumMember.isFullPayment() ? "Yes" : "No", // using yes/no for better understanding
+	                                    premiumMember.isFullPayment() ? "Yes" : "No",
 	                                    premiumMember.getDiscountAmount(),
-	                                    "~","~", "~", "~", "~" // setting the regular member columns to have "~" as data (setting empty)
+	                                    "~","~", "~", "~", "~" // regular member columns set to "~" (empty/null)
 	                                );
-	                                
-	                            }
-	                            
 
+	                            } 
 	                            else if (member instanceof RegularMember) {
 	                                RegularMember regularMember = (RegularMember) member;
 	                                memberData = String.format(
-		        	                    "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-	                                	+ " %-20s %-15s %-15s %-20s" // premium
-	        	                        + " %-12s %-13s %-25s %-20s %-20s", // regular
-		        	                        
-		        	                    regularMember.getId(),
-		        	                    regularMember.getName(),
-		        	                    regularMember.getLocation(),
-		        	                    regularMember.getPhone(),
-		        	                    regularMember.getEmail(),
-		        	                    regularMember.getMembershipStartDate(),
-		        	                    regularMember.getAttendance(),
-		        	                    regularMember.getLoyaltyPoints(),
-		        	                    regularMember.isActiveStatus() ? "Active" : "Inactive", // using active/inactive for better understanding
-		        	                    "Regular",
-		                                "~","~","~","~", // setting premium member columns to have "~" as data (setting empty)
-		        	                    regularMember.getPlan(),
-		        	                    regularMember.getPlanPrice(regularMember.getPlan()),
-		        	                    regularMember.isEligibleForUpgrade() ? "Yes" : "No", // using yes/no for better understanding
-		        	                    regularMember.getReferralSource(),
-		        	                    regularMember.getRemovalReason().isEmpty()? "N/A" : regularMember.getRemovalReason() // setting "N/A" if removalReason is null
-	                                );
+	                                    "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	                                    + " %-20s %-15s %-15s %-20s" // premium
+	                                    + " %-12s %-13s %-25s %-20s %-20s", // regular
 
+	                                    regularMember.getId(),
+	                                    regularMember.getName(),
+	                                    regularMember.getLocation(),
+	                                    regularMember.getPhone(),
+	                                    regularMember.getEmail(),
+	                                    regularMember.getMembershipStartDate(),
+	                                    regularMember.getAttendance(),
+	                                    regularMember.getLoyaltyPoints(),
+	                                    regularMember.isActiveStatus() ? "Active" : "Inactive",
+	                                    "Regular",
+	                                    "~","~","~","~", // Premium member columns set to "~" (empty/null)
+	                                    regularMember.getPlan(),
+	                                    regularMember.getPlanPrice(regularMember.getPlan()),
+	                                    regularMember.isEligibleForUpgrade() ? "Yes" : "No",
+	                                    regularMember.getReferralSource(),
+	                                    regularMember.getRemovalReason().isEmpty() ? "N/A" : regularMember.getRemovalReason()
+	                                );
 	                            }
 
-	                            writer.write(memberData);
-	                            writer.newLine(); // ensuring the next member's data prints on another line
+	                            writer.write(memberData + "\n"); // ensuring new line for each member
 	                        }
 
-	                        // showing confirmation message
-	                        JOptionPane.showMessageDialog(null, "All members' data has been successfully exported to this Java file's directory.", "Export Successful!", JOptionPane.INFORMATION_MESSAGE);
-	                    } 
-	                    catch (IOException e1) {
-	                        JOptionPane.showMessageDialog(null, "Error saving member data: " + e1.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+	                        // success message
+	                        JOptionPane.showMessageDialog(null, "Data has successfully been exported to this project's directory!","Export Successful",JOptionPane.INFORMATION_MESSAGE);
+
 	                    }
-	                }
+	                    catch (IOException e1) {
+	                    	// error message
+	                        JOptionPane.showMessageDialog(null, "Failed to export member data!\nError: "+e1.getMessage(),"Export Failed",JOptionPane.ERROR_MESSAGE);
+	                    }	                
+	               }
 	                
 	                /*
 	                 * adding mouse interaction effects again because mouseListeners of exportFileButton are removed every call of loadTableData.run()
