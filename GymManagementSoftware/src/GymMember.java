@@ -44,12 +44,18 @@ public abstract class GymMember {
 	
 	//method that changes activeStatus to true if the membership needs to be activated or renewed
 	public void activateMembership() {
-		this.activeStatus = true;
+		// only setting to true if activeStatus is false
+		if(this.activeStatus==false) {
+			this.activeStatus = true;
+		}
 	}
 	
 	//method that changes activeStatus to false if the membership needs to be deactivated or paused
 	public void deactivateMembership() {
-		this.activeStatus = false;
+		// only setting to false if activeStatus is true
+		if(this.activeStatus==true) {
+			this.activeStatus = false;
+		}
 	}
 
 	//method to reset a member's gym data
