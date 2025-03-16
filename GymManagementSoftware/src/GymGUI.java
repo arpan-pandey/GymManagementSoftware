@@ -1614,60 +1614,62 @@ public class GymGUI{
 	                            int attendance = Integer.parseInt(columns[8]);
 	                            boolean isActive = columns[10].equalsIgnoreCase("Active");
 	                            String memberType = columns[11];
-	                            String personalTrainer = columns[12];
-	                            double paidAmount;
-	                            String plan;
-	                            String referralSource;
+	                            String personalTrainer = columns[12].equals("~")? "" : columns[12];
+	                            double paidAmount = columns[13].equals("~")? 0.0 : Double.parseDouble(columns[13]);
+	                            String plan = columns[14].equals("~")? "" : columns[14];
+	                            String referralSource = columns[15].equals("~")? "" : columns[15];
 	                            
-	                            GymMember member = null;
+	                            /*
+	                             * INITIALIZING PREMIUM OR REGULAR MEMBER BASED ON DATA
+	                             */
+	                            GymMember member = memberType.equals("Premium")?
+	                            			new PremiumMember(id,name,location,phone,email,gender,DOB,membershipStartDate,personalTrainer)
+	                            			:
+	                            			new RegularMember(id,name,location,phone,email,gender,DOB,membershipStartDate,referralSource) 
+	                            	;
 
-	                            if (memberType.equals("Premium")) {
-		                            personalTrainer = columns[12];
-		                            paidAmount = Double.parseDouble(columns[13]);
-	                            	
-	                                // creating a PremiumMember object and adding to the list
-	                            	member = new PremiumMember(id,name,location,phone,email,gender,DOB,membershipStartDate,personalTrainer);
-
-	                                for(int j = 0 ; j < attendance ; j++) {
-	                                	member.markAttendance();
-	                                }
-	                            	
-	                                // if paidAmount is not 0
-	                                if(paidAmount != 0.0) {
-		                            	// casting member to PremiumMember, to pay due amount
-		                            	PremiumMember premiumMember = (PremiumMember) member;
-		                            	
-		                            	premiumMember.payDueAmount(paidAmount);
-	                                }
-	                            } 
-	                            else if (memberType.equals("Regular")) {
-	                            	plan = columns[14];
-	                            	referralSource = columns[15];
-	                            	
-	                                // creating a RegularMember object and adding to the list
-	                                member = new RegularMember(id,name,location,phone,email,gender,DOB,membershipStartDate,referralSource); 
-	                            
-	                                for(int j = 0 ; j < attendance ; j++) {
-	                                	member.markAttendance();
-	                                }
-	                                
-	                                // if plan is not the default "Basic" one
-	                                if(!plan.equals("Basic")) {
-	                                	
-		                            	// casting member to RegularMember, to upgradePlan
-		                            	RegularMember regularMember = (RegularMember) member;
-
-		                            	regularMember.upgradePlan(plan);
-	                                }
-	                            }
-	                            
-                                
+	                            /*
+	                             * UPDATING ACTIVE STATUS
+	                             */
                                 if(isActive) {
                                 	member.activateMembership();
                                 }
+	                            
+	                            /*
+	                             * UPDATING ATTEDANCE
+	                             */
+                                for(int j = 0 ; j < attendance ; j++) {
+                                	member.markAttendance();
+                                }
+	                            
+                                /*
+                                 * UPDATING PAID AMOUNT OF PREMIUM MEMBERS (if paidAmount is not 0)
+                                 */
+                                if(paidAmount != 0.0 && memberType.equals("Premium")) {
+	                            	// casting member to PremiumMember, to pay due amount
+	                            	PremiumMember premiumMember = (PremiumMember) member;
+	                            	
+	                            	premiumMember.payDueAmount(paidAmount);
+                                }
+                                
+                                /*
+                                 * UPDATING PLAN OF REGULAR MEMBERS (if plan is not the default "Basic" one)
+                                 */
+                                if(!plan.equals("Basic") && memberType.equals("Regular")) {
+                                	
+	                            	// casting member to RegularMember, to upgradePlan
+	                            	RegularMember regularMember = (RegularMember) member;
+
+	                            	regularMember.upgradePlan(plan);
+                                }
+                                
+                                /*
+                                 * ADDING MEMBER TO ARRAYLIST
+                                 */
                                 members.add(member);
 	                        }
 	                        
+	                        // reloading table data
 	                        loadTableData.run();
 	                        
 	                        // success message
