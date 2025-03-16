@@ -1587,22 +1587,22 @@ public class GymGUI{
 	                        StringBuilder fileContent = new StringBuilder();
 	                        int character;
 	                        
-	                        // Reading character by character
+	                        // reading character by character
 	                        while ((character = reader.read()) != -1) {
 	                            fileContent.append((char) character);
 	                        }
 
-	                        // Splitting file content into lines
+	                        // splitting file content into lines
 	                        String[] lines = fileContent.toString().split("\n");
 
-	                        // Skipping header and separator (assuming first 2 lines are header)
+	                        // skipping header and separator (assuming first 2 lines are header)
 	                        for (int i = 2; i < lines.length; i++) {
 	                            String line = lines[i].trim();
 	                            
-	                            // Splitting line into columns (based on fixed-width spacing)
-	                            String[] columns = line.split("\\s{2,}"); // At least 2 spaces as delimiter
-
-	                            // Extracting common attributes
+	                            // splitting line into columns (based on fixed-width spacing)
+	                            String[] columns = line.split("\\s{2,}"); // at least 2 spaces as delimiter
+	                            
+	                            // extracting all attributes if possible
 	                            int id = Integer.parseInt(columns[0]);
 	                            String name = columns[1];
 	                            String gender = columns[2];
