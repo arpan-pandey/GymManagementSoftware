@@ -38,8 +38,10 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -373,6 +375,7 @@ public class GymGUI{
 								)
 			};
 		
+        String filePath = "MemberDetails.txt"; // saving in the same directory
 		
 	/*
 	 * addMember VARIABLES
@@ -1171,7 +1174,7 @@ public class GymGUI{
 		    	
 		    	// adding spaces before each column title
 		    	for (int i = 0; i < allMembersColumns.length; i++) {
-		    	    allMembersColumns[i] = " " + allMembersColumns[i];
+		    	    allMembersColumns[i] = " " + allMembersColumns[i].trim(); // adding space before the data
 		    	}
 		    	
 	            // initializing the table model
@@ -1439,46 +1442,71 @@ public class GymGUI{
 	            	}
 	            };
 	            
-	            // import button functionality
-	            importFileButton.addMouseListener(new MouseAdapter() {
-	            	@Override
-	            	public void mousePressed(MouseEvent e) {
-	            		System.out.println("sigma");
-	            	}
-	            });
-	            
 	        	// removing mouse listener of exportFileButton to avoid a bug where no. of dialog boxes keep increasing
-	        	MouseListener[] listeners = exportFileButton.getMouseListeners();
-	        	for (MouseListener listener : listeners) {
-		            exportFileButton.removeMouseListener(listener);
+	        	MouseListener[] exportListeners = exportFileButton.getMouseListeners();
+	        	MouseListener[] importListeners = importFileButton.getMouseListeners();
+	        	for (int i = 0 ; i < exportListeners.length ; i++) {
+		            exportFileButton.removeMouseListener(exportListeners[i]);
+		            importFileButton.removeMouseListener(importListeners[i]);
+	        	}
+	        	
+                /*
+                 * adding mouse interaction effects again because mouseListeners of exportFileButton are removed every call of loadTableData.run()
+                 */
+	        	
+	        	for(int i = 0 ; i < dashboardButtons.length - 1 ; i++) {
+	        		JButton button = dashboardButtons[i]; // putting button into a common variable
+	        		button.addMouseListener(new MouseAdapter() {
+		                
+	                    @Override
+	    		        public void mouseEntered(MouseEvent e) {
+	                    	button.setBackground(PASTELBLUE);
+	                    	button.setForeground(MIDNIGHTBLUE);
+	    		        }
+
+	    		        @Override
+	    		        public void mouseExited(MouseEvent e) {
+	    		        	button.setBackground(MIDNIGHTBLUE);
+	    		        	button.setForeground(LIGHTGRAY);
+	    		        }
+	    		        
+	    		        @Override
+	    		        public void mouseClicked(MouseEvent e) {
+	    		        	button.setBackground(MIDNIGHTBLUE);
+	    		        }
+	    		        
+	    		        @Override
+	    		        public void mouseReleased(MouseEvent e) {
+	    		        	button.setForeground(LIGHTGRAY);
+	    		        	button.setBackground(MIDNIGHTBLUE);
+	    		        }
+	        		});
 	        	}
 
 	            // export button functionality
 	            exportFileButton.addMouseListener(new MouseAdapter() {
 	                @Override
 	                public void mousePressed(MouseEvent e) {
-	                    
-	                    String filePath = "MemberDetails.txt"; // saving in the same directory
 
 	                    try (FileWriter writer = new FileWriter(filePath)) {
 
 	                        // Header with 19 columns
 	                        String header = String.format(
-	                            "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-	                            + " %-20s %-15s %-15s %-20s" // premium
-	                            + " %-12s %-13s %-25s %-20s %-20s", // regular
+	                        	"%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	                            + " %-20s %-15s" // premium
+	                            + " %-12s %-20s", // regular
 
 	                            // common attributes
-	                            "ID", "Name", "Location", "Phone", "Email", "Membership Start Date", "Attendance", "Loyalty Points", "Active Status", "Member Type", 
+	                            "ID", "Name", "Gender", "Location", "Phone", "DOB", "Email", "Membership Start Date", "Attendance", "Loyalty Points", "Active Status", "Member Type", 
 
 	                            // premium member attributes
-	                            "Trainer Name", "Paid Amount", "Full Payment?", "Discount Amount",
+	                            "Trainer Name", "Paid Amount",
 
 	                            // regular member attributes
-	                            "Plan", "Plan Price", "Eligible for Upgrade?", "Referral Source", "Removal Reason"
+	                            "Plan", "Referral Source"
 	                        );
 	                        writer.write(header + "\n"); // using "\n" for new line
-	                        writer.write("=".repeat(362) + "\n"); // using '=' as header separator
+	                        writer.write("=".repeat(299)+ "\n"); // using '=' as header separator
 
 	                        // Writing each member's details
 	                        for (GymMember member : members) {
@@ -1488,14 +1516,16 @@ public class GymGUI{
 	                                PremiumMember premiumMember = (PremiumMember) member;
 
 	                                memberData = String.format(
-	                                    "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-	                                    + " %-20s %-15s %-15s %-20s" // premium
-	                                    + " %-12s %-13s %-25s %-20s %-20s", // regular
+	        	                        "%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	        	                        + " %-20s %-15s" // premium
+	        	                        + " %-12s %-20s", // regular
 
 	                                    premiumMember.getId(),
 	                                    premiumMember.getName(),
+	                                    premiumMember.getGender(),
 	                                    premiumMember.getLocation(),
 	                                    premiumMember.getPhone(),
+	                                    premiumMember.getDOB(),
 	                                    premiumMember.getEmail(),
 	                                    premiumMember.getMembershipStartDate(),
 	                                    premiumMember.getAttendance(),
@@ -1504,35 +1534,32 @@ public class GymGUI{
 	                                    "Premium", 
 	                                    premiumMember.getPersonalTrainer(),
 	                                    premiumMember.getPaidAmount(),
-	                                    premiumMember.isFullPayment() ? "Yes" : "No",
-	                                    premiumMember.getDiscountAmount(),
-	                                    "~","~", "~", "~", "~" // regular member columns set to "~" (empty/null)
+	                                    "~","~" // regular member columns set to "~" (empty/null)
 	                                );
 
 	                            } 
 	                            else if (member instanceof RegularMember) {
 	                                RegularMember regularMember = (RegularMember) member;
 	                                memberData = String.format(
-	                                    "%-10s %-25s %-20s %-20s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-	                                    + " %-20s %-15s %-15s %-20s" // premium
-	                                    + " %-12s %-13s %-25s %-20s %-20s", // regular
+	                                	"%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+	        	                        + " %-20s %-15s" // premium
+	        	                        + " %-12s %-20s", // regular
 
 	                                    regularMember.getId(),
 	                                    regularMember.getName(),
+	                                    regularMember.getGender(),
 	                                    regularMember.getLocation(),
 	                                    regularMember.getPhone(),
+	                                    regularMember.getDOB(),
 	                                    regularMember.getEmail(),
 	                                    regularMember.getMembershipStartDate(),
 	                                    regularMember.getAttendance(),
 	                                    regularMember.getLoyaltyPoints(),
 	                                    regularMember.isActiveStatus() ? "Active" : "Inactive",
 	                                    "Regular",
-	                                    "~","~","~","~", // Premium member columns set to "~" (empty/null)
+	                                    "~","~", // Premium member columns set to "~" (empty/null)
 	                                    regularMember.getPlan(),
-	                                    regularMember.getPlanPrice(regularMember.getPlan()),
-	                                    regularMember.isEligibleForUpgrade() ? "Yes" : "No",
-	                                    regularMember.getReferralSource(),
-	                                    regularMember.getRemovalReason().isEmpty() ? "N/A" : regularMember.getRemovalReason()
+	                                    regularMember.getReferralSource()
 	                                );
 	                            }
 
@@ -1548,33 +1575,109 @@ public class GymGUI{
 	                        JOptionPane.showMessageDialog(null, "Failed to export member data!\nError: "+e1.getMessage(),"Export Failed",JOptionPane.ERROR_MESSAGE);
 	                    }	                
 	               }
-	                
-	                /*
-	                 * adding mouse interaction effects again because mouseListeners of exportFileButton are removed every call of loadTableData.run()
-	                 */
-	                
-                    @Override
-    		        public void mouseEntered(MouseEvent e) {
-    		            exportFileButton.setBackground(PASTELBLUE);
-    		            exportFileButton.setForeground(MIDNIGHTBLUE);
-    		        }
+	            });
+	            
+	            // import button functionlity
+	            importFileButton.addMouseListener(new MouseAdapter() {
+	            	@Override
+	            	public void mousePressed(MouseEvent e) {
+	            		
+	                    try (FileReader reader = new FileReader(filePath)) {
+	                    	members.clear();
+	                        StringBuilder fileContent = new StringBuilder();
+	                        int character;
+	                        
+	                        // Reading character by character
+	                        while ((character = reader.read()) != -1) {
+	                            fileContent.append((char) character);
+	                        }
 
-    		        @Override
-    		        public void mouseExited(MouseEvent e) {
-    		            exportFileButton.setBackground(MIDNIGHTBLUE);
-    		            exportFileButton.setForeground(LIGHTGRAY);
-    		        }
-    		        
-    		        @Override
-    		        public void mouseClicked(MouseEvent e) {
-    		        	exportFileButton.setBackground(MIDNIGHTBLUE);
-    		        }
-    		        
-    		        @Override
-    		        public void mouseReleased(MouseEvent e) {
-    		        	exportFileButton.setForeground(LIGHTGRAY);
-    		        	exportFileButton.setBackground(MIDNIGHTBLUE);
-    		        }
+	                        // Splitting file content into lines
+	                        String[] lines = fileContent.toString().split("\n");
+
+	                        // Skipping header and separator (assuming first 2 lines are header)
+	                        for (int i = 2; i < lines.length; i++) {
+	                            String line = lines[i].trim();
+	                            
+	                            // Splitting line into columns (based on fixed-width spacing)
+	                            String[] columns = line.split("\\s{2,}"); // At least 2 spaces as delimiter
+
+	                            // Extracting common attributes
+	                            int id = Integer.parseInt(columns[0]);
+	                            String name = columns[1];
+	                            String gender = columns[2];
+	                            String location = columns[3];
+	                            String phone = columns[4];
+	                            String DOB = columns[5];
+	                            String email = columns[6];
+	                            String membershipStartDate = columns[7];
+	                            int attendance = Integer.parseInt(columns[8]);
+	                            boolean isActive = columns[10].equalsIgnoreCase("Active");
+	                            String memberType = columns[11];
+	                            String personalTrainer = columns[12];
+	                            double paidAmount;
+	                            String plan;
+	                            String referralSource;
+	                            
+	                            GymMember member = null;
+
+	                            if (memberType.equals("Premium")) {
+		                            personalTrainer = columns[12];
+		                            paidAmount = Double.parseDouble(columns[13]);
+	                            	
+	                                // creating a PremiumMember object and adding to the list
+	                            	member = new PremiumMember(id,name,location,phone,email,gender,DOB,membershipStartDate,personalTrainer);
+
+	                                for(int j = 0 ; j < attendance ; j++) {
+	                                	member.markAttendance();
+	                                }
+	                            	
+	                                // if paidAmount is not 0
+	                                if(paidAmount != 0.0) {
+		                            	// casting member to PremiumMember, to pay due amount
+		                            	PremiumMember premiumMember = (PremiumMember) member;
+		                            	
+		                            	premiumMember.payDueAmount(paidAmount);
+	                                }
+	                            } 
+	                            else if (memberType.equals("Regular")) {
+	                            	plan = columns[14];
+	                            	referralSource = columns[15];
+	                            	
+	                                // creating a RegularMember object and adding to the list
+	                                member = new RegularMember(id,name,location,phone,email,gender,DOB,membershipStartDate,referralSource); 
+	                            
+	                                for(int j = 0 ; j < attendance ; j++) {
+	                                	member.markAttendance();
+	                                }
+	                                
+	                                // if plan is not the default "Basic" one
+	                                if(!plan.equals("Basic")) {
+	                                	
+		                            	// casting member to RegularMember, to upgradePlan
+		                            	RegularMember regularMember = (RegularMember) member;
+		                            	
+		                            	regularMember.upgradePlan(plan);
+	                                }
+	                            }
+	                            
+                                
+                                if(isActive) {
+                                	member.activateMembership();
+                                }
+                                members.add(member);
+	                        }
+	                        
+	                        loadTableData.run();
+	                        
+	                        // success message
+	                        JOptionPane.showMessageDialog(null, "Data has successfully been imported!","Import Successful",JOptionPane.INFORMATION_MESSAGE);
+
+	                    }
+	                    catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e1) {
+	                    	JOptionPane.showMessageDialog(null, "Failed to import member data!\nError: "+e1.getMessage(),"Import Failed",JOptionPane.ERROR_MESSAGE);
+	                    }
+	            	}
 	            });
 
 	            
