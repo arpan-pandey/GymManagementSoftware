@@ -1656,8 +1656,7 @@ public class GymGUI{
 	                                	
 		                            	// casting member to RegularMember, to upgradePlan
 		                            	RegularMember regularMember = (RegularMember) member;
-		                            	
-		                            	System.out.println(1);
+
 		                            	regularMember.upgradePlan(plan);
 	                                }
 	                            }
