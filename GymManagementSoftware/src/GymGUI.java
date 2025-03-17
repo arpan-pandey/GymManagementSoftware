@@ -1487,6 +1487,13 @@ public class GymGUI{
 	            exportFileButton.addMouseListener(new MouseAdapter() {
 	                @Override
 	                public void mousePressed(MouseEvent e) {
+	                	
+	                	// removing caret from search field
+	                	if(tableControlSearch_F.getText().trim().equals("")) {
+		            		tableControlSearch_F.setText(searchPlaceholder);
+		            		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+	                	}
+	                	tableControlSearch_F.setFocusable(false);
 
 	                    try (FileWriter writer = new FileWriter(filePath)) {
 
@@ -1579,8 +1586,17 @@ public class GymGUI{
 	            
 	            // import button functionlity
 	            importFileButton.addMouseListener(new MouseAdapter() {
+	            	
+	            	
 	            	@Override
 	            	public void mousePressed(MouseEvent e) {
+	            		
+	                	// removing caret from search field
+	                	if(tableControlSearch_F.getText().trim().equals("")) {
+		            		tableControlSearch_F.setText(searchPlaceholder);
+		            		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+	                	}
+	                	tableControlSearch_F.setFocusable(false);
 	            		
 	                    try (FileReader reader = new FileReader(filePath)) {
 	                    	members.clear();
@@ -1694,8 +1710,6 @@ public class GymGUI{
 					@Override
 					public void itemStateChanged(ItemEvent e) {
 						
-						tableControlSearch_F.setFocusable(false);
-						
 						// checking if an option was selected
 				        if (e.getStateChange() == ItemEvent.SELECTED) { filter.run(); }
 					}
@@ -1713,11 +1727,26 @@ public class GymGUI{
 					}
 				});
 	            
+	            for(JComboBox comboBox : controlComboBoxes) {
+	            	comboBox.addMouseListener(new MouseAdapter() {
+	            		@Override
+	            		public void mousePressed(MouseEvent e) {
+	            			
+		                	// removing caret from search field
+		                	if(tableControlSearch_F.getText().trim().equals("")) {
+			            		tableControlSearch_F.setText(searchPlaceholder);
+			            		tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
+		                	}
+		                	tableControlSearch_F.setFocusable(false);
+	            		}
+	            	});
+	            }
+	            
 	            clearFilterButton.addMouseListener(new MouseAdapter() {
 	            	@Override
 	            	public void mousePressed(MouseEvent e) {
 	            		
-	            		boolean isSearching = !(tableControlSearch_F.getText().isEmpty() || tableControlSearch_F.getText().equals(searchPlaceholder));
+	            		boolean isSearching = !(tableControlSearch_F.getText().trim().equals("") || tableControlSearch_F.getText().equals(searchPlaceholder));
 	            		boolean hasSelectedStatus = controlActiveStatus_C.getSelectedIndex()!=0;
 	            		boolean hasSelectedType = controlMemberType_C.getSelectedIndex()!=0;
 	            		
