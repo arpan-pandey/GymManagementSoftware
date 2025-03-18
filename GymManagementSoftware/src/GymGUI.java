@@ -824,7 +824,7 @@ public class GymGUI{
 		menuButtonPanel.setPreferredSize(new Dimension(MENU_BAR_WIDTH, 200));
 		menuButtonPanel.setBackground(DARKNAVY);
 		menuButtonPanel.setBorder(DEFAULT_BUTTON_OUTLINE);
-		menuButtonPanel.setLayout(new GridLayout(0,1,0,0));
+		menuButtonPanel.setLayout(new GridLayout(3,1));
 		
 		//adding each button to the menuButtonPane using a for each loop
 		for(JButton button: menuButtons) {
