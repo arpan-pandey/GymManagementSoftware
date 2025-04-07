@@ -64,7 +64,10 @@ import javax.swing.RowFilter;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -72,8 +75,6 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
 public class GymGUI{
-    
-    
     /*
      * color variables
      */
@@ -444,10 +445,42 @@ public class GymGUI{
                     new JTextField(), // location
                     new JTextField(), // phone
                     new JTextField(), // email
-                    new JTextField(), // DOB
-                    new JTextField(), // start date
                     new JTextField(), // personal trainer
                     new JTextField()  // referral source
+                };
+                
+                private JPanel[] comboContainers = {
+                	new JPanel(),
+                	new JPanel()
+                };
+                
+                private String[][] inputComboItems = {
+                	{   // year (dob)
+                		"Year", "2006", "2005", "2004", "2003", "2002", "2001", "2000", "1999", "1998",
+                        "1997", "1996", "1995", "1994", "1993", "1992", "1991", "1990", "1989", "1988",
+                        "1987", "1986", "1985", "1984", "1983", "1982", "1981", "1980"
+                	},
+                	{   // month (shared for dob and start date)
+                		"Month", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"
+                	},
+                	{   // day (shared for dob and start date)
+                		"Day", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+                		"11", "12", "13", "14", "15", "16", "17", "18", "19", "20",
+                		"21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"
+                	},
+                	{   // year (start date)
+                		"Year","2025", "2024", "2023", "2022", "2021", "2020", "2019",
+                		"2018", "2017", "2016", "2015"
+                	}
+                };
+                
+                private JComboBox[] inputCombos = {
+                	new JComboBox<String>(inputComboItems[0]), // year (dob)
+                	new JComboBox<String>(inputComboItems[1]), // month
+                	new JComboBox<String>(inputComboItems[2]), // day
+                	new JComboBox<String>(inputComboItems[3]), // year (start date)
+                	new JComboBox<String>(inputComboItems[1]), // month
+                	new JComboBox<String>(inputComboItems[2])  // day
                 };
 
                 
@@ -469,8 +502,6 @@ public class GymGUI{
                                 "Enter city",            // location
                                 "+977 9XXXXXXXX",        // phone no.
                                 "name@domain.com",        // email
-                                "YYYY-MM-DD",            // DOB
-                                "YYYY-MM-DD",            // Membership Start Date
                             };
                     
                 private String[][]
@@ -649,7 +680,7 @@ public class GymGUI{
         },
         //array of utility buttons
         utilityButtons_P = { 
-            new JPanel(), //back button    for add a member forms
+            new JPanel(), //back button for add a member forms
             new JPanel(), // back button for member management
         },
         // array of center body panels
@@ -1217,7 +1248,6 @@ public class GymGUI{
                 scrollPane.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mousePressed(MouseEvent e) {
-                        
                         tableControlSearch_F.setFocusable(false); // removing caret
                         
                         // adding placeholder if nothing is input
@@ -1825,6 +1855,7 @@ public class GymGUI{
                     
                     formPanels[formIndex].setBackground(LIGHTGRAY);
                     formPanels[formIndex].setLayout(new GridLayout(3, 3, 0, 0));
+                    int comboIndex = 0;
                     
                     for (int j = 0; j < inputPanels.length - 1; j++) {
 
@@ -1832,26 +1863,31 @@ public class GymGUI{
                         
                         inputLabels[l].setForeground(MIDNIGHTBLUE);
                         inputLabels[l].setFont(CENTURY_GOTHIC_BOLD_15);
-
                         
+                        // for panels with flow layout
+                        if(j==5 || j==6 || j==7) {
+                        	inputLabels[j].setPreferredSize(new Dimension(200, 15)); // increasing the width of label to make it so that panels with flow layout work properly
+                        }
+
                         // initializing panels
                         JPanel inputPanel = inputPanels[j]; //putting the current panel into a variable for easy future use
 
                         inputPanel.removeAll();
                         inputPanel.setBorder(FORM_INPUT_MARGIN);
                         inputPanel.setBackground(LIGHTGRAY);
-                        inputPanel.setLayout(new BorderLayout());
+                        
+                        // flow layout for 3 panels, with others being border layout
+                        inputPanel.setLayout(j==5 ?
+                        					new FlowLayout(FlowLayout.LEADING, 0, 3)
+                        					:
+                        					new BorderLayout());
+                        
                         inputPanel.add(inputLabels[l], BorderLayout.NORTH); // adding label at the top
 
+                        //adding gender radio buttons instead of a text field for panel 5
                         if (j == 5) { 
-                            //adding gender radio buttons instead of a text field for panel 5
-                            
-                            inputPanel.setLayout(new FlowLayout(FlowLayout.LEADING, 0, 0)); // setting different layout
-                            inputLabels[j].setPreferredSize(new Dimension(200, 15)); // increasing the width of label to make it so that gender radio buttons appaer on next line
-
-
+                        	
                             // to set attributes of radio buttons
-                            
                             for (int k = 0; k < 2; k++) {
 
                                 JRadioButton genderRadio = genderRadioButtons[k]; //putting the current radio button into a variable for easy future use
@@ -1894,10 +1930,82 @@ public class GymGUI{
                             }
                             
                         }
-                        
+                        else if(j==6 || j==7) {
+                        	int containerIndex = j==6 ? 0 : 1;
+                        	JPanel currentContainer = comboContainers[containerIndex]; // comon variable
+                        	
+                        	currentContainer.setBackground(LIGHTGRAY);
+                        	currentContainer.setPreferredSize(new Dimension(1,30));
+                        	currentContainer.setLayout(new GridLayout(1,3,5,0));
+                        	inputPanel.add(currentContainer, BorderLayout.SOUTH);
+                        	
+                        	currentContainer.add(inputCombos[comboIndex]);
+                        	currentContainer.add(inputCombos[comboIndex+1]);
+                        	currentContainer.add(inputCombos[comboIndex+2]);
+                        	comboIndex+=3;
+                        	
+                        	inputCombos[0].setName("Year");
+                        	inputCombos[1].setName("Month");
+                        	inputCombos[2].setName("Day");
+                        	inputCombos[3].setName("Year");
+                        	inputCombos[4].setName("Month");
+                        	inputCombos[5].setName("Day");
+                        	
+                        	for(int k = 0 ; k < inputCombos.length ; k++) {
+                        		inputCombos[k].setFocusable(false);
+                        		inputCombos[k].setSelectedIndex(0);
+                        		inputCombos[k].setForeground(PLACEHOLDERGRAY);
+                        		inputCombos[k].setBackground(LIGHTGRAY);
+                        		int m = k; // to pass into next block
+                        		
+                        		inputCombos[k].addPopupMenuListener(new PopupMenuListener() {
+
+									@Override
+									public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+										
+								        SwingUtilities.invokeLater(() -> {
+								            String firstItem = (String) inputCombos[m].getItemAt(0);
+								            if (firstItem.equals("Year") || firstItem.equals("Month") || firstItem.equals("Day")) {
+								            	inputCombos[m].removeItemAt(0);
+								            	inputCombos[m].setSelectedIndex(-1);
+								        	}
+								        });
+								        
+									}
+
+									@Override
+									public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
+										if(inputCombos[m].getSelectedIndex()==-1) {
+											String placeholder = (m == 0 || m == 3) ? "Year" : 
+																 ((m == 1 || m == 4) ? "Month" : "Day");
+
+											if (!inputCombos[m].getItemAt(0).equals(placeholder)) {
+												inputCombos[m].insertItemAt(placeholder, 0);
+												inputCombos[m].setSelectedIndex(0);
+											}
+										}
+									}
+
+									@Override
+									public void popupMenuCanceled(PopupMenuEvent e) {
+										if(inputCombos[m].getSelectedIndex()==-1) {
+											String placeholder = (m == 0 || m == 3) ? "Year" : 
+																 ((m == 1 || m == 4) ? "Month" : "Day");
+
+											if (!inputCombos[m].getItemAt(0).equals(placeholder)) {
+												inputCombos[m].insertItemAt(placeholder, 0);
+												inputCombos[m].setSelectedIndex(0);
+											}
+										}
+										
+									}
+                        			
+                        		});
+                        	}
+                        }
                         else {
                             
-                            int k = j < 5 ? j : (j==inputFields.length - 1 && isFormContent[1]) ? j : j-1; // to use/add [j-1] fields to the panels after panel 5
+                            int k = j < 5 ? j : (j==inputFields.length - 1 && isFormContent[1]) ? j : j-3; // to use/add [j-1] fields to the panels after panel 5
                                 
                             // setting the placeholders for input variables
                             String inputPlaceholder = k < (inputFields.length - 2) ? commonPlaceholders[k] : uniquePlaceholders[formIndex][0];
@@ -1941,7 +2049,6 @@ public class GymGUI{
                                 @Override
                                 public void mousePressed(MouseEvent e) {
                                     inputField.setFocusable(false);
-                                    
                                 }
                                 
                                 @Override
@@ -1960,7 +2067,6 @@ public class GymGUI{
                     formButtons_P.setPreferredSize(new Dimension(1, 100));
                     formButtons_P.setLayout(new BorderLayout());
 
-                    
                     formControlButtonsPanel.setLayout(new FlowLayout(FlowLayout.TRAILING,10,30));
                     formControlButtonsPanel.setPreferredSize(new Dimension(400,1));
                     formControlButtonsPanel.setBackground(LIGHTGRAY);
@@ -2081,7 +2187,6 @@ public class GymGUI{
                         } 
                         
                          // checking if gender is selected after confirming all fields are filled 
-                        
                         else if (!isGenderSelected) {    
                             // remving caret from the fields
                             for (int k = 0; k < inputFields.length; k++) {
@@ -2355,7 +2460,7 @@ public class GymGUI{
                                 
                                 individualMemberFields[1].setFocusable(false); // making sure the field isn't focusable at first
                                 
-                             // adding button panels in corresponding places
+                                // adding button panels in corresponding places
                                 for(int i = 0 ; i < individualMemberButtons_P.length - 1 ; i++ ) {
                                     
                                     individualMemberButtons_P[i].removeAll();
@@ -2481,6 +2586,7 @@ public class GymGUI{
                                             else {
                                                 individualMemberButtons_P[6].add(individualMemberFieldTitle[2], BorderLayout.NORTH); // adding label at the top
                                                 individualMemberButtons_P[6].add(individualMemberFields[0], BorderLayout.SOUTH); // adding field at the bottom
+                                                individualMemberFields[0].setText("");
                                             }
                                             
                                             break;
@@ -2776,7 +2882,7 @@ public class GymGUI{
 
                                 // resetting form fields
                                 for (int j = 0; j < inputFields.length; j++) {
-                                    String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+                                    String placeholder = j < 5 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
                                     inputFields[j].setForeground(PLACEHOLDERGRAY);
                                     inputFields[j].setText(placeholder);
                                     inputFields[j].setFocusable(false);
