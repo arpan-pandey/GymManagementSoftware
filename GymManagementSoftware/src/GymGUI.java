@@ -1944,13 +1944,6 @@ public class GymGUI{
                         	currentContainer.add(inputCombos[comboIndex+2]);
                         	comboIndex+=3;
                         	
-                        	inputCombos[0].setName("Year");
-                        	inputCombos[1].setName("Month");
-                        	inputCombos[2].setName("Day");
-                        	inputCombos[3].setName("Year");
-                        	inputCombos[4].setName("Month");
-                        	inputCombos[5].setName("Day");
-                        	
                         	for(int k = 0 ; k < inputCombos.length ; k++) {
                         		inputCombos[k].setFocusable(false);
                         		inputCombos[k].setSelectedIndex(0);
@@ -1963,6 +1956,7 @@ public class GymGUI{
 									@Override
 									public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 										
+										// removing the placeholders from the comboboxes, only after the popup is fully loaded
 								        SwingUtilities.invokeLater(() -> {
 								            String firstItem = (String) inputCombos[m].getItemAt(0);
 								            if (firstItem.equals("Year") || firstItem.equals("Month") || firstItem.equals("Day")) {
@@ -1973,6 +1967,7 @@ public class GymGUI{
 								        
 									}
 
+									// adding the popup back if the popup is closed without any item selected
 									@Override
 									public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 										if(inputCombos[m].getSelectedIndex()==-1) {
@@ -1986,6 +1981,7 @@ public class GymGUI{
 										}
 									}
 
+									// adding the popup back if the popup is cancelled
 									@Override
 									public void popupMenuCanceled(PopupMenuEvent e) {
 										if(inputCombos[m].getSelectedIndex()==-1) {
@@ -2221,10 +2217,31 @@ public class GymGUI{
                                     phone = inputFields[3].getText(),
                                     email = inputFields[4].getText(),
                                     gender = indexOfGenderSelected==0 ? "Male" : "Female", // use of ternary operator to dynamically assign value
-                                    DOB = inputFields[5].getText(),
-                                    membershipStartDate = inputFields[6].getText(),
-                                    personalTrainer = inputFields[7].getText(), // unique field
-                                    referralSource = inputFields[8].getText(); // unique field
+                                    		
+                                    // getting combo box selection, and adding 0 in front of single digit choices
+                                    DOB = inputCombos[0].getSelectedItem()
+                                    	  +
+                                    	  "-" 
+                                    	  + 
+                                    	  (inputCombos[1].getSelectedItem().toString().length() == 1 ? "0" : "") + inputCombos[4].getSelectedItem()
+                                    	  +
+                                    	  "-"
+                                    	  +
+                                    	  (inputCombos[2].getSelectedItem().toString().length() == 1 ? "0" : "") + inputCombos[5].getSelectedItem(),
+                                    
+                    				// getting combo box selection, and adding 0 in front of single digit choices
+                                    membershipStartDate = inputCombos[3].getSelectedItem()
+                                    					  +
+                                    					  "-" 
+                                    					  + 
+                                    					  (inputCombos[4].getSelectedItem().toString().length() == 1 ? "0" : "") + inputCombos[4].getSelectedItem()
+                                    					  +
+                                    					  "-"
+                                    					  +
+                                    					  (inputCombos[5].getSelectedItem().toString().length() == 1 ? "0" : "") + inputCombos[5].getSelectedItem(),
+                                    
+                                    personalTrainer = inputFields[5].getText(), // unique field
+                                    referralSource = inputFields[6].getText(); // unique field
                                     
                                     
                                      // creating premium member object, based on the form on display
@@ -2252,7 +2269,7 @@ public class GymGUI{
                                     for(int j=0 ; j < inputFields.length ; j++ ) {
                                         
                                         // setting the placeholders for input variables
-                                        String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+                                        String placeholder = j < 5 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
                                         
                                         inputFields[j].setForeground(PLACEHOLDERGRAY);
                                         inputFields[j].setText(placeholder);
@@ -2262,7 +2279,16 @@ public class GymGUI{
                                     
                                     GENDER.clearSelection(); // deselecting radio buttons
                                     isGenderSelected = false; // since gender is deselected
-                                
+                                    
+                                    // adding combo box placeholders again
+                                    for(int m = 0 ; m < inputCombos.length ; m++) {
+    									String placeholder = (m == 0 || m == 3) ? "Year" : 
+   										 ((m == 1 || m == 4) ? "Month" : "Day");
+
+
+   										inputCombos[m].insertItemAt(placeholder, 0);
+   										inputCombos[m].setSelectedIndex(0);
+                                    }
                                 }
                                 else {
                                     JOptionPane.showMessageDialog(
