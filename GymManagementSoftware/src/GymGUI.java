@@ -2111,7 +2111,7 @@ public class GymGUI{
                                     for(int j=0 ; j < inputFields.length ; j++ ) {
                                         
                                         // setting the placeholders for input variables
-                                        String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+                                        String placeholder = j < 5 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
                                         
                                         inputFields[j].setForeground(PLACEHOLDERGRAY);
                                         inputFields[j].setText(placeholder);
@@ -2121,6 +2121,17 @@ public class GymGUI{
                                     
                                     GENDER.clearSelection(); // deselecting radio buttons
                                     isGenderSelected = false; // since gender is deselected
+                                    
+                                    // resetting combo box placeholders
+                                    for(int m = 0 ; m < inputCombos.length ; m++) {
+    									String placeholder = (m == 0 || m == 3) ? "Year" : 
+   										 ((m == 1 || m == 4) ? "Month" : "Day");
+
+    									if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
+    										inputCombos[m].insertItemAt(placeholder, 0);
+    										inputCombos[m].setSelectedIndex(0);
+    									}
+                                    }
                                     
                                     JOptionPane.showMessageDialog(frame, "Form successfully cleared!", "Success", JOptionPane.INFORMATION_MESSAGE); // success message
                                 }
@@ -2147,6 +2158,17 @@ public class GymGUI{
                         
                         GENDER.clearSelection(); // deselecting radio buttons
                         isGenderSelected = false; // since gender is deselected
+                        
+                        // resetting combo box placeholders, silently
+                        for(int m = 0 ; m < inputCombos.length ; m++) {
+							String placeholder = (m == 0 || m == 3) ? "Year" : 
+								 ((m == 1 || m == 4) ? "Month" : "Day");
+
+							if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
+								inputCombos[m].insertItemAt(placeholder, 0);
+								inputCombos[m].setSelectedIndex(0);
+							}
+                        }
                     }
                     
                     // event listener for add premium member/regular member buttons of respective forms
@@ -2280,14 +2302,15 @@ public class GymGUI{
                                     GENDER.clearSelection(); // deselecting radio buttons
                                     isGenderSelected = false; // since gender is deselected
                                     
-                                    // adding combo box placeholders again
+                                    // resetting combo box placeholders
                                     for(int m = 0 ; m < inputCombos.length ; m++) {
     									String placeholder = (m == 0 || m == 3) ? "Year" : 
    										 ((m == 1 || m == 4) ? "Month" : "Day");
 
-
-   										inputCombos[m].insertItemAt(placeholder, 0);
-   										inputCombos[m].setSelectedIndex(0);
+   										if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
+   											inputCombos[m].insertItemAt(placeholder, 0);
+   											inputCombos[m].setSelectedIndex(0);
+   										}
                                     }
                                 }
                                 else {
@@ -2917,6 +2940,18 @@ public class GymGUI{
 
                                 GENDER.clearSelection();
                                 isGenderSelected = false;
+                                
+                                // resetting combo box placeholders
+                                for(int m = 0 ; m < inputCombos.length ; m++) {
+									String placeholder = (m == 0 || m == 3) ? "Year" : 
+										 ((m == 1 || m == 4) ? "Month" : "Day");
+
+
+									if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
+										inputCombos[m].insertItemAt(placeholder, 0);
+										inputCombos[m].setSelectedIndex(0);
+									}
+                                }
 
                                 // reverting title and remove back button
                                 addMemberTitle_L.setText("Add a Member");
