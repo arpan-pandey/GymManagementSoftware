@@ -2125,7 +2125,7 @@ public class GymGUI{
                                     // resetting combo box placeholders
                                     for(int m = 0 ; m < inputCombos.length ; m++) {
     									String placeholder = (m == 0 || m == 3) ? "Year" : 
-   										 ((m == 1 || m == 4) ? "Month" : "Day");
+   										 					 ((m == 1 || m == 4) ? "Month" : "Day");
 
     									if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
     										inputCombos[m].insertItemAt(placeholder, 0);
@@ -2305,7 +2305,7 @@ public class GymGUI{
                                     // resetting combo box placeholders
                                     for(int m = 0 ; m < inputCombos.length ; m++) {
     									String placeholder = (m == 0 || m == 3) ? "Year" : 
-   										 ((m == 1 || m == 4) ? "Month" : "Day");
+   										 					 ((m == 1 || m == 4) ? "Month" : "Day");
 
    										if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
    											inputCombos[m].insertItemAt(placeholder, 0);
@@ -2944,7 +2944,7 @@ public class GymGUI{
                                 // resetting combo box placeholders
                                 for(int m = 0 ; m < inputCombos.length ; m++) {
 									String placeholder = (m == 0 || m == 3) ? "Year" : 
-										 ((m == 1 || m == 4) ? "Month" : "Day");
+										 				 ((m == 1 || m == 4) ? "Month" : "Day");
 
 
 									if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
