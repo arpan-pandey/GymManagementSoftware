@@ -3486,7 +3486,7 @@ public class GymGUI{
             @Override
             public void mousePressed(MouseEvent e) {
                 GymMember member = members.get(currentMemberIndex); // putting the current member into a common variable
-                showDialog = false; // setting to false so dialog doesn't appear again when we a re already in the management screen
+                showDialog = false; // sett0ing to false so dialog doesn't appear again when we a re already in the management screen
                 
                 boolean proceedUpdate = true; // boolean to make the card update or not        
                 
