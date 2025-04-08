@@ -2146,7 +2146,7 @@ public class GymGUI{
                                 for(int j=0 ; j < inputFields.length ; j++ ) {
                                     
                                     // setting the placeholders for input variables
-                                    String placeholder = j < 7 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
+                                    String placeholder = j < 5 ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
                                     
                                     inputFields[j].setForeground(PLACEHOLDERGRAY);
                                     inputFields[j].setText(placeholder);
