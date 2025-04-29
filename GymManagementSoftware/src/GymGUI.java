@@ -36,12 +36,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Member;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -1604,12 +1601,11 @@ public class GymGUI{
 
                             // success message
                             JOptionPane.showMessageDialog(null, "Data has successfully been exported to this project's directory!","Export Successful",JOptionPane.INFORMATION_MESSAGE);
-
                         }
                         catch (IOException e1) {
                             // error message
                             JOptionPane.showMessageDialog(null, "Failed to export member data!\nError: "+e1.getMessage(),"Export Failed",JOptionPane.ERROR_MESSAGE);
-                        }                    
+                        }
                    }
                 });
                 
