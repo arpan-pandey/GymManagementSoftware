@@ -2205,6 +2205,9 @@ public class GymGUI{
                         
                         boolean allFieldsFilled = true; // assuming all fields are filled initially
                         
+                        boolean isValidDOB = !inputCombos[0].getSelectedItem().equals("Year") && !inputCombos[1].getSelectedItem().equals("Month") && !inputCombos[2].getSelectedItem().equals("Day");
+                        boolean isValidStartDate = !inputCombos[3].getSelectedItem().equals("Year") && !inputCombos[4].getSelectedItem().equals("Month") && !inputCombos[5].getSelectedItem().equals("Day");
+                        
                         int currentFormIndex = e.getSource()==formButtons[1] ? 0 : 1;
                         
                         String memberType = isFormContent[0] ? "premium" : "regular";
@@ -2241,7 +2244,25 @@ public class GymGUI{
                             }
                             
                             JOptionPane.showMessageDialog(frame, "Please select a gender.", "Incomplete Form", JOptionPane.ERROR_MESSAGE);
-                        } 
+                        }
+                        
+                        else if (!isValidDOB) {
+                            // remving caret from the fields
+                            for (int k = 0; k < inputFields.length; k++) {
+                                inputFields[k].setFocusable(false);
+                            }
+                            
+                            JOptionPane.showMessageDialog(frame, "Please select a valid Date of Birth.", "Incomplete Form", JOptionPane.ERROR_MESSAGE);
+                        }
+                        
+                        else if (!isValidStartDate) {
+                            // remving caret from the fields
+                            for (int k = 0; k < inputFields.length; k++) {
+                                inputFields[k].setFocusable(false);
+                            }
+                            
+                            JOptionPane.showMessageDialog(frame, "Please select a valid Start Date.", "Incomplete Form", JOptionPane.ERROR_MESSAGE);
+                        }
                         
                         // proceeding with adding a member if all conditions are met
                         else {  
