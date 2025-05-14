@@ -68,6 +68,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -378,6 +379,7 @@ public class GymGUI{
             };
         
         String projectPath = System.getProperty("user.dir"); // path of the project folder
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Text Files",".txt"); // to show only .txt files when users are presented with file save/open dialog
         
     /*
      * addMember VARIABLES
@@ -1532,6 +1534,7 @@ public class GymGUI{
                         
                         JFileChooser fileChooser = new JFileChooser(); // creating a JFileChooser instance
                         fileChooser.setCurrentDirectory(new File(projectPath)); // setting default directory to project directory
+                        fileChooser.setFileFilter(fileFilter); // showing only .txt files
                         
                         int option = fileChooser.showSaveDialog(null); // opening dialog box to save a file, assisnging it to a variable
                         
@@ -1644,6 +1647,7 @@ public class GymGUI{
                         
                         JFileChooser fileChooser = new JFileChooser(); // creating a JFileChooser instance
                         fileChooser.setCurrentDirectory(new File(projectPath)); // setting default directory to project directory
+                        fileChooser.setFileFilter(fileFilter); // showing only .txt files
                         
                         int option = fileChooser.showOpenDialog(null); // opening dialog box to save a file, assisnging it to a variable
                         
