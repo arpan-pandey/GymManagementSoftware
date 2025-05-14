@@ -36,11 +36,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -48,6 +50,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -374,7 +377,7 @@ public class GymGUI{
                                 )
             };
         
-        String filePath = "MemberDetails.txt"; // saving in the same directory
+        String projectPath = System.getProperty("user.dir"); // path of the project folder
         
     /*
      * addMember VARIABLES
@@ -1389,8 +1392,14 @@ public class GymGUI{
                 // adding a row sorter to the table to sort by ascending id
                 rowSorter = new TableRowSorter<DefaultTableModel>(model);
                 
-                // setting comparator of rowSorter to compare the ids of members and sort in ascending order (usage of lambda expression)
-                rowSorter.setComparator(0, (id1, id2) -> Integer.compare(Integer.parseInt(id1.toString().trim()), Integer.parseInt(id2.toString().trim())));
+                // setting comparator of rowSorter to compare the ids of members and sort in descending order
+                rowSorter.setComparator(0, new Comparator<String>() {
+
+					@Override
+					public int compare(String o1, String o2) {
+						return Integer.compare(Integer.parseInt(o2.trim()), Integer.parseInt(o1.trim()));
+					}
+                });
                 
                 table.setRowSorter(rowSorter); // setting sorter
                 rowSorter.setSortKeys(Arrays.asList(new RowSorter.SortKey(0, SortOrder.ASCENDING))); // Sort by ID (Column 0)
@@ -1520,91 +1529,101 @@ public class GymGUI{
                             tableControlSearch_F.setForeground(PLACEHOLDERGRAY);
                         }
                         tableControlSearch_F.setFocusable(false);
+                        
+                        JFileChooser fileChooser = new JFileChooser(); // creating a JFileChooser instance
+                        fileChooser.setCurrentDirectory(new File(projectPath)); // setting default directory to project directory
+                        
+                        int option = fileChooser.showSaveDialog(null); // opening dialog box to save a file, assisnging it to a variable
+                        
+                        // if user chooses a file
+                        if(option == JFileChooser.APPROVE_OPTION) {
+                        	File file = fileChooser.getSelectedFile(); // getting the file selected and putting it into a File variable
+                        	
+                        	try (FileWriter writer = new FileWriter(file)) {
 
-                        try (FileWriter writer = new FileWriter(filePath)) {
+                                // Header with 19 columns
+                                String header = String.format(
+                                    "%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+                                    + " %-20s %-15s" // premium
+                                    + " %-12s %-20s", // regular
 
-                            // Header with 19 columns
-                            String header = String.format(
-                                "%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-                                + " %-20s %-15s" // premium
-                                + " %-12s %-20s", // regular
+                                    // common attributes
+                                    "ID", "Name", "Gender", "Location", "Phone", "DOB", "Email", "Membership Start Date", "Attendance", "Loyalty Points", "Active Status", "Member Type", 
 
-                                // common attributes
-                                "ID", "Name", "Gender", "Location", "Phone", "DOB", "Email", "Membership Start Date", "Attendance", "Loyalty Points", "Active Status", "Member Type", 
+                                    // premium member attributes
+                                    "Trainer Name", "Paid Amount",
 
-                                // premium member attributes
-                                "Trainer Name", "Paid Amount",
+                                    // regular member attributes
+                                    "Plan", "Referral Source"
+                                );
+                                writer.write(header + "\n"); // using "\n" for new line
+                                writer.write("=".repeat(299)+ "\n"); // using '=' as header separator
 
-                                // regular member attributes
-                                "Plan", "Referral Source"
-                            );
-                            writer.write(header + "\n"); // using "\n" for new line
-                            writer.write("=".repeat(299)+ "\n"); // using '=' as header separator
+                                // Writing each member's details
+                                for (GymMember member : members) {
+                                    String memberData = "";
 
-                            // Writing each member's details
-                            for (GymMember member : members) {
-                                String memberData = "";
+                                    if (member instanceof PremiumMember) {
+                                        PremiumMember premiumMember = (PremiumMember) member;
 
-                                if (member instanceof PremiumMember) {
-                                    PremiumMember premiumMember = (PremiumMember) member;
+                                        memberData = String.format(
+                                            "%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+                                            + " %-20s %-15s" // premium
+                                            + " %-12s %-20s", // regular
 
-                                    memberData = String.format(
-                                        "%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-                                        + " %-20s %-15s" // premium
-                                        + " %-12s %-20s", // regular
+                                            premiumMember.getId(),
+                                            premiumMember.getName(),
+                                            premiumMember.getGender(),
+                                            premiumMember.getLocation(),
+                                            premiumMember.getPhone(),
+                                            premiumMember.getDOB(),
+                                            premiumMember.getEmail(),
+                                            premiumMember.getMembershipStartDate(),
+                                            premiumMember.getAttendance(),
+                                            premiumMember.getLoyaltyPoints(),
+                                            premiumMember.isActiveStatus() ? "Active" : "Inactive",
+                                            "Premium", 
+                                            premiumMember.getPersonalTrainer(),
+                                            premiumMember.getPaidAmount(),
+                                            "~","~" // regular member columns set to "~" (empty/null)
+                                        );
 
-                                        premiumMember.getId(),
-                                        premiumMember.getName(),
-                                        premiumMember.getGender(),
-                                        premiumMember.getLocation(),
-                                        premiumMember.getPhone(),
-                                        premiumMember.getDOB(),
-                                        premiumMember.getEmail(),
-                                        premiumMember.getMembershipStartDate(),
-                                        premiumMember.getAttendance(),
-                                        premiumMember.getLoyaltyPoints(),
-                                        premiumMember.isActiveStatus() ? "Active" : "Inactive",
-                                        "Premium", 
-                                        premiumMember.getPersonalTrainer(),
-                                        premiumMember.getPaidAmount(),
-                                        "~","~" // regular member columns set to "~" (empty/null)
-                                    );
+                                    } 
+                                    else if (member instanceof RegularMember) {
+                                        RegularMember regularMember = (RegularMember) member;
+                                        memberData = String.format(
+                                            "%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
+                                            + " %-20s %-15s" // premium
+                                            + " %-12s %-20s", // regular
 
-                                } 
-                                else if (member instanceof RegularMember) {
-                                    RegularMember regularMember = (RegularMember) member;
-                                    memberData = String.format(
-                                        "%-10s %-25s %-15s %-20s %-20s %-15s %-25s %-25s %-15s %-20s %-15s %-15s" // common
-                                        + " %-20s %-15s" // premium
-                                        + " %-12s %-20s", // regular
+                                            regularMember.getId(),
+                                            regularMember.getName(),
+                                            regularMember.getGender(),
+                                            regularMember.getLocation(),
+                                            regularMember.getPhone(),
+                                            regularMember.getDOB(),
+                                            regularMember.getEmail(),
+                                            regularMember.getMembershipStartDate(),
+                                            regularMember.getAttendance(),
+                                            regularMember.getLoyaltyPoints(),
+                                            regularMember.isActiveStatus() ? "Active" : "Inactive",
+                                            "Regular",
+                                            "~","~", // Premium member columns set to "~" (empty/null)
+                                            regularMember.getPlan(),
+                                            regularMember.getReferralSource()
+                                        );
+                                    }
 
-                                        regularMember.getId(),
-                                        regularMember.getName(),
-                                        regularMember.getGender(),
-                                        regularMember.getLocation(),
-                                        regularMember.getPhone(),
-                                        regularMember.getDOB(),
-                                        regularMember.getEmail(),
-                                        regularMember.getMembershipStartDate(),
-                                        regularMember.getAttendance(),
-                                        regularMember.getLoyaltyPoints(),
-                                        regularMember.isActiveStatus() ? "Active" : "Inactive",
-                                        "Regular",
-                                        "~","~", // Premium member columns set to "~" (empty/null)
-                                        regularMember.getPlan(),
-                                        regularMember.getReferralSource()
-                                    );
+                                    writer.write(memberData + "\n"); // ensuring new line for each member
                                 }
 
-                                writer.write(memberData + "\n"); // ensuring new line for each member
+                                // success message
+                                JOptionPane.showMessageDialog(null, "Data has successfully been exported to this project's directory!","Export Successful",JOptionPane.INFORMATION_MESSAGE);
                             }
-
-                            // success message
-                            JOptionPane.showMessageDialog(null, "Data has successfully been exported to this project's directory!","Export Successful",JOptionPane.INFORMATION_MESSAGE);
-                        }
-                        catch (IOException e1) {
-                            // error message
-                            JOptionPane.showMessageDialog(null, "Failed to export member data!\nError: "+e1.getMessage(),"Export Failed",JOptionPane.ERROR_MESSAGE);
+                            catch (IOException e1) {
+                                // error message
+                                JOptionPane.showMessageDialog(null, "Failed to export member data!\nError: "+e1.getMessage(),"Export Failed",JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                    }
                 });
@@ -1623,102 +1642,112 @@ public class GymGUI{
                         }
                         tableControlSearch_F.setFocusable(false);
                         
-                        try (FileReader reader = new FileReader(filePath)) {
-                            members.clear();
-                            StringBuilder fileContent = new StringBuilder();
-                            int character;
-                            
-                            // reading character by character
-                            while ((character = reader.read()) != -1) {
-                                fileContent.append((char) character);
-                            }
-
-                            // splitting file content into lines
-                            String[] lines = fileContent.toString().split("\n");
-
-                            // skipping header and separator (assuming first 2 lines are header)
-                            for (int i = 2; i < lines.length; i++) {
-                                String line = lines[i].trim();
+                        JFileChooser fileChooser = new JFileChooser(); // creating a JFileChooser instance
+                        fileChooser.setCurrentDirectory(new File(projectPath)); // setting default directory to project directory
+                        
+                        int option = fileChooser.showOpenDialog(null); // opening dialog box to save a file, assisnging it to a variable
+                        
+                        // if the user chooses a file
+                        if(option == JFileChooser.APPROVE_OPTION) {
+                        	File file = fileChooser.getSelectedFile();
+                        	
+                        	try (FileReader reader = new FileReader(file)) {
+                                members.clear();
+                                StringBuilder fileContent = new StringBuilder();
+                                int character;
                                 
-                                // splitting line into columns (based on fixed-width spacing)
-                                String[] columns = line.split("\\s{2,}"); // at least 2 spaces as delimiter
-                                
-                                // extracting all attributes if possible
-                                int id = Integer.parseInt(columns[0]);
-                                String name = columns[1];
-                                String gender = columns[2];
-                                String location = columns[3];
-                                String phone = columns[4];
-                                String DOB = columns[5];
-                                String email = columns[6];
-                                String membershipStartDate = columns[7];
-                                int attendance = Integer.parseInt(columns[8]);
-                                boolean isActive = columns[10].equalsIgnoreCase("Active");
-                                String memberType = columns[11];
-                                String personalTrainer = columns[12].equals("~")? "" : columns[12];
-                                double paidAmount = columns[13].equals("~")? 0.0 : Double.parseDouble(columns[13]);
-                                String plan = columns[14].equals("~")? "" : columns[14];
-                                String referralSource = columns[15].equals("~")? "" : columns[15];
-                                
-                                /*
-                                 * INITIALIZING PREMIUM OR REGULAR MEMBER BASED ON DATA
-                                 */
-                                GymMember member = memberType.equals("Premium")?
-                                            new PremiumMember(id,name,location,phone,email,gender,DOB,membershipStartDate,personalTrainer)
-                                            :
-                                            new RegularMember(id,name,location,phone,email,gender,DOB,membershipStartDate,referralSource) 
-                                    ;
-
-                                /*
-                                 * UPDATING ACTIVE STATUS
-                                 */
-                                if(isActive) {
-                                    member.activateMembership();
+                                // reading character by character
+                                while ((character = reader.read()) != -1) {
+                                    fileContent.append((char) character);
                                 }
-                                
-                                /*
-                                 * UPDATING ATTEDANCE
-                                 */
-                                for(int j = 0 ; j < attendance ; j++) {
-                                    member.markAttendance();
-                                }
-                                
-                                /*
-                                 * UPDATING PAID AMOUNT OF PREMIUM MEMBERS (if paidAmount is not 0)
-                                 */
-                                if(paidAmount != 0.0 && memberType.equals("Premium")) {
-                                    // casting member to PremiumMember, to pay due amount
-                                    PremiumMember premiumMember = (PremiumMember) member;
+
+                                // splitting file content into lines
+                                String[] lines = fileContent.toString().split("\n");
+
+                                // skipping header and separator (assuming first 2 lines are header)
+                                for (int i = 2; i < lines.length; i++) {
+                                    String line = lines[i].trim();
                                     
-                                    premiumMember.payDueAmount(paidAmount);
-                                }
-                                
-                                /*
-                                 * UPDATING PLAN OF REGULAR MEMBERS (if plan is not the default "Basic" one)
-                                 */
-                                if(!plan.equals("Basic") && memberType.equals("Regular")) {
+                                    // splitting line into columns (based on fixed-width spacing)
+                                    String[] columns = line.split("\\s{2,}"); // at least 2 spaces as delimiter
                                     
-                                    // casting member to RegularMember, to upgradePlan
-                                    RegularMember regularMember = (RegularMember) member;
+                                    // extracting all attributes if possible
+                                    int id = Integer.parseInt(columns[0]);
+                                    String name = columns[1];
+                                    String gender = columns[2];
+                                    String location = columns[3];
+                                    String phone = columns[4];
+                                    String DOB = columns[5];
+                                    String email = columns[6];
+                                    String membershipStartDate = columns[7];
+                                    int attendance = Integer.parseInt(columns[8]);
+                                    boolean isActive = columns[10].equalsIgnoreCase("Active");
+                                    String memberType = columns[11];
+                                    String personalTrainer = columns[12].equals("~")? "" : columns[12];
+                                    double paidAmount = columns[13].equals("~")? 0.0 : Double.parseDouble(columns[13]);
+                                    String plan = columns[14].equals("~")? "" : columns[14];
+                                    String referralSource = columns[15].equals("~")? "" : columns[15];
+                                    
+                                    /*
+                                     * INITIALIZING PREMIUM OR REGULAR MEMBER BASED ON DATA
+                                     */
+                                    GymMember member = memberType.equals("Premium")?
+                                                new PremiumMember(id,name,location,phone,email,gender,DOB,membershipStartDate,personalTrainer)
+                                                :
+                                                new RegularMember(id,name,location,phone,email,gender,DOB,membershipStartDate,referralSource) 
+                                        ;
 
-                                    regularMember.upgradePlan(plan);
+                                    /*
+                                     * UPDATING ACTIVE STATUS
+                                     */
+                                    if(isActive) {
+                                        member.activateMembership();
+                                    }
+                                    
+                                    /*
+                                     * UPDATING ATTEDANCE
+                                     */
+                                    for(int j = 0 ; j < attendance ; j++) {
+                                        member.markAttendance();
+                                    }
+                                    
+                                    /*
+                                     * UPDATING PAID AMOUNT OF PREMIUM MEMBERS (if paidAmount is not 0)
+                                     */
+                                    if(paidAmount != 0.0 && memberType.equals("Premium")) {
+                                        // casting member to PremiumMember, to pay due amount
+                                        PremiumMember premiumMember = (PremiumMember) member;
+                                        
+                                        premiumMember.payDueAmount(paidAmount);
+                                    }
+                                    
+                                    /*
+                                     * UPDATING PLAN OF REGULAR MEMBERS (if plan is not the default "Basic" one)
+                                     */
+                                    if(!plan.equals("Basic") && memberType.equals("Regular")) {
+                                        
+                                        // casting member to RegularMember, to upgradePlan
+                                        RegularMember regularMember = (RegularMember) member;
+
+                                        regularMember.upgradePlan(plan);
+                                    }
+                                    
+                                    /*
+                                     * ADDING MEMBER TO ARRAYLIST
+                                     */
+                                    members.add(member);
                                 }
                                 
-                                /*
-                                 * ADDING MEMBER TO ARRAYLIST
-                                 */
-                                members.add(member);
-                            }
-                            
-                            // reloading table data
-                            loadTableData.run();
-                            
-                            // success message
-                            JOptionPane.showMessageDialog(null, "Data has successfully been imported!","Import Successful",JOptionPane.INFORMATION_MESSAGE);
+                                // reloading table data
+                                loadTableData.run();
+                                
+                                // success message
+                                JOptionPane.showMessageDialog(null, "Data has successfully been imported!","Import Successful",JOptionPane.INFORMATION_MESSAGE);
 
-                        }
-                        catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e1) {
-                            JOptionPane.showMessageDialog(null, "Failed to import member data!\nError: "+e1.getMessage(),"Import Failed",JOptionPane.ERROR_MESSAGE);
+                            }
+                            catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e1) {
+                                JOptionPane.showMessageDialog(null, "Failed to import member data!\nError: "+e1.getMessage(),"Import Failed",JOptionPane.ERROR_MESSAGE);
+                            }
                         }
                     }
                 });
@@ -1954,14 +1983,17 @@ public class GymGUI{
 									public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 										
 										// removing the placeholders from the comboboxes, only after the popup is fully loaded
-								        SwingUtilities.invokeLater(() -> {
-								            String firstItem = (String) inputCombos[m].getItemAt(0);
-								            if (firstItem.equals("Year") || firstItem.equals("Month") || firstItem.equals("Day")) {
-								            	inputCombos[m].removeItemAt(0);
-								            	inputCombos[m].setSelectedIndex(-1);
-								        	}
+								        SwingUtilities.invokeLater(new Runnable(){
+								        	
+								            @Override
+								            public void run() {
+								            	String firstItem = (String) inputCombos[m].getItemAt(0);
+									            if (firstItem.equals("Year") || firstItem.equals("Month") || firstItem.equals("Day")) {
+									            	inputCombos[m].removeItemAt(0);
+									            	inputCombos[m].setSelectedIndex(-1);
+									        	}
+								            }
 								        });
-								        
 									}
 
 									// adding the popup back if the popup is closed without any item selected
