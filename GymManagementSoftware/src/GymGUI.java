@@ -2125,7 +2125,7 @@ public class GymGUI{
                             String inputPlaceholder = i < (inputFields.length - 2) ? commonPlaceholders[i] : uniquePlaceholders[currentFormIndex][0];
                             
                             // seetting the corresponding input fields into a common variable
-                            JTextField inputField = i < (inputFields.length - 2) ? inputFields[i] : inputFields[i+currentFormIndex];
+                            JTextField inputField = inputFields[i];
                             
                             // checking if input fields dont have their corresponding placeholders or empty value, and only allowing form clearing when that's the case
                             if( ! (inputField.getText().equals(inputPlaceholder)) && ! (inputField.getText().equals(""))) {
@@ -2229,10 +2229,9 @@ public class GymGUI{
                             String text = inputField.getText(); // getting text from input fields
 
                             // setting allFieldsFilled to false, if atleast one input field is "empty"
-                            if (text.equals(inputPlaceholder) || text.equals("")) {
-                                allFieldsFilled = false;
+                            if (!text.equals(inputPlaceholder) || !text.equals("")) {
+                                allFieldsFilled = true;
                             }
-                            
                         }
 
                         // LOGIC TO DISPLAY ERROR MESSAGES AND CREATE OBJECTS
@@ -2944,6 +2943,8 @@ public class GymGUI{
                 
                 @Override
                 public void mousePressed(MouseEvent e) {
+                	
+                	boolean exit = false;
                     
                     // looping through the buttons to find the clicked button and change attributes
                     for (int i = 0; i < menuButtons.length; i++) {
@@ -2961,9 +2962,9 @@ public class GymGUI{
                                     // setting the corresponding placeholders for input fields into a common variable
                                     String inputPlaceholder = j < (inputFields.length - 2) ? commonPlaceholders[j] : uniquePlaceholders[currentFormIndex][0];
                                     
-                                    // seetting the corresponding input fields into a common variable
-                                    JTextField inputField = j < (inputFields.length - 2) ? inputFields[j] : inputFields[j+currentFormIndex];
-
+                                    // setting the corresponding input fields into a common variable
+                                    JTextField inputField = inputFields[j];
+                                    
                                     // checking if any field has user input
                                     if (!inputField.getText().equals(inputPlaceholder) && !inputField.getText().isEmpty()) {
                                         isFormFilled = true;
@@ -2981,7 +2982,8 @@ public class GymGUI{
                                             null, options, options[1]);
 
                                     if (menuWish != 0) {
-                                        continue; // skipping reset if "No" is selected
+                                    	exit = true;
+                                        break; // skipping reset if "No" is selected
                                     }
                                 }
 
@@ -3042,77 +3044,78 @@ public class GymGUI{
                         }
                     }
                     
-                    // refreshing the frame layout to reflect the changes
-                    frame.revalidate(); // recalculating layout
-                    frame.repaint();    // redrawing the frame
-                    manageMemberButton.setEnabled(true);
-   
-                    // updating table when dashboard button is pressed
-                    if(e.getSource()==menuButtons[0] && lastIndex!=0) {
-                            loadTableData.run();
-                            filter.run();
-                    }
-                    // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
-                    else if (e.getSource() == menuButtons[2] && lastIndex != 2) {
-                        
-                        // removing mouse listener of manageMemberButton to avoid one bug where no. of dialog boxes keep increasing
-                        MouseListener[] listeners = manageMemberButton.getMouseListeners();
-                        for (MouseListener listener : listeners) {
-                            manageMemberButton.removeMouseListener(listener);
+                    if(!exit) {
+                    	// refreshing the frame layout to reflect the changes
+                        frame.revalidate(); // recalculating layout
+                        frame.repaint();    // redrawing the frame
+                        manageMemberButton.setEnabled(true);
+       
+                        // updating table when dashboard button is pressed
+                        if(e.getSource()==menuButtons[0] && lastIndex!=0) {
+                                loadTableData.run();
+                                filter.run();
                         }
-                        
-                        showDialog=true;
-                        isAccessedFromTable=false; // since back button should not fo to dashboard when accessed from menu button
-                        lastMemberID = "-1"; // since last member id isn't needed (resetting it to default placeholder value)
-
-                        memberManagementTitle_L.setText("Member Management"); // reverting to original title
-                        memberManagementTitle_P.remove(utilityButtons_P[1]); // removing back button
-
-                        
-                        bodyContent[2].remove(memberManagementButton_P);
-                        bodyContent[2].remove(individualMemberManagement_P);
-                        
-                        // calling updateInidividualMemberPanel runnable declared above
-                        updateInidividualMemberPanel.run();
-                        
-                        // adding an action listener to the button (when it's re-added to the panel)
-                        manageMemberButton.addMouseListener(new MouseAdapter() {
-                            @Override
-                            public void mousePressed(MouseEvent e) {
-                                manageMemberButton.setForeground(MIDNIGHTBLUE);
-
-                                // triggering the same dialog input handling (run() function) when the button is clicked
-                                updateInidividualMemberPanel.run();
-                            }
-                            @Override
-                            public void mouseEntered(MouseEvent e) {
-                                manageMemberButton.setBackground(PASTELBLUE);
-                                manageMemberButton.setForeground(MIDNIGHTBLUE);
-                            }
-
-                            @Override
-                            public void mouseExited(MouseEvent e) {
-                                manageMemberButton.setBackground(MIDNIGHTBLUE);
-                                manageMemberButton.setForeground(LIGHTGRAY);
+                        // showing input dialog box if the member management panel is clicked and the current panel isn't member management panel
+                        else if (e.getSource() == menuButtons[2] && lastIndex != 2) {
+                            
+                            // removing mouse listener of manageMemberButton to avoid one bug where no. of dialog boxes keep increasing
+                            MouseListener[] listeners = manageMemberButton.getMouseListeners();
+                            for (MouseListener listener : listeners) {
+                                manageMemberButton.removeMouseListener(listener);
                             }
                             
-                            @Override
-                            public void mouseClicked(MouseEvent e) {
-                                manageMemberButton.setBackground(MIDNIGHTBLUE);
-                            }
-                            
-                            @Override
-                            public void mouseReleased(MouseEvent e) {
-                                manageMemberButton.setForeground(LIGHTGRAY);
-                                manageMemberButton.setBackground(MIDNIGHTBLUE);
-                            }
-                        });
+                            showDialog=true;
+                            isAccessedFromTable=false; // since back button should not fo to dashboard when accessed from menu button
+                            lastMemberID = "-1"; // since last member id isn't needed (resetting it to default placeholder value)
 
-                        // TO FIX AN ISSUE WHERE THE BUTTON KEEPS THE PRESSED STATE COLOR EVEN AFTER CHANGING PANELS
-                        manageMemberButton.setBackground(MIDNIGHTBLUE); // Resets color
-                        manageMemberButton.setForeground(LIGHTGRAY);
+                            memberManagementTitle_L.setText("Member Management"); // reverting to original title
+                            memberManagementTitle_P.remove(utilityButtons_P[1]); // removing back button
+
+                            
+                            bodyContent[2].remove(memberManagementButton_P);
+                            bodyContent[2].remove(individualMemberManagement_P);
+                            
+                            // calling updateInidividualMemberPanel runnable declared above
+                            updateInidividualMemberPanel.run();
+                            
+                            // adding an action listener to the button (when it's re-added to the panel)
+                            manageMemberButton.addMouseListener(new MouseAdapter() {
+                                @Override
+                                public void mousePressed(MouseEvent e) {
+                                    manageMemberButton.setForeground(MIDNIGHTBLUE);
+
+                                    // triggering the same dialog input handling (run() function) when the button is clicked
+                                    updateInidividualMemberPanel.run();
+                                }
+                                @Override
+                                public void mouseEntered(MouseEvent e) {
+                                    manageMemberButton.setBackground(PASTELBLUE);
+                                    manageMemberButton.setForeground(MIDNIGHTBLUE);
+                                }
+
+                                @Override
+                                public void mouseExited(MouseEvent e) {
+                                    manageMemberButton.setBackground(MIDNIGHTBLUE);
+                                    manageMemberButton.setForeground(LIGHTGRAY);
+                                }
+                                
+                                @Override
+                                public void mouseClicked(MouseEvent e) {
+                                    manageMemberButton.setBackground(MIDNIGHTBLUE);
+                                }
+                                
+                                @Override
+                                public void mouseReleased(MouseEvent e) {
+                                    manageMemberButton.setForeground(LIGHTGRAY);
+                                    manageMemberButton.setBackground(MIDNIGHTBLUE);
+                                }
+                            });
+
+                            // TO FIX AN ISSUE WHERE THE BUTTON KEEPS THE PRESSED STATE COLOR EVEN AFTER CHANGING PANELS
+                            manageMemberButton.setBackground(MIDNIGHTBLUE); // Resets color
+                            manageMemberButton.setForeground(LIGHTGRAY);
+                        }
                     }
-
                 }
             });
         }
@@ -3229,6 +3232,17 @@ public class GymGUI{
                                 GENDER.clearSelection(); // deselecting radio buttons
                                 isGenderSelected = false; // since gender is deselected
                                 
+                                // resetting combo box placeholders
+                                for(int m = 0 ; m < inputCombos.length ; m++) {
+									String placeholder = (m == 0 || m == 3) ? "Year" : 
+										 					 ((m == 1 || m == 4) ? "Month" : "Day");
+
+										if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
+											inputCombos[m].insertItemAt(placeholder, 0);
+											inputCombos[m].setSelectedIndex(0);
+										}
+                                }
+                                
                                 for(int m = 0 ; m < inputFields.length ; m++) {
                                 
                                 // only resetting the form if yes is clicked
@@ -3276,6 +3290,17 @@ public class GymGUI{
                                 // removing the current form panel & form buttons
                                 bodyContent[1].remove(formPanels[currentFormIndex]);
                                 bodyContent[1].remove(formButtons_P);
+                               
+                                // resetting combo box placeholders
+                                for(int m = 0 ; m < inputCombos.length ; m++) {
+									String placeholder = (m == 0 || m == 3) ? "Year" : 
+										 					 ((m == 1 || m == 4) ? "Month" : "Day");
+
+										if(!inputCombos[m].getItemAt(0).equals(placeholder)) {
+											inputCombos[m].insertItemAt(placeholder, 0);
+											inputCombos[m].setSelectedIndex(0);
+										}
+                                }
                                 
                                 //showing the memberTypeSelect panel
                                 bodyContent[1].add(memberTypeSelect_P, BorderLayout.CENTER); // showing corresponding content
