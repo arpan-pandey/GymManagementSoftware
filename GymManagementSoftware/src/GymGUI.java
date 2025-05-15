@@ -380,7 +380,7 @@ public class GymGUI{
         
         String projectPath = System.getProperty("user.dir"); // path of the project folder
         FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Text Files","txt"); // to show only .txt files when users are presented with file save/open dialog
-        
+        String filename = ""; // empty global string to store filename
     /*
      * addMember VARIABLES
      */
@@ -1541,6 +1541,7 @@ public class GymGUI{
                         // if user chooses a file
                         if(option == JFileChooser.APPROVE_OPTION) {
                         	File file = fileChooser.getSelectedFile(); // getting the file selected and putting it into a File variable
+                        	filename = file.getName();
                         	
                         	try (FileWriter writer = new FileWriter(file)) {
 
@@ -1621,7 +1622,7 @@ public class GymGUI{
                                 }
 
                                 // success message
-                                JOptionPane.showMessageDialog(null, "Data has successfully been exported to this project's directory!","Export Successful",JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Data has successfully been exported to \""+filename+"\"!","Export Successful",JOptionPane.INFORMATION_MESSAGE);
                             }
                             catch (IOException e1) {
                                 // error message
@@ -1654,6 +1655,7 @@ public class GymGUI{
                         // if the user chooses a file
                         if(option == JFileChooser.APPROVE_OPTION) {
                         	File file = fileChooser.getSelectedFile();
+                        	filename = file.getName();
                         	
                         	try (FileReader reader = new FileReader(file)) {
                                 members.clear();
@@ -1746,7 +1748,7 @@ public class GymGUI{
                                 loadTableData.run();
                                 
                                 // success message
-                                JOptionPane.showMessageDialog(null, "Data has successfully been imported!","Import Successful",JOptionPane.INFORMATION_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Data has successfully been imported from \""+filename+"\"!","Import Successful",JOptionPane.INFORMATION_MESSAGE);
 
                             }
                             catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e1) {
