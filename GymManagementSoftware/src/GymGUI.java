@@ -1626,7 +1626,7 @@ public class GymGUI{
                             }
                             catch (IOException e1) {
                                 // error message
-                                JOptionPane.showMessageDialog(null, "Failed to export member data!\nError: "+e1.getMessage(),"Export Failed",JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Failed to export member data! Please try again.","Export Failed",JOptionPane.ERROR_MESSAGE);
                             }
                         }
                    }
@@ -1752,7 +1752,7 @@ public class GymGUI{
 
                             }
                             catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e1) {
-                                JOptionPane.showMessageDialog(null, "Failed to import member data!\nError: "+e1.getMessage(),"Import Failed",JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "Failed to import member data, since the selected file (\""+filename+"\") has invalid format.","Import Failed",JOptionPane.ERROR_MESSAGE);
                             }
                         }
                     }
