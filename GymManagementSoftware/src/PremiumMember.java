@@ -2,10 +2,10 @@
 public class PremiumMember extends GymMember{
 	
     //unique instance variable declaration for Premium members
-    final double premiumCharge;
-    double paidAmount, discountAmount;
-    boolean isFullPayment;
-    String personalTrainer;
+    private final double premiumCharge;
+    private double paidAmount, discountAmount;
+    private boolean isFullPayment;
+    private String personalTrainer;
     
     public PremiumMember(int id, String name, String location, String phone, String email, String gender, String DOB, String membershipStartDate, String personalTrainer){
         

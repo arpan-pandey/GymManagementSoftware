@@ -3639,7 +3639,7 @@ public class GymGUI{
                         PremiumMember premiumMember = (PremiumMember) member; // downcasting to GymMember PremiumMember
 
                         
-                        if(!premiumMember.isFullPayment) {
+                        if(!premiumMember.isFullPayment()) {
                             title = "Ineligible for Discount";
                             messageType = JOptionPane.ERROR_MESSAGE; // setting dialog type to error
                             proceedUpdate = false;
@@ -3778,7 +3778,7 @@ public class GymGUI{
                             message = premiumMember.payDueAmount(Double.parseDouble(payingAmount)); // parsing string to double                        
                         }
                         catch(NumberFormatException e2) {
-                            if(premiumMember.isFullPayment) {
+                            if(premiumMember.isFullPayment()) {
                                 // when the user tries to pay "Fully Paid" text
                                 message = "Your plan has already been paid fully.";
                                 title = "Already Paid";
