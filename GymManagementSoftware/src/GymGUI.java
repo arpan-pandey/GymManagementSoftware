@@ -379,7 +379,7 @@ public class GymGUI{
             };
         
         String projectPath = System.getProperty("user.dir"); // path of the project folder
-        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Text Files",".txt"); // to show only .txt files when users are presented with file save/open dialog
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("Text Files","txt"); // to show only .txt files when users are presented with file save/open dialog
         
     /*
      * addMember VARIABLES
